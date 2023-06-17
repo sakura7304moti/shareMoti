@@ -1,8 +1,11 @@
 <template>
-  <q-page class="">
+  <q-page class="" style="background-image: url(../assets/obahome.jpg)">
     <div class="row q-gutter-md">
-      <img src="../assets/obachan.jpg" height="130" />
-      <balloon-left :text="obamessage" />
+      <div>
+        <img src="../assets/obachan.jpg" height="130" id="oba-profile" />
+        <div class="profile-name">韓国のおばあちゃん</div>
+      </div>
+      <balloon-left :text="obamessage" style="height: 120px" />
     </div>
   </q-page>
 </template>
@@ -21,3 +24,14 @@ export default defineComponent({
   },
 });
 </script>
+<style>
+#oba-profile {
+  border-radius: 50%; /* 角丸半径を50%にする(=円形にする) */
+  border: 3px solid #95e2b5; /* 枠線を付加 */
+}
+.profile-name {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+</style>

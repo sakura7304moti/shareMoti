@@ -30,7 +30,7 @@ export default defineComponent({
   color: #555;
   font-size: 16px;
   background: #fff;
-  border: solid 3px #555;
+  border: solid 3px #cccccc;
   box-sizing: border-box;
 }
 
@@ -52,7 +52,7 @@ export default defineComponent({
   left: -30px;
   margin-top: -14px;
   border: 14px solid transparent;
-  border-right: 14px solid #555;
+  border-right: 14px solid #cccccc;
   z-index: 1;
 }
 
