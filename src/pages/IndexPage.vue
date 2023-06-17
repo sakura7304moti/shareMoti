@@ -7,6 +7,10 @@
       </div>
       <balloon-left :text="obamessage" style="height: 120px" />
     </div>
+    <div class="row q-gutter-sm">
+      <q-icon name="warning" color="grey" size="md" />
+      <div class="text-subtitle1">まだ開発中</div>
+    </div>
   </q-page>
 </template>
 
@@ -19,7 +23,8 @@ export default defineComponent({
   setup() {
     return {
       obamessage: `よく来たわね
-ゆっくりしていきなさい`,
+ゆっくりしていきなさい
+`,
     };
   },
 });
