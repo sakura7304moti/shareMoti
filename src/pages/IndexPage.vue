@@ -1,5 +1,5 @@
 <template>
-  <q-page class="" style="background-image: url(../assets/obahome.jpg)">
+  <q-page class="">
     <div class="row q-gutter-md">
       <div>
         <img src="../assets/obachan.jpg" height="130" id="oba-profile" />
@@ -32,7 +32,7 @@ export default defineComponent({
 <style>
 #oba-profile {
   border-radius: 50%; /* 角丸半径を50%にする(=円形にする) */
-  border: 3px solid #95e2b5; /* 枠線を付加 */
+  border: 3px solid #b4b4b4; /* 枠線を付加 */
 }
 .profile-name {
   text-align: center;
