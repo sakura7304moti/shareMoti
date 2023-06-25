@@ -32,40 +32,7 @@ export default defineComponent({
         sortable: true,
       },
     ];
-    const records = [
-      {
-        word: '韓国のおばあちゃん',
-        desc: 'キムチを食べているときにガノンヤーキーを使ってたところから派生した',
-      },
-      {
-        word: 'ガノンヤーキー',
-        desc: 'テリーヤーキーの次に生まれたヤーキー。だいたいウルトラCの餌食になる。',
-      },
-      {
-        word: '三者面談',
-        desc: '',
-      },
-      {
-        word: 'ゴルバチョフ',
-        desc: '',
-      },
-      {
-        word: '韓国のおばあちゃん',
-        desc: 'キムチを食べているときにガノンヤーキーを使ってたところから派生した',
-      },
-      {
-        word: 'ガノンヤーキー',
-        desc: 'テリーヤーキーの次に生まれたヤーキー。だいたいウルトラCの餌食になる。',
-      },
-      {
-        word: '三者面談',
-        desc: '',
-      },
-      {
-        word: 'ゴルバチョフ',
-        desc: '',
-      },
-    ] as DataState[];
+    const records = [] as DataState[];
     return { records, columns };
   },
 });

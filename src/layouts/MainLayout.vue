@@ -12,7 +12,9 @@
         />
 
         <q-toolbar-title>
-          <a @click.prevent="router.replace('/')">韓国のおばあちゃんち</a>
+          <a @click.prevent="router.replace('/')" class="text-white"
+            >韓国のおばあちゃんち</a
+          >
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
@@ -59,13 +61,19 @@ export default defineComponent({
         label: '名言集',
         iconColor: 'primary',
         icon: 'chat',
-        link: '/ssbu/wordList',
+        link: '',
       },
       {
         label: 'あだ名一覧',
         icon: 'content_paste',
         iconColor: 'secondary',
         link: '',
+      },
+      {
+        label: 'Twitter Scraper',
+        icon: 'image',
+        iconColor: 'primary',
+        link: '/twitter',
       },
     ] as MenuItem[];
     const router = useRouter();

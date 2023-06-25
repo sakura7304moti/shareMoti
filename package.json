@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
+    "axios": "^1.4.0",
     "quasar": "^2.6.0",
     "sqlite3": "^5.1.6",
     "vue": "^3.0.0",
