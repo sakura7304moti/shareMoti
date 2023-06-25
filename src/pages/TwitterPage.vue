@@ -4,7 +4,7 @@
     <!--入力フォーム-->
     <div class="row q-gutter-md">
       <q-input
-        label="検索ワード"
+        label="ハッシュタグ"
         v-model="condition.hashtag"
         class="form-model"
         stack-label
