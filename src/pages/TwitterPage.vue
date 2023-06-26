@@ -88,27 +88,38 @@
             :href="r.image"
             @click.prevent.stop="r.displayMenu = !r.displayMenu"
             class="image-container"
+            :class="{
+              'image-selected': r.displayMenu,
+            }"
           >
             <img :src="r.image" />
             <div class="button-overlay" v-if="r.displayMenu">
-              <span class="row button">
+              <div class="row q-gutter-md button">
                 <!--Download-->
-                <a
-                  href="#"
+                <q-btn
+                  icon="file_download"
                   @click.prevent="fileDownload(r.image)"
-                  class="q-pa-xs"
+                  color="primary"
+                  round
+                  ><q-tooltip :delay="1000">download</q-tooltip></q-btn
                 >
-                  <q-icon name="file_download" color="primary" size="md" />
-                </a>
                 <!--View-->
-                <a
-                  href="#"
+                <q-btn
+                  icon="image"
                   @click.prevent="fullScViewClick(r.image)"
-                  class="q-pa-xs"
+                  color="secondary"
+                  round
+                  ><q-tooltip :delay="1000">image view</q-tooltip></q-btn
                 >
-                  <q-icon name="image" color="secondary" size="md" />
-                </a>
-              </span>
+                <!--tweet <link-->
+                <q-btn
+                  icon="info"
+                  @click.prevent="pageOpenClick(r.url)"
+                  color="black"
+                  round
+                  ><q-tooltip :delay="1000">tweet link</q-tooltip></q-btn
+                >
+              </div>
             </div>
           </a>
         </li>
@@ -116,17 +127,51 @@
     </div>
 
     <!--View Modal-->
-    <q-dialog v-model="fullSc">
+    <q-dialog
+      v-model="fullSc"
+      persistent
+      :maximized="maximizedToggle"
+      transition-show="slide-up"
+      transition-hide="slide-down"
+    >
       <q-card>
         <q-card-section>
-          <div class="image-full-view"></div>
-          <img :src="fullScreenViewUrl" />
+          <q-bar>
+            <q-space />
+
+            <q-btn
+              dense
+              flat
+              icon="minimize"
+              @click="maximizedToggle = false"
+              :disable="!maximizedToggle"
+            >
+              <q-tooltip v-if="maximizedToggle" class="bg-white text-primary"
+                >Minimize</q-tooltip
+              >
+            </q-btn>
+            <q-btn
+              dense
+              flat
+              icon="crop_square"
+              @click="maximizedToggle = true"
+              :disable="maximizedToggle"
+            >
+              <q-tooltip v-if="!maximizedToggle" class="bg-white text-primary"
+                >Maximize</q-tooltip
+              >
+            </q-btn>
+            <q-btn dense flat icon="close" v-close-popup>
+              <q-tooltip class="bg-white text-primary">Close</q-tooltip>
+            </q-btn>
+          </q-bar>
+          <img :src="fullScreenViewUrl" style="height: 100%" />
         </q-card-section>
       </q-card>
     </q-dialog>
 
     <!--pagi-->
-    <div class="q-pt-sm" v-if="dataState.totalPages > 1 && !isLoading">
+    <div class="q-pt-md" v-if="dataState.totalPages > 1 && !isLoading">
       <hr />
       <q-pagination
         v-model="condition.pageNo"
@@ -198,7 +243,7 @@ export default defineComponent({
       imageLinkOpen,
     } = useTwitterModel();
     getHoloList();
-
+    //search(); //test
     const handleProps = function () {
       console.log('props', props);
       if (props.hashtag) {
@@ -276,6 +321,10 @@ export default defineComponent({
       fullSc.value = true;
     };
 
+    const pageOpenClick = function (url: string) {
+      window.open(url);
+    };
+
     return {
       condition,
       dataState,
@@ -292,6 +341,8 @@ export default defineComponent({
       fullSc,
       fullScreenViewUrl,
       fullScViewClick,
+      maximizedToggle: ref(true),
+      pageOpenClick,
     };
   },
 });
@@ -308,6 +359,7 @@ interface PropsState extends LocationQueryRaw {
 }
 </script>
 <style>
+/*input */
 .form-model {
   width: 200px;
   height: 40px;
@@ -356,7 +408,7 @@ interface PropsState extends LocationQueryRaw {
 .button-overlay .button {
   width: 100%;
   height: 40px;
-  background-color: rgba(128, 128, 128, 0.3);
+  background-color: rgba(128, 128, 128, 0);
 }
 
 /*　横幅900px以下の段組み設定　*/
@@ -384,11 +436,6 @@ a {
   color: #333;
 }
 
-a:hover,
-a:active {
-  text-decoration: none;
-}
-
 h1 {
   text-align: center;
   font-size: 6vw;
@@ -400,5 +447,11 @@ h1 {
 p {
   margin: 0 10px 10px 10px;
   word-wrap: break-word;
+}
+
+/*image select */
+.image-selected {
+  background: #f0f7ff;
+  border: dashed 2px #5b8bd0; /*点線*/
 }
 </style>

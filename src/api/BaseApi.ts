@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 //API呼び出しのためのクラス
 export class APIClient {
   public apiEndpoint = 'http://192.168.11.40:5000';
-  public localEndpoint = 'http://127.0.0.1:5000/';
+  public localEndpoint = 'http://localhost:5000';
   public config = {
     headers: {
       'Content-Type': 'application/json',

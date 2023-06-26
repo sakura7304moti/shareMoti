@@ -15,7 +15,7 @@ export function useTwitterModel() {
   const quasar = useQuasar();
   const condition = ref({
     pageNo: 1,
-    pageSize: 10,
+    pageSize: 40,
     hashtag: '',
     startDate: '',
     endDate: formattedDate,
@@ -57,6 +57,10 @@ export function useTwitterModel() {
     {
       label: '20000',
       value: 20000,
+    },
+    {
+      label: '50000',
+      value: 50000,
     },
   ] as Array<selectItem>;
 
