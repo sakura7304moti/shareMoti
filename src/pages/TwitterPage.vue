@@ -173,11 +173,14 @@
     <!--pagi-->
     <div class="q-pt-md" v-if="dataState.totalPages > 1 && !isLoading">
       <hr />
+
       <q-pagination
         v-model="condition.pageNo"
         :max="dataState.totalPages"
         :max-pages="10"
+        @click="search()"
       />
+      <hr />
     </div>
   </q-page>
 </template>
@@ -186,8 +189,10 @@ import { useViewSupport } from 'src/utils/viewSupport';
 import { useTwitterModel } from 'src/models/TwitterModels';
 import { defineComponent, ref, watch } from 'vue';
 import { LocationQueryRaw, useRoute, useRouter } from 'vue-router';
+import HoloHashtagList from 'src/components/HoloHashtagList.vue';
 export default defineComponent({
   name: 'twitter-page',
+  component: { 'holo-hashtag-list': HoloHashtagList },
   props: {
     pageNo: {
       type: Number,

@@ -24,6 +24,17 @@ export function useTwitterModel() {
     maxLike: 0,
   } as ConditionState);
 
+  const fetchedCondition = ref({
+    pageNo: 0,
+    pageSize: 40,
+    hashtag: '',
+    startDate: '',
+    endDate: formattedDate,
+    userName: '',
+    minLike: 100,
+    maxLike: 0,
+  } as ConditionState);
+
   const dataState = ref({
     totalPages: 0,
     records: [] as TwitterRecord[],
@@ -92,9 +103,31 @@ export function useTwitterModel() {
   };
 
   const isLoading = ref(false);
+  //検索条件変わっていたらページを1にする
+  const compareCondition = function () {
+    if (condition.value.hashtag != fetchedCondition.value.hashtag) {
+      condition.value.pageNo = 1;
+    }
+    if (condition.value.startDate != fetchedCondition.value.startDate) {
+      condition.value.pageNo = 1;
+    }
+    if (condition.value.endDate != fetchedCondition.value.endDate) {
+      condition.value.pageNo = 1;
+    }
+    if (condition.value.userName != fetchedCondition.value.userName) {
+      condition.value.pageNo = 1;
+    }
+    if (condition.value.minLike != fetchedCondition.value.minLike) {
+      condition.value.pageNo = 1;
+    }
+    if (condition.value.maxLike != fetchedCondition.value.maxLike) {
+      condition.value.pageNo = 1;
+    }
+  };
   const search = async function () {
     isLoading.value = true;
     dataState.value.records.splice(0);
+    compareCondition(); //検索条件変わったらページ数1にする
     const request = {
       page_no: condition.value.pageNo,
       page_size: condition.value.pageSize,
@@ -129,6 +162,18 @@ export function useTwitterModel() {
               } as TwitterRecord);
             });
           });
+
+          const c: ConditionState = JSON.parse(JSON.stringify(condition.value));
+          fetchedCondition.value = {
+            hashtag: c.hashtag,
+            startDate: c.startDate,
+            endDate: c.endDate,
+            userName: c.userName,
+            minLike: c.minLike,
+            maxLike: c.maxLike,
+            pageNo: c.pageNo,
+            pageSize: c.pageSize,
+          };
         }
       })
       .catch((e) => {

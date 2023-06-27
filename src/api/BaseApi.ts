@@ -1,8 +1,12 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { useRoute } from 'vue-router';
 //API呼び出しのためのクラス
 export class APIClient {
-  public apiEndpoint = 'http://192.168.11.40:5000';
-  public localEndpoint = 'http://localhost:5000';
+  public route = useRoute();
+  public apiEndpoint = function () {
+    const path = location.origin.replace(':9000', ''); //http:xxx
+    return path + ':5000';
+  };
   public config = {
     headers: {
       'Content-Type': 'application/json',

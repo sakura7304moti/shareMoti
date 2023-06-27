@@ -5,7 +5,7 @@ export class TwitterApi extends APIClient {
     request: TwitterRequest
   ): Promise<PageResult<TwitterResponse> | null> {
     const url = '/twitter/search';
-    const path = this.combineUrl(this.localEndpoint, url);
+    const path = this.combineUrl(this.apiEndpoint(), url);
 
     return this.httpPost<TwitterRequest, PageResult<TwitterResponse>>(
       path,
@@ -15,7 +15,7 @@ export class TwitterApi extends APIClient {
 
   public holoList(): Promise<Array<string> | null> {
     const url = '/twitter/hololist';
-    const path = this.combineUrl(this.localEndpoint, url);
+    const path = this.combineUrl(this.apiEndpoint(), url);
 
     return this.httpGet<Array<string>>(path);
   }
