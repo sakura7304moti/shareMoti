@@ -61,7 +61,7 @@ export default defineComponent({
         label: '名言集',
         iconColor: 'primary',
         icon: 'chat',
-        link: '',
+        link: '/wordList',
       },
       {
         label: 'あだ名一覧',

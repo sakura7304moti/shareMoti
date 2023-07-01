@@ -14,8 +14,8 @@ export class APIClient {
   } as AxiosRequestConfig;
 
   //URL結合
-  public combineUrl(url: string, endpoint: string): string {
-    return url + endpoint;
+  public combineUrl(endpoint: string): string {
+    return this.apiEndpoint() + endpoint;
   }
   //http post
   public async httpPost<T, U>(url: string, request: T): Promise<U | null> {
