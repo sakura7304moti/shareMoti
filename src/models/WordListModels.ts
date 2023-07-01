@@ -10,6 +10,7 @@ export function useWordListModel() {
     desc: '',
   } as ConditionState);
 
+  const detailEditLock = ref(true);
   const records = ref([] as DataState[]);
 
   //function
@@ -78,7 +79,8 @@ export function useWordListModel() {
                 word: word,
                 desc: desc,
               });
-              saveModalShow.value = false;
+              insertCondition.value.word = '';
+              insertCondition.value.desc = '';
             }
 
             //更新した場合
@@ -94,7 +96,8 @@ export function useWordListModel() {
                 word: word,
                 desc: desc,
               };
-              saveModalShow.value = false;
+              insertCondition.value.word = '';
+              insertCondition.value.desc = '';
             }
           }
         })
@@ -168,6 +171,7 @@ export function useWordListModel() {
     isSaveLoading,
     deleteRecord,
     isDeleteLoading,
+    detailEditLock,
   };
 }
 

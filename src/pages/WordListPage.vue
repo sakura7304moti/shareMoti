@@ -30,7 +30,7 @@
         </div>
 
         <!--botton-->
-        <div class="row q-gutter-md q-pt-md">
+        <div class="row q-gutter-md">
           <q-btn
             label="検索"
             color="primary"
@@ -46,7 +46,7 @@
       <div>
         <!--追加画面-->
         <div v-if="saveModalShow" class="edit-form">
-          <div class="text-h6">新規追加</div>
+          <div class="text-subtitle1">新規追加</div>
           <div class="row q-gutter-md" style="height: 150px">
             <q-input
               label="名言"
@@ -57,6 +57,7 @@
               outlined
               stack-label
               style="width: 250px"
+              clearable
             />
             <q-input
               label="詳細(省略可)"
@@ -67,6 +68,7 @@
               outlined
               stack-label
               style="width: 250px"
+              clearable
             />
           </div>
           <q-btn
@@ -80,24 +82,32 @@
 
     <!--テーブル-->
     <div class="q-pt-md" v-if="records.length > 0">
-      <hr />
-      <q-toggle
-        v-model="visibleColumns"
-        val="desc"
-        label="詳細を表示"
-        keep-color
-        color="blue"
-      />
-
       <q-table
         dense
+        title="名言集"
         :rows="records"
         :columns="columns"
         separator="cell"
         :visible-columns="visibleColumns"
         class="search-table"
         :rows-per-page-options="[0]"
-      />
+      >
+        <template v-slot:top-right
+          ><div class="row q-gutter-md">
+            <q-toggle
+              v-model="visibleColumns"
+              val="desc"
+              label="詳細を表示"
+              keep-color
+              color="blue"
+            />
+            <lock-icon
+              v-model="detailEditLock"
+              label="更新・削除"
+              class="q-pt-sm"
+            /></div
+        ></template>
+      </q-table>
     </div>
   </q-page>
 </template>
@@ -105,8 +115,12 @@
 import { QTableProps } from 'quasar';
 import { defineComponent, ref } from 'vue';
 import { useWordListModel } from 'src/models/WordListModels';
+import lockIcon from 'src/components/LockIcon.vue';
 export default defineComponent({
   name: 'word-list',
+  components: {
+    'lock-icon': lockIcon,
+  },
   setup() {
     const {
       condition,
@@ -119,6 +133,7 @@ export default defineComponent({
       isSaveLoading,
       deleteRecord,
       isDeleteLoading,
+      detailEditLock,
     } = useWordListModel();
     const columns: QTableProps['columns'] = [
       {
@@ -149,7 +164,8 @@ export default defineComponent({
       deleteRecord,
       isDeleteLoading,
       saveModalShow,
-      visibleColumns: ref(['word']),
+      visibleColumns: ref(['word', 'desc']),
+      detailEditLock,
     };
   },
 });
@@ -163,7 +179,7 @@ export default defineComponent({
 /*上部分の横幅 */
 .form-space {
   max-width: 1200px;
-  height: 220px;
+  height: 240px;
 }
 @media (max-width: 1199px) {
   .form-space {
@@ -178,7 +194,6 @@ export default defineComponent({
 .edit-form {
   padding: 0.5em 1em;
   font-weight: bold;
-  color: #60d36f; /*文字色*/
   background: #fff;
   border: solid 3px #60d36f; /*線*/
   border-radius: 10px; /*角の丸み*/
