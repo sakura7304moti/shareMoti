@@ -1,19 +1,14 @@
 <template>
   <div class="lock-icon">
-    <a
-      href="#"
-      @click.prevent="onToggleClick"
-      style="text-decoration: none"
-      class="row q-gutter-xs"
-    >
+    <a href="#" @click.prevent="onToggleClick" class="row q-gutter-xs">
       <q-icon v-if="toggle" name="lock" size="sm" color="secondary" />
       <q-icon v-else name="lock_open" size="sm" color="secondary" />
-      <div class="text-subtitle text-black">{{ iconText }}</div>
+      <div class="text-subtitle text-black lock-icon">{{ iconText }}</div>
     </a>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 export default defineComponent({
   name: 'LockIcon',
   props: {
@@ -26,13 +21,17 @@ export default defineComponent({
       required: false,
     },
   },
-  setup(props) {
+  setup(props, context) {
     const toggle = ref(props.modelValue);
     const iconText = ref(props.label ?? '');
 
     const onToggleClick = function () {
       toggle.value = !toggle.value;
     };
+
+    watch(toggle, () => {
+      context.emit('event-change', toggle.value);
+    });
     return {
       toggle,
       iconText,
@@ -41,3 +40,14 @@ export default defineComponent({
   },
 });
 </script>
+<style>
+.lock-icon {
+  height: 32px;
+}
+.lock-icon a {
+  text-decoration: none;
+}
+.lock-icon a:hover {
+  background-color: rgba(221, 238, 255, 0.5);
+}
+</style>
