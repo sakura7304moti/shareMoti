@@ -1,6 +1,7 @@
 import { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
+  /*おばあちゃんち */
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
@@ -26,6 +27,35 @@ const routes: RouteRecordRaw[] = [
       maxLike: Number(route.query.max),
       fetch: route.query.fetch,
     }),
+  },
+  /*Scraper */
+  {
+    path: '/scraper/',
+    component: () => import('layouts/ScraperLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/ScraperIndexPage.vue') },
+    ],
+  },
+  {
+    path: '/scraper/twitter',
+    component: () => import('layouts/ScraperLayout.vue'),
+    children: [{ path: '', component: () => import('pages/TwitterPage.vue') }],
+    props: (route) => ({
+      pageNo: Number(route.query.p),
+      pageSize: Number(route.query.ps),
+      hashtag: route.query.h,
+      startDate: route.query.sd,
+      endDate: route.query.ed,
+      userName: route.query.u,
+      minLike: Number(route.query.min),
+      maxLike: Number(route.query.max),
+      fetch: route.query.fetch,
+    }),
+  },
+  {
+    path: '/scraper/hololewd',
+    component: () => import('layouts/ScraperLayout.vue'),
+    children: [{ path: '', component: () => import('pages/HololewdPage.vue') }],
   },
 
   // Always leave this as last one,

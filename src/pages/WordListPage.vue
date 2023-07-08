@@ -179,7 +179,7 @@
                 outlined
                 stack-label
                 style="width: 250px"
-                clearable
+                readonly
               />
               <q-input
                 label="詳細(省略可)"

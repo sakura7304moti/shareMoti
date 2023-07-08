@@ -40,7 +40,7 @@ export function useWordListModel() {
           console.log('response', response);
 
           records.value.splice(0);
-          response.records.forEach((rec) =>
+          response.records?.forEach((rec) =>
             records.value.push({
               word: rec.word ?? '',
               desc: rec.desc ?? '',
@@ -90,8 +90,8 @@ export function useWordListModel() {
     if (insertErr.value == '') {
       isSaveLoading.value = true;
       const request = {
-        word: word,
-        desc: desc,
+        word: word.replace(/\n/g, ''),
+        desc: desc.replace(/\n/g, ''),
       } as ConditionState;
       await api
         .save(request)
@@ -146,8 +146,8 @@ export function useWordListModel() {
     if (updateErr.value == '') {
       isSaveLoading.value = true;
       const request = {
-        word: word,
-        desc: desc,
+        word: word.replace(/\n/g, ''),
+        desc: desc.replace(/\n/g, ''),
       } as ConditionState;
       await api
         .save(request)
@@ -191,8 +191,8 @@ export function useWordListModel() {
   const deleteRecord = async function (word: string, desc: string) {
     isDeleteLoading.value = true;
     const request = {
-      word: word,
-      desc: desc,
+      word: word.replace(/\n/g, ''),
+      desc: desc.replace(/\n/g, ''),
     } as ConditionState;
 
     await api
