@@ -67,13 +67,19 @@ export default defineComponent({
         label: 'あだ名一覧',
         icon: 'content_paste',
         iconColor: 'secondary',
-        link: '',
+        link: '/nameList',
       },
       {
-        label: 'Twitter Scraper',
+        label: 'twitter',
         icon: 'image',
         iconColor: 'primary',
         link: '/twitter',
+      },
+      {
+        label: '共有URLまとめ',
+        icon: 'info',
+        iconColor: 'grey-6',
+        link: '/info',
       },
     ] as MenuItem[];
     const router = useRouter();

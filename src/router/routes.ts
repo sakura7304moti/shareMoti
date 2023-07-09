@@ -13,6 +13,11 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('pages/WordListPage.vue') }],
   },
   {
+    path: '/nameList',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/NameListPage.vue') }],
+  },
+  {
     path: '/twitter',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/TwitterPage.vue') }],
@@ -27,6 +32,13 @@ const routes: RouteRecordRaw[] = [
       maxLike: Number(route.query.max),
       fetch: route.query.fetch,
     }),
+  },
+  {
+    path: '/info',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/InfomationPage.vue') },
+    ],
   },
   /*Scraper */
   {
