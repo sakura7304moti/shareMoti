@@ -1,8 +1,29 @@
 <template>
   <q-page class="">
     <div class="text-h5 q-pb-md">共有URLまとめ</div>
+    <!--neta-->
+    <div class="row q-gutter-md q-pb-md">
+      <div>
+        <img
+          src="../assets/yosao.png"
+          height="130"
+          width="140"
+          id="oba-profile"
+        />
+        <div class="profile-name">未来から来た与謝野晶子</div>
+      </div>
+      <balloon-left :text="yosamessage" style="height: 120px" />
+    </div>
+    <div class="row q-gutter-md">
+      <div>
+        <img src="../assets/obachan.jpg" height="130" id="oba-profile" />
+        <div class="profile-name">韓国のおばあちゃん</div>
+      </div>
+      <balloon-left :text="obamessage" style="height: 120px" />
+    </div>
     <!--Links-->
-    <div id="info-links" class="q-pb-md">
+    <hr />
+    <div id="info-links" class="q-pb-md q-pt-md">
       <div id="notion-urls">
         <a
           class="row q-gutter-xs info-link-row"
@@ -32,6 +53,23 @@
     </div>
   </q-page>
 </template>
+<script lang="ts">
+import { defineComponent } from 'vue';
+import balloonLeft from 'src/components/balloonLeft.vue';
+export default defineComponent({
+  name: 'InfoPage',
+  components: { balloonLeft },
+  setup() {
+    return {
+      yosamessage: `もう帰るのかい？
+ちょっとそこで立ってなさい
+`,
+      obamessage: `いやだああああぁぁぁ
+`,
+    };
+  },
+});
+</script>
 <style>
 /*image */
 .info-icon {
@@ -45,5 +83,15 @@
 
 .info-link-row:hover {
   text-decoration: underline;
+}
+/*pfofile */
+#oba-profile {
+  border-radius: 50%; /* 角丸半径を50%にする(=円形にする) */
+  border: 3px solid #b4b4b4; /* 枠線を付加 */
+}
+.profile-name {
+  text-align: center;
+  font-weight: lighter;
+  font-size: 1rem;
 }
 </style>
