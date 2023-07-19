@@ -15,7 +15,7 @@ export function useTwitterModel() {
   const quasar = useQuasar();
   const condition = ref({
     pageNo: 1,
-    pageSize: 40,
+    pageSize: 20,
     hashtag: '',
     startDate: '',
     endDate: formattedDate,
@@ -26,7 +26,7 @@ export function useTwitterModel() {
 
   const fetchedCondition = ref({
     pageNo: 0,
-    pageSize: 40,
+    pageSize: 20,
     hashtag: '',
     startDate: '',
     endDate: formattedDate,
@@ -82,7 +82,9 @@ export function useTwitterModel() {
       .holoList()
       .then((response) => {
         //console.log('response', response);
-        response?.forEach((res) => holoList.value.push(res));
+        response?.forEach((res) =>
+          holoList.value.push(res.replace('#AIart #hololive', '#AIart'))
+        );
       })
       .catch((e) => {
         console.log(e);

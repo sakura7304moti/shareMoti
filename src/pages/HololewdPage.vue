@@ -3,54 +3,18 @@
     <div class="text-h5 q-pb-md">Hololewd Scraper</div>
     <!--入力フォーム-->
     <div class="row q-gutter-md">
-      <q-input
-        label="fullName"
-        v-model="condition.fullName"
-        class="form-model"
-        stack-label
-        dense
-        autocomplete="off"
-      />
       <q-select
         label="fullNames"
         v-model="condition.fullName"
-        :option="holoList"
+        :options="holoList"
         class="form-model"
         dense
         stack-label
+        clearable
       />
-      <q-input
-        label="firstName"
-        v-model="condition.firstName"
-        class="form-model"
-        stack-label
-        dense
-        autocomplete="off"
-      />
-      <div class="text-h6 q-pt-sm form-date-span">~</div>
-      <q-input
-        label="lastName"
-        v-model="condition.lastName"
-        class="form-model"
-        stack-label
-        dense
-        autocomplete="off"
-      />
-    </div>
-    <div class="row q-gutter-md q-pt-md">
       <q-select
-        label="vote"
+        label="min like"
         v-model="condition.minLike"
-        :options="selectItems"
-        class="form-model"
-        emit-value
-        map-options
-        dense
-      />
-      <div class="text-h6 q-pt-sm form-date-span">~</div>
-      <q-select
-        label="vote"
-        v-model="condition.maxLike"
         :options="selectItems"
         class="form-model"
         emit-value
@@ -112,14 +76,6 @@
                   color="secondary"
                   round
                   ><q-tooltip :delay="1000">image view</q-tooltip></q-btn
-                >
-                <!--tweet <link-->
-                <q-btn
-                  icon="info"
-                  @click.prevent="pageOpenClick(r.url)"
-                  color="black"
-                  round
-                  ><q-tooltip :delay="1000">tweet link</q-tooltip></q-btn
                 >
               </div>
             </div>

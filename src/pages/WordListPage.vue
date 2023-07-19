@@ -155,6 +155,7 @@
           </tr>
         </tbody>
       </q-markup-table>
+      <div class="q-pt-sm text-weight-light">count:{{ records.length }}</div>
     </div>
 
     <!--更新ダイアログ-->

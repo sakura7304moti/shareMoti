@@ -1,54 +1,56 @@
 <template>
   <q-page class="">
-    <div class="text-h5 q-pb-md">共有URLまとめ</div>
-    <!--neta-->
-    <div class="row q-gutter-md q-pb-md">
-      <div>
-        <img
-          src="../assets/yosao.png"
-          height="130"
-          width="140"
-          id="oba-profile"
-        />
-        <div class="profile-name">未来から来た与謝野晶子</div>
+    <div id="page-main">
+      <div class="text-h5 q-pb-md">共有URLまとめ</div>
+      <!--neta-->
+      <div class="row q-gutter-md q-pb-md">
+        <div>
+          <img
+            src="../assets/yosao.png"
+            height="130"
+            width="140"
+            id="oba-profile"
+          />
+          <div class="profile-name">未来から来た与謝野晶子</div>
+        </div>
+        <balloon-left :text="yosamessage" style="height: 120px" />
       </div>
-      <balloon-left :text="yosamessage" style="height: 120px" />
-    </div>
-    <div class="row q-gutter-md">
-      <div>
-        <img src="../assets/obachan.jpg" height="130" id="oba-profile" />
-        <div class="profile-name">韓国のおばあちゃん</div>
+      <div class="row q-gutter-md">
+        <div>
+          <img src="../assets/obachan.jpg" height="130" id="oba-profile" />
+          <div class="profile-name">韓国のおばあちゃん</div>
+        </div>
+        <balloon-left :text="obamessage" style="height: 120px" />
       </div>
-      <balloon-left :text="obamessage" style="height: 120px" />
-    </div>
-    <!--Links-->
-    <hr />
-    <div id="info-links" class="q-pb-md q-pt-md">
-      <div id="notion-urls">
-        <a
-          class="row q-gutter-xs info-link-row"
-          href="https://brindle-spring-0d6.notion.site/URL-2998ca28318d430cbdd7d5b7ad034ccf?pvs=4"
-          target="_blank"
-          rel="noopener"
-        >
-          <div>
-            <img src="../assets/notion_icon.png" class="info-icon" />
-          </div>
-          <div class="text-subtitle1">Notion</div>
-        </a>
-      </div>
-      <div id="google-urls" class="q-pt-sm">
-        <a
-          class="row q-gutter-xs info-link-row"
-          href="https://drive.google.com/drive/folders/1XSRGqBx5FeJaOSJj9UtF3e2M7S3Z3PsG?usp=sharing"
-          target="_blank"
-          rel="noopener"
-        >
-          <div>
-            <img src="../assets/google_drive_icon.png" class="info-icon" />
-          </div>
-          <div class="text-subtitle1">Googleドライブ</div>
-        </a>
+      <!--Links-->
+      <hr />
+      <div id="info-links" class="q-pb-md q-pt-md">
+        <div id="notion-urls">
+          <a
+            class="row q-gutter-xs info-link-row"
+            href="https://brindle-spring-0d6.notion.site/URL-2998ca28318d430cbdd7d5b7ad034ccf?pvs=4"
+            target="_blank"
+            rel="noopener"
+          >
+            <div>
+              <img src="../assets/notion_icon.png" class="info-icon" />
+            </div>
+            <div class="text-subtitle1">Notion</div>
+          </a>
+        </div>
+        <div id="google-urls" class="q-pt-sm">
+          <a
+            class="row q-gutter-xs info-link-row"
+            href="https://drive.google.com/drive/folders/1XSRGqBx5FeJaOSJj9UtF3e2M7S3Z3PsG?usp=sharing"
+            target="_blank"
+            rel="noopener"
+          >
+            <div>
+              <img src="../assets/google_drive_icon.png" class="info-icon" />
+            </div>
+            <div class="text-subtitle1">Googleドライブ</div>
+          </a>
+        </div>
       </div>
     </div>
   </q-page>

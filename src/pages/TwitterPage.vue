@@ -10,6 +10,10 @@
         stack-label
         dense
       />
+      
+      
+      <q-select v-model="condition.hashtag" :options="holoList" label="ハッシュタグ一覧" class="form-model" dense stack-label transition-show="jump-up"
+        transition-hide="jump-up"/>
       <q-input
         label="ツイート日"
         v-model="condition.startDate"
@@ -348,6 +352,7 @@ export default defineComponent({
       fullScViewClick,
       maximizedToggle: ref(true),
       pageOpenClick,
+      
     };
   },
 });

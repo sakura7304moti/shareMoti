@@ -8,7 +8,7 @@ export function useHololewdModel() {
   const quasar = useQuasar();
   const condition = ref({
     pageNo: 1,
-    pageSize: 40,
+    pageSize: 20,
     fullName: '',
     firstName: '',
     lastName: '',
@@ -17,7 +17,7 @@ export function useHololewdModel() {
   } as ConditionState);
   const fetchedCondition = ref({
     pageNo: 1,
-    pageSize: 40,
+    pageSize: 20,
     fullName: '',
     firstName: '',
     lastName: '',
@@ -113,9 +113,9 @@ export function useHololewdModel() {
     const request = {
       page_no: condition.value.pageNo,
       page_size: condition.value.pageSize,
-      full_name: condition.value.fullName,
-      first_name: condition.value.firstName,
-      last_name: condition.value.lastName,
+      full_name: condition.value.fullName ?? '',
+      first_name: condition.value.firstName ?? '',
+      last_name: condition.value.lastName ?? '',
       min_like: condition.value.minLike,
       max_like: condition.value.maxLike,
       displayMenu: false,
