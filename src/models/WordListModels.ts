@@ -28,13 +28,10 @@ export function useWordListModel() {
   /*SELECT */
   const search = async function () {
     isLoading.value = true;
-    const request = {
-      word: condition.value.word,
-      desc: condition.value.desc,
-    } as ConditionState;
-
     await api
-      .search(request)
+      .search({
+        text: condition.value.word,
+      })
       .then((response) => {
         if (response) {
           console.log('response', response);

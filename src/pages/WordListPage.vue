@@ -4,41 +4,31 @@
       <!--画面左側-->
       <div>
         <div class="q-pb-md text-h6">名言集</div>
-        <div class="row q-gutter-md q-pb-md">
-          <q-input
-            label="名言"
-            v-model="condition.word"
-            class="form-model"
-            dense
-            outlined
-            stack-label
-          />
-          <q-input
-            label="詳細"
-            v-model="condition.desc"
-            class="form-model"
-            dense
-            outlined
-            stack-label
-          />
-          <q-toggle
-            label="追加画面を表示する"
-            v-model="saveModalShow"
-            keep-color
-            color="grey-6"
-          />
-        </div>
+        <div class="row q-gutter-md" style="padding-bottom: 8px">
+          <q-field dense>
+            <q-input
+              v-model="condition.word"
+              class="form-model"
+              dense
+              stack-label
+              outlined
+            />
+            <q-btn
+              color="primary"
+              dense
+              icon="search"
+              @click="search"
+              :loading="isLoading"
+            />
+          </q-field>
 
-        <!--botton-->
-        <div class="row q-gutter-md">
           <q-btn
-            label="検索"
-            color="primary"
-            dense
-            icon="search"
+            label="追加"
+            icon-right="note_add"
+            color="grey-6"
+            @click="saveModalShow = true"
             outline
-            @click="search"
-            :loading="isLoading"
+            dense
           />
         </div>
       </div>
@@ -103,22 +93,24 @@
     </div>
 
     <!--テーブル-->
-    <div class="q-pt-md q-pb-md search-table" v-if="records.length > 0">
-      <div class="row q-gutter-md">
+    <div class="q-pb-md search-table" v-if="records.length > 0">
+      <div class="row q-gutter-md search-table">
         <q-toggle
           v-model="visibleColumns"
           val="desc"
-          label="詳細を表示"
+          label="詳細"
           keep-color
           color="blue"
+          dense
+          class="q-pt-sm"
         />
         <lock-icon
           v-model="detailEditLock"
           @event-change="detailEditLock = $event"
-          label="更新・削除"
           class="q-pt-sm"
         />
       </div>
+
       <q-markup-table separator="cell" class="search-table">
         <thead>
           <th width="50" v-if="!detailEditLock">編集</th>

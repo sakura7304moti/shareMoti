@@ -65,6 +65,7 @@ export default api;
 /*
  *interfaces
  */
+
 export interface NameListRequest {
   key: string | null;
   val: string | null;

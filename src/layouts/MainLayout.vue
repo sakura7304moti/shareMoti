@@ -20,7 +20,6 @@
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" class="q-pa-md bg-grey-4" bordered>
-      <q-item-label header> Pages</q-item-label>
       <q-list>
         <template v-for="(menuItem, index) in menuList" :key="index">
           <q-item
@@ -35,8 +34,13 @@
             <q-item-section class="text-h6">
               {{ menuItem.label }}
             </q-item-section>
+            <q-separator :key="'sep' + index" v-if="menuItem.separator" />
           </q-item>
-          <q-separator :key="'sep' + index" v-if="menuItem.separator" />
+          <q-separator
+            :key="'sep' + index"
+            v-if="menuItem.separator"
+            color="grey"
+          />
         </template>
       </q-list>
     </q-drawer>
@@ -62,24 +66,28 @@ export default defineComponent({
         iconColor: 'primary',
         icon: 'chat',
         link: '/wordList',
+        separator: false,
       },
       {
         label: 'あだ名一覧',
         icon: 'content_paste',
         iconColor: 'secondary',
         link: '/nameList',
-      },
-      {
-        label: 'twitter',
-        icon: 'image',
-        iconColor: 'primary',
-        link: '/twitter',
+        separator: false,
       },
       {
         label: '共有URLまとめ',
         icon: 'info',
         iconColor: 'grey-6',
         link: '/info',
+        separator: true,
+      },
+      {
+        label: 'Twitter',
+        icon: 'image',
+        iconColor: 'primary',
+        link: '/twitter',
+        separator: false,
       },
     ] as MenuItem[];
     const router = useRouter();
@@ -97,7 +105,7 @@ interface MenuItem {
   icon: string;
   iconColor: string;
   label: string;
-  separator: string;
+  separator: boolean;
   link: string;
 }
 </script>

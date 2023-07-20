@@ -5,14 +5,23 @@
       <div>
         <div class="q-pb-md text-h6">あだ名一覧</div>
         <div class="row q-gutter-md q-pb-md">
-          <q-input
-            label="あだ名"
-            v-model="condition.key"
-            class="form-model"
-            dense
-            outlined
-            stack-label
-          />
+          <q-field dense>
+            <q-input
+              label="あだ名"
+              v-model="condition.key"
+              class="form-model"
+              dense
+              stack-label
+            />
+            <q-btn
+              color="primary"
+              dense
+              icon="search"
+              @click="search"
+              :loading="isLoading"
+            />
+          </q-field>
+
           <q-select
             label="キャラ名"
             v-model="condition.val"
@@ -23,26 +32,18 @@
             outlined
             stack-label
           />
-          <q-toggle
-            label="追加画面を表示する"
-            v-model="saveModalShow"
-            keep-color
+          <q-btn
+            label="追加"
+            icon-right="note_add"
             color="grey-6"
+            outline
+            @click="saveModalShow = true"
+            dense
           />
         </div>
 
         <!--botton-->
-        <div class="row q-gutter-md">
-          <q-btn
-            label="検索"
-            color="primary"
-            dense
-            icon="search"
-            outline
-            @click="search"
-            :loading="isLoading"
-          />
-        </div>
+        <div class="row q-gutter-md"></div>
       </div>
       <!--追加画面-->
       <q-dialog v-model="saveModalShow">
@@ -107,19 +108,20 @@
     </div>
 
     <!--テーブル-->
-    <div class="q-pt-md q-pb-md search-table" v-if="records.length > 0">
-      <div class="row q-gutter-md">
+    <div class="q-pb-md search-table" v-if="records.length > 0">
+      <div class="row q-gutter-md q-pt-xs">
         <q-toggle
           v-model="visibleColumns"
           val="desc"
-          label="キャラ名を表示"
+          label="キャラ名"
           keep-color
           color="blue"
+          dense
+          class="q-pt-sm"
         />
         <lock-icon
           v-model="detailEditLock"
           @event-change="detailEditLock = $event"
-          label="更新・削除"
           class="q-pt-sm"
         />
       </div>
@@ -283,7 +285,7 @@
   </q-page>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 import { useNameListModel } from 'src/models/NameListModels';
 import lockIcon from 'src/components/LockIcon.vue';
 export default defineComponent({
@@ -342,16 +344,16 @@ export default defineComponent({
 
     watch(condition.value, () => {
       if (condition.value.key == '') {
-        search();
+        records.value = records.value.filter(
+          (it) => it.val == condition.value.val
+        );
       }
     });
 
     //追加画面のセレクト選択後登録済みのあだ名表示
     watch(insertCondition.value, () => {
       if (insertCondition.value.val != '') {
-        saveDisplayList.value = records.value.filter(
-          (it) => it.val == insertCondition.value.val
-        );
+        search();
       }
     });
 
@@ -387,7 +389,7 @@ export default defineComponent({
 <style>
 /*input 入力の横幅 */
 .form-model {
-  width: 300px;
+  width: 200px;
   height: 40px;
 }
 /*テーブルのサイズ */

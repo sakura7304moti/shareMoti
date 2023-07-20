@@ -275,6 +275,9 @@ export function useNameListModel() {
           searchSsbuNames.value.push(res);
           editSsbuNames.value.push(res);
         });
+        ssbuNames.value.sort();
+        searchSsbuNames.value.sort();
+        editSsbuNames.value.sort();
       })
       .catch((e) => {
         console.log(e);
