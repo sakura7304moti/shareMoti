@@ -12,6 +12,7 @@
               dense
               stack-label
               outlined
+              v-on:keydown.enter="search"
             />
             <q-btn
               color="primary"

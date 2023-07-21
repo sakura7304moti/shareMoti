@@ -3,15 +3,15 @@
     <div class="row q-gutter-md">
       <!--画面左側-->
       <div>
-        <div class="q-pb-md text-h6">あだ名一覧</div>
-        <div class="row q-gutter-md q-pb-md">
+        <div class="q-pb-md text-h6">焼き直し条約</div>
+        <div class="row q-gutter-md" style="padding-bottom: 8px">
           <q-field dense>
             <q-input
-              label="あだ名"
-              v-model="condition.key"
+              v-model="condition.word"
               class="form-model"
               dense
               stack-label
+              outlined
               v-on:keydown.enter="search"
             />
             <q-btn
@@ -23,28 +23,15 @@
             />
           </q-field>
 
-          <q-select
-            label="キャラ名"
-            v-model="condition.val"
-            :options="searchSsbuNames"
-            clearable
-            class="form-model"
-            dense
-            outlined
-            stack-label
-          />
           <q-btn
             label="追加"
             icon-right="note_add"
             color="grey-6"
-            outline
             @click="saveModalShow = true"
+            outline
             dense
           />
         </div>
-
-        <!--botton-->
-        <div class="row q-gutter-md"></div>
       </div>
       <!--追加画面-->
       <q-dialog v-model="saveModalShow">
@@ -56,11 +43,12 @@
                 <q-btn icon="close" @click="saveModalShow = false" round flat />
               </div>
               <hr />
-              <div class="row q-gutter-md">
-                <div>
+              <div class="row q-gutter-md" style="height: 150px">
+                <div style="height: 150px">
                   <q-input
-                    label="あだ名"
-                    v-model="insertCondition.key"
+                    label="条約名"
+                    type="textarea"
+                    v-model="insertCondition.word"
                     class="form-model"
                     dense
                     outlined
@@ -71,25 +59,21 @@
                 </div>
 
                 <q-select
-                  label="キャラ名"
-                  v-model="insertCondition.val"
+                  label="種類"
+                  v-model="insertCondition.yaki"
                   class="form-model"
-                  :options="ssbuNames"
+                  :options="selecter"
                   dense
                   outlined
                   stack-label
                   style="width: 250px"
                 />
               </div>
-              <ul v-if="saveDisplayList.length > 0">
-                <div class="text-h6">登録済みのあだ名</div>
-                <li v-for="n in saveDisplayList" :key="n.key">{{ n.key }}</li>
-              </ul>
               <hr />
               <div class="row q-gutter-md">
                 <q-btn
                   @click.prevent="
-                    insertRecord(insertCondition.key, insertCondition.val)
+                    insertRecord(insertCondition.word, insertCondition.yaki)
                   "
                   label="追加"
                   color="primary"
@@ -110,11 +94,11 @@
 
     <!--テーブル-->
     <div class="q-pb-md search-table" v-if="records.length > 0">
-      <div class="row q-gutter-md q-pt-xs">
+      <div class="row q-gutter-md search-table">
         <q-toggle
           v-model="visibleColumns"
           val="desc"
-          label="キャラ名"
+          label="種類"
           keep-color
           color="blue"
           dense
@@ -126,20 +110,19 @@
           class="q-pt-sm"
         />
       </div>
+
       <q-markup-table separator="cell" class="search-table">
         <thead>
           <th width="50" v-if="!detailEditLock">編集</th>
-          <th width="250">あだ名</th>
-          <th v-if="visibleColumns">キャラ名</th>
+          <th width="250">条約</th>
+          <th v-if="visibleColumns">種類</th>
         </thead>
         <tbody>
-          <tr v-for="rec in records" :key="rec.key">
+          <tr v-for="rec in records" :key="rec.word">
             <td
               v-if="!detailEditLock"
               :class="{
-                'bg-light-blue-1':
-                  rec.val == updateCondition.val &&
-                  rec.key == updateCondition.key,
+                'bg-light-blue-1': rec.word == updateCondition.word,
               }"
             >
               <a href="#" @click.prevent="onEditClick(rec)"
@@ -148,25 +131,23 @@
             </td>
             <td
               :class="{
-                'bg-light-blue-1': rec.key == updateCondition.key,
+                'bg-light-blue-1': rec.word == updateCondition.word,
               }"
             >
-              {{ rec.key }}
+              {{ rec.word }}
             </td>
             <td
               v-if="visibleColumns"
               :class="{
-                'bg-light-blue-1': rec.key == updateCondition.key,
+                'bg-light-blue-1': rec.word == updateCondition.word,
               }"
             >
-              {{ rec.val }}
+              {{ rec.yaki }}
             </td>
           </tr>
         </tbody>
       </q-markup-table>
-      <div class="q-pt-sm text-weight-light" style="">
-        count:{{ records.length }}
-      </div>
+      <div class="q-pt-sm text-weight-light">count:{{ records.length }}</div>
     </div>
 
     <!--更新ダイアログ-->
@@ -181,19 +162,11 @@
 
             <hr />
             <!--inputs-->
-            <div class="row q-gutter-md">
+            <div class="row q-gutter-md" style="height: 150px">
               <q-input
-                label="あだ名"
-                v-model="updateCondition.key"
-                class="form-model"
-                dense
-                outlined
-                stack-label
-                style="width: 250px"
-              />
-              <q-input
-                label="キャラ名"
-                v-model="updateCondition.val"
+                label="条約"
+                type="textarea"
+                v-model="updateCondition.word"
                 class="form-model"
                 dense
                 outlined
@@ -201,28 +174,22 @@
                 style="width: 250px"
                 readonly
               />
+              <q-select
+                label="種類"
+                :options="selecter"
+                v-model="updateCondition.yaki"
+                class="form-model"
+                dense
+                stack-label
+                style="width: 250px"
+              />
             </div>
-            <ul
-              v-if="
-                records.filter((it) => it.val == updateCondition.val).length > 0
-              "
-            >
-              <div class="text-h6">登録済みのあだ名</div>
-              <li
-                v-for="n in records.filter(
-                  (it) => it.val == updateCondition.val
-                )"
-                :key="n.key"
-              >
-                {{ n.key }}
-              </li>
-            </ul>
             <!--buttons-->
             <hr />
             <div class="row q-gutter-md">
               <q-btn
                 @click.prevent="
-                  updateRecord(updateCondition.key, updateCondition.val)
+                  updateRecord(updateCondition.word, updateCondition.yaki)
                 "
                 label="更新"
                 color="primary"
@@ -262,14 +229,14 @@
               />
             </div>
             <hr />
-            <div>次のあだ名を削除してもいいかな？</div>
-            <q-field label="あだ名" stack-label>{{
-              updateCondition.key
+            <div>次の条約を削除してもいいかな？</div>
+            <q-field label="条約" stack-label>{{
+              updateCondition.word
             }}</q-field>
             <div class="row q-gutter-md q-pt-sm">
               <q-btn
                 @click.prevent="
-                  deleteRecord(updateCondition.key, updateCondition.val)
+                  deleteRecord(updateCondition.word, updateCondition.yaki)
                 "
                 label="削除する"
                 color="negative"
@@ -287,10 +254,10 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue';
-import { useNameListModel } from 'src/models/NameListModels';
+import { useYakiListModel } from 'src/models/YakiListModels';
 import lockIcon from 'src/components/LockIcon.vue';
 export default defineComponent({
-  name: 'word-list',
+  name: 'yaki-list',
   components: {
     'lock-icon': lockIcon,
   },
@@ -314,47 +281,20 @@ export default defineComponent({
       insertRecord,
       updateErr,
       deleteCheckModalShow,
-      //initNameList,
-      saveDisplayList,
-      ssbuNames,
-      ssbuList,
-      searchSsbuNames,
-      editSsbuNames,
-      updateBeforeCondition,
-    } = useNameListModel();
-    //initNameList();
+      selecter,
+    } = useYakiListModel();
     search();
-    ssbuList();
 
-    //追加画面閉じたら初期化
     watch(editModalShow, () => {
       if (editModalShow.value == false) {
-        updateCondition.value.key = '';
-        updateCondition.value.val = '';
-      }
-    });
-
-    //編集画面閉じたら初期化
-    watch(saveModalShow, () => {
-      if (saveModalShow.value == false) {
-        insertCondition.value.key = '';
-        insertCondition.value.val = '';
-        saveDisplayList.value.splice(0);
+        updateCondition.value.word = '';
       }
     });
 
     watch(condition.value, () => {
-      if (condition.value.key == '') {
-        records.value = records.value.filter(
-          (it) => it.val == condition.value.val
-        );
-      }
-    });
-
-    //追加画面のセレクト選択後登録済みのあだ名表示
-    watch(insertCondition.value, () => {
-      if (insertCondition.value.val != '') {
-        search();
+      if (condition.value.yaki && condition.value.yaki != '') {
+        condition.value.word = condition.value.yaki;
+        condition.value.yaki = '';
       }
     });
 
@@ -378,11 +318,7 @@ export default defineComponent({
       insertRecord,
       updateErr,
       deleteCheckModalShow,
-      ssbuNames,
-      searchSsbuNames,
-      editSsbuNames,
-      saveDisplayList,
-      updateBeforeCondition,
+      selecter,
     };
   },
 });
@@ -406,16 +342,5 @@ export default defineComponent({
 .search-table td {
   word-wrap: break-word; /* テキストの自動改行を設定 */
   white-space: normal; /* 空白文字の扱いを設定 */
-}
-/*箇条書き */
-ul {
-  background: #fcfcfc; /*背景色*/
-  padding: 0.5em 0.5em 0.5em 2em; /*ボックス内の余白*/
-  border: solid 3px gray; /*線の種類 太さ 色*/
-}
-
-li {
-  line-height: 1.5; /*文の行高*/
-  padding: 0.5em 0; /*前後の文との余白*/
 }
 </style>

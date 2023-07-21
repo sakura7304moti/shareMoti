@@ -76,6 +76,13 @@ export default defineComponent({
         separator: false,
       },
       {
+        label: '焼き直し条約',
+        icon: 'chat',
+        iconColor: 'negative',
+        link: '/yaki',
+        separator: false,
+      },
+      {
         label: '共有URLまとめ',
         icon: 'info',
         iconColor: 'grey-6',

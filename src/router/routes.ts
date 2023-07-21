@@ -18,6 +18,18 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('pages/NameListPage.vue') }],
   },
   {
+    path: '/info',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/InfomationPage.vue') },
+    ],
+  },
+  {
+    path: '/yaki',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/YakiListPage.vue') }],
+  },
+  {
     path: '/twitter',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/TwitterPage.vue') }],
@@ -33,13 +45,7 @@ const routes: RouteRecordRaw[] = [
       fetch: route.query.fetch,
     }),
   },
-  {
-    path: '/info',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/InfomationPage.vue') },
-    ],
-  },
+
   /*Scraper */
   {
     path: '/scraper/',
