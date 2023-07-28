@@ -88,42 +88,25 @@
     <q-dialog
       v-model="fullSc"
       persistent
-      :maximized="maximizedToggle"
+      full-height
+      full-width
       transition-show="slide-up"
       transition-hide="slide-down"
     >
       <q-card>
         <q-card-section>
           <q-bar>
-            <q-space />
-
             <q-btn
               dense
               flat
-              icon="minimize"
-              @click="maximizedToggle = false"
-              :disable="!maximizedToggle"
+              icon="close"
+              v-close-popup
+              style="margin-left: auto"
             >
-              <q-tooltip v-if="maximizedToggle" class="bg-white text-primary"
-                >Minimize</q-tooltip
-              >
-            </q-btn>
-            <q-btn
-              dense
-              flat
-              icon="crop_square"
-              @click="maximizedToggle = true"
-              :disable="maximizedToggle"
-            >
-              <q-tooltip v-if="!maximizedToggle" class="bg-white text-primary"
-                >Maximize</q-tooltip
-              >
-            </q-btn>
-            <q-btn dense flat icon="close" v-close-popup>
               <q-tooltip class="bg-white text-primary">Close</q-tooltip>
             </q-btn>
           </q-bar>
-          <img :src="fullScreenViewUrl" style="height: 100%" />
+          <img :src="fullScreenViewUrl" :height="pageHeight" />
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -145,7 +128,7 @@
 <script lang="ts">
 import { useViewSupport } from 'src/utils/viewSupport';
 import { useHololewdModel } from 'src/models/HololewdModels';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 export default defineComponent({
   name: 'holoewd-page',
   setup() {
@@ -172,6 +155,14 @@ export default defineComponent({
     const pageOpenClick = function (url: string) {
       window.open(url);
     };
+
+    const pageWidth = computed(() => {
+      return window.innerWidth;
+    });
+
+    const pageHeight = computed(() => {
+      return window.innerHeight - 100;
+    });
     return {
       condition,
       dataState,
@@ -188,6 +179,8 @@ export default defineComponent({
       fullScViewClick,
       maximizedToggle: ref(true),
       pageOpenClick,
+      pageWidth,
+      pageHeight,
     };
   },
 });

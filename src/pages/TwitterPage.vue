@@ -10,10 +10,17 @@
         stack-label
         dense
       />
-      
-      
-      <q-select v-model="condition.hashtag" :options="holoList" label="ハッシュタグ一覧" class="form-model" dense stack-label transition-show="jump-up"
-        transition-hide="jump-up"/>
+
+      <q-select
+        v-model="condition.hashtag"
+        :options="holoList"
+        label="ハッシュタグ一覧"
+        class="form-model"
+        dense
+        stack-label
+        transition-show="jump-up"
+        transition-hide="jump-up"
+      />
       <q-input
         label="ツイート日"
         v-model="condition.startDate"
@@ -134,42 +141,25 @@
     <q-dialog
       v-model="fullSc"
       persistent
-      :maximized="maximizedToggle"
+      full-height
+      full-width
       transition-show="slide-up"
       transition-hide="slide-down"
     >
       <q-card>
         <q-card-section>
           <q-bar>
-            <q-space />
-
             <q-btn
               dense
               flat
-              icon="minimize"
-              @click="maximizedToggle = false"
-              :disable="!maximizedToggle"
+              icon="close"
+              v-close-popup
+              style="margin-left: auto"
             >
-              <q-tooltip v-if="maximizedToggle" class="bg-white text-primary"
-                >Minimize</q-tooltip
-              >
-            </q-btn>
-            <q-btn
-              dense
-              flat
-              icon="crop_square"
-              @click="maximizedToggle = true"
-              :disable="maximizedToggle"
-            >
-              <q-tooltip v-if="!maximizedToggle" class="bg-white text-primary"
-                >Maximize</q-tooltip
-              >
-            </q-btn>
-            <q-btn dense flat icon="close" v-close-popup>
               <q-tooltip class="bg-white text-primary">Close</q-tooltip>
             </q-btn>
           </q-bar>
-          <img :src="fullScreenViewUrl" style="height: 100%" />
+          <img :src="fullScreenViewUrl" :height="pageHeight" />
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -191,51 +181,13 @@
 <script lang="ts">
 import { useViewSupport } from 'src/utils/viewSupport';
 import { useTwitterModel } from 'src/models/TwitterModels';
-import { defineComponent, ref, watch } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import { LocationQueryRaw, useRoute, useRouter } from 'vue-router';
 import HoloHashtagList from 'src/components/HoloHashtagList.vue';
 export default defineComponent({
   name: 'twitter-page',
   component: { 'holo-hashtag-list': HoloHashtagList },
-  props: {
-    pageNo: {
-      type: Number,
-      required: false,
-    },
-    pageSize: {
-      type: Number,
-      required: false,
-    },
-    hashtag: {
-      type: String,
-      required: false,
-    },
-    startDate: {
-      type: String,
-      required: false,
-    },
-    endDate: {
-      type: String,
-      required: false,
-    },
-    userName: {
-      type: String,
-      required: false,
-    },
-    minLike: {
-      type: Number,
-      required: false,
-    },
-    maxLike: {
-      type: Number,
-      required: false,
-    },
-    fetch: {
-      type: Boolean,
-      required: false,
-    },
-  },
-  setup(props) {
+  setup() {
     const route = useRoute();
     const router = useRouter();
     const { fileDownload } = useViewSupport();
@@ -252,43 +204,6 @@ export default defineComponent({
       imageLinkOpen,
     } = useTwitterModel();
     getHoloList();
-    //search(); //test
-    const handleProps = function () {
-      console.log('props', props);
-      if (props.hashtag) {
-        condition.value.hashtag = props.hashtag;
-      }
-      if (props.startDate) {
-        condition.value.startDate = props.startDate;
-      }
-      if (props.endDate) {
-        condition.value.endDate = props.endDate;
-      }
-      if (props.userName) {
-        condition.value.userName = props.userName;
-      }
-      if (props.minLike) {
-        condition.value.minLike = props.minLike;
-      }
-      if (props.maxLike) {
-        condition.value.maxLike = props.maxLike;
-      }
-      if (props.pageNo) {
-        condition.value.pageNo = props.pageNo;
-      }
-      if (props.pageSize) {
-        condition.value.pageSize = props.pageSize;
-      }
-      if (props.fetch) {
-        search();
-      }
-    };
-
-    handleProps();
-
-    watch(props, () => {
-      handleProps();
-    });
 
     const onSearchClick = async function () {
       // パラメータと値を持つオブジェクトを作成
@@ -315,9 +230,6 @@ export default defineComponent({
         params.max = condition.value.maxLike;
       }
       params.fetch = 1;
-
-      // URLを変更してクエリパラメータを設定
-      console.log('hey', route.params);
       router.push({ path: route.path, query: params });
     };
 
@@ -333,6 +245,14 @@ export default defineComponent({
     const pageOpenClick = function (url: string) {
       window.open(url);
     };
+
+    const pageWidth = computed(() => {
+      return window.innerWidth;
+    });
+
+    const pageHeight = computed(() => {
+      return window.innerHeight - 100;
+    });
 
     return {
       condition,
@@ -352,21 +272,11 @@ export default defineComponent({
       fullScViewClick,
       maximizedToggle: ref(true),
       pageOpenClick,
-      
+      pageWidth,
+      pageHeight,
     };
   },
 });
-interface PropsState extends LocationQueryRaw {
-  p: number;
-  ps: number;
-  h?: string;
-  sd?: string;
-  ed?: string;
-  u?: string;
-  min?: number | null;
-  max?: number | null;
-  fetch: number;
-}
 </script>
 <style>
 /*input */

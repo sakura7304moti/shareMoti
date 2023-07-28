@@ -33,17 +33,6 @@ const routes: RouteRecordRaw[] = [
     path: '/twitter',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/TwitterPage.vue') }],
-    props: (route) => ({
-      pageNo: Number(route.query.p),
-      pageSize: Number(route.query.ps),
-      hashtag: route.query.h,
-      startDate: route.query.sd,
-      endDate: route.query.ed,
-      userName: route.query.u,
-      minLike: Number(route.query.min),
-      maxLike: Number(route.query.max),
-      fetch: route.query.fetch,
-    }),
   },
 
   /*Scraper */
@@ -58,17 +47,6 @@ const routes: RouteRecordRaw[] = [
     path: '/scraper/twitter',
     component: () => import('layouts/ScraperLayout.vue'),
     children: [{ path: '', component: () => import('pages/TwitterPage.vue') }],
-    props: (route) => ({
-      pageNo: Number(route.query.p),
-      pageSize: Number(route.query.ps),
-      hashtag: route.query.h,
-      startDate: route.query.sd,
-      endDate: route.query.ed,
-      userName: route.query.u,
-      minLike: Number(route.query.min),
-      maxLike: Number(route.query.max),
-      fetch: route.query.fetch,
-    }),
   },
   {
     path: '/scraper/hololewd',
