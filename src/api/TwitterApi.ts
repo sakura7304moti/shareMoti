@@ -4,7 +4,7 @@ export class TwitterApi extends APIClient {
   public search(
     request: TwitterRequest
   ): Promise<PageResult<TwitterResponse> | null> {
-    const url = '/twitter/search';
+    const url = '/nitter/search'; //twitter/search
     const path = this.combineUrl(url);
 
     return this.httpPost<TwitterRequest, PageResult<TwitterResponse>>(
@@ -14,7 +14,7 @@ export class TwitterApi extends APIClient {
   }
 
   public holoList(): Promise<Array<string> | null> {
-    const url = '/twitter/hololist';
+    const url = '/nitter/hololist'; //twitter/hololist
     const path = this.combineUrl(url);
 
     return this.httpGet<Array<string>>(path);
