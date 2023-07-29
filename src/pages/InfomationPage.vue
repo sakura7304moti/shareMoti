@@ -2,27 +2,62 @@
   <q-page class="">
     <div id="page-main">
       <div class="text-h5 q-pb-md">共有URLまとめ</div>
-      <!--neta-->
-      <div class="row q-gutter-md q-pb-md">
-        <div>
-          <img
-            src="../assets/yosao.png"
-            height="130"
-            width="140"
-            id="oba-profile"
-          />
-          <div class="profile-name">未来から来た与謝野晶子</div>
-        </div>
-        <balloon-left :text="yosamessage" style="height: 120px" />
-      </div>
+      <!--ネタ要素満載-->
       <div class="row q-gutter-md">
-        <div>
-          <img src="../assets/obachan.jpg" height="130" id="oba-profile" />
-          <div class="profile-name">韓国のおばあちゃん</div>
+        <!--与謝野晶子による焼き直し劇場-->
+        <div class="neta-talk" style="padding-right: 100px">
+          <div class="row q-gutter-md q-pb-md">
+            <div>
+              <img
+                src="../assets/yosao.png"
+                height="130"
+                width="140"
+                id="oba-profile"
+              />
+              <div class="profile-name">未来から来た与謝野晶子</div>
+            </div>
+            <balloon-left :text="yosamessage" style="height: 120px" />
+          </div>
+          <div class="row q-gutter-md">
+            <div>
+              <img src="../assets/obachan.jpg" height="130" id="oba-profile" />
+              <div class="profile-name">韓国のおばあちゃん</div>
+            </div>
+            <balloon-left :text="obamessage" style="height: 120px" />
+          </div>
         </div>
-        <balloon-left :text="obamessage" style="height: 120px" />
+
+        <!--ガノンヤーキー川柳-->
+        <div class="haiku-box">
+          <div style="font-family: HinaMincho-Regular; font-size: 36px">
+            2023年交通安全川柳<br /><b>最優秀作品</b>
+          </div>
+          <div
+            style="
+              writing-mode: vertical-rl;
+              font-family: haiku;
+              font-size: 32px;
+              margin-left: auto;
+            "
+          >
+            <div style="margin-right: 100px">安全は</div>
+            <div style="margin-right: 20px">規則を守って</div>
+            <div style="margin-right: 20px">ガノンヤーキー</div>
+          </div>
+          <audio
+            controls
+            autoplay
+            :volume="0.5"
+            preload="auto"
+            loop
+            class="q-pt-md"
+          >
+            <source src="../songs/watamote.mp3" type="audio/mp3" />
+          </audio>
+        </div>
       </div>
-      <!--Links-->
+
+      <!--リンクまとめ-->
       <hr />
       <div id="info-links" class="q-pb-md q-pt-md">
         <div id="notion-urls">
@@ -95,5 +130,43 @@ export default defineComponent({
   text-align: center;
   font-weight: lighter;
   font-size: 1rem;
+}
+/*fonts */
+@font-face {
+  font-family: 'haiku';
+  src: url(../fonts/haiku2.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'HinaMincho-Regular';
+  src: url(../fonts/HinaMincho-Regular.ttf) format('truetype');
+}
+/*haiku-box */
+.haiku-box {
+  width: 400px;
+  margin: 2em 0;
+  position: relative;
+  padding: 0.5em 1.5em;
+  border-top: solid 2px black;
+  border-bottom: solid 2px black;
+}
+.haiku-box:before,
+.haiku-box:after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  width: 2px;
+  height: -webkit-calc(100% + 20px);
+  height: calc(100% + 20px);
+  background-color: black;
+}
+.haiku-box:before {
+  left: 10px;
+}
+.haiku-box:after {
+  right: 10px;
+}
+.haiku-box div {
+  margin: 0;
+  padding: 0;
 }
 </style>
