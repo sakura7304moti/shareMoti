@@ -12,7 +12,7 @@ export function useHololewdModel() {
     fullName: '',
     firstName: '',
     lastName: '',
-    minLike: 100,
+    minLike: 0,
     maxLike: 0,
   } as ConditionState);
   const fetchedCondition = ref({
@@ -21,7 +21,7 @@ export function useHololewdModel() {
     fullName: '',
     firstName: '',
     lastName: '',
-    minLike: 100,
+    minLike: 0,
     maxLike: 0,
   } as ConditionState);
 

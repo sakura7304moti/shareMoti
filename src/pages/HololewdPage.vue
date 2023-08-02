@@ -64,7 +64,7 @@
                 <!--Download-->
                 <q-btn
                   icon="file_download"
-                  @click.prevent="fileDownload(r.image)"
+                  @click.prevent="imageDownload(r.image)"
                   color="primary"
                   round
                   ><q-tooltip :delay="1000">download</q-tooltip></q-btn
@@ -142,7 +142,7 @@ export default defineComponent({
       selectItems,
       imageLinkOpen,
     } = useHololewdModel();
-    const { fileDownload } = useViewSupport();
+    const { fileDownload, imageDownload } = useViewSupport();
     const downloadMode = ref(false);
 
     const fullScreenViewUrl = ref('');
@@ -173,6 +173,7 @@ export default defineComponent({
       selectItems,
       imageLinkOpen,
       fileDownload,
+      imageDownload,
       downloadMode,
       fullSc,
       fullScreenViewUrl,

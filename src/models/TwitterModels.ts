@@ -10,6 +10,7 @@ export function useTwitterModel() {
   const month = String(today.getMonth() + 1).padStart(2, '0');
   const day = String(today.getDate()).padStart(2, '0');
   const formattedDate = `${year}/${month}/${day}`;
+  const searchOptionShow = ref(false);
 
   //val
   const quasar = useQuasar();
@@ -20,6 +21,7 @@ export function useTwitterModel() {
     startDate: '',
     endDate: formattedDate,
     userName: '',
+    mode: 'holo',
     minLike: 100,
     maxLike: 0,
   } as ConditionState);
@@ -72,6 +74,10 @@ export function useTwitterModel() {
     {
       label: '50000',
       value: 50000,
+    },
+    {
+      label: '100000',
+      value: 100000,
     },
   ] as Array<selectItem>;
 
@@ -130,6 +136,12 @@ export function useTwitterModel() {
     isLoading.value = true;
     dataState.value.records.splice(0);
     compareCondition(); //検索条件変わったらページ数1にする
+    if (
+      condition.value.minLike == null ||
+      condition.value.minLike == undefined
+    ) {
+      condition.value.minLike = 0;
+    }
     const request = {
       page_no: condition.value.pageNo,
       page_size: condition.value.pageSize,
@@ -137,8 +149,9 @@ export function useTwitterModel() {
       start_date: dateToString(condition.value.startDate),
       end_date: dateToString(condition.value.endDate),
       user_name: condition.value.userName,
-      min_like: condition.value.minLike,
-      max_like: condition.value.maxLike,
+      mode: condition.value.mode,
+      min_like: condition.value.minLike ?? 0,
+      max_like: condition.value.maxLike ?? 0,
       displayMenu: false,
     } as TwitterRequest;
 
@@ -171,11 +184,15 @@ export function useTwitterModel() {
             startDate: c.startDate,
             endDate: c.endDate,
             userName: c.userName,
+            mode: c.mode,
             minLike: c.minLike,
             maxLike: c.maxLike,
             pageNo: c.pageNo,
             pageSize: c.pageSize,
           };
+          searchOptionShow.value = false;
+        } else {
+          dataState.value.totalPages = 1;
         }
       })
       .catch((e) => {
@@ -203,6 +220,7 @@ export function useTwitterModel() {
     dateModalShow,
     selectItems,
     imageLinkOpen,
+    searchOptionShow,
   };
 }
 interface ConditionState {
@@ -212,6 +230,7 @@ interface ConditionState {
   startDate: string;
   endDate: string;
   userName: string;
+  mode: string;
   minLike: number | null;
   maxLike: number | null;
 }

@@ -1,84 +1,193 @@
 <template>
   <q-page class="">
-    <div class="text-h5 q-pb-md">Twitter Scraper</div>
+    <div class="q-pb-md">
+      <div v-if="condition.mode == 'holo'" class="row q-gutter-md">
+        <div class="text-h5" style="width: 150px">HoloTwitter</div>
+        <div>
+          <a href="#" @click.prevent="condition.mode = ''"
+            ><img src="../assets/holo_icon.jpg" style="height: 30px"
+          /></a>
+        </div>
+      </div>
+      <div v-else class="row q-gutter-md">
+        <div class="text-h5" style="width: 150px">Twitter</div>
+        <div>
+          <a href="#" @click.prevent="condition.mode = 'holo'">
+            <img
+              src="../assets/Logo_of_Twitter.jpg"
+              style="height: 30px"
+              @click.prevent="condition.mode = ''"
+            />
+          </a>
+        </div>
+      </div>
+    </div>
     <!--入力フォーム-->
     <div class="row q-gutter-md">
       <q-input
-        label="ハッシュタグ"
         v-model="condition.hashtag"
+        label="hashtag"
         class="form-model"
-        stack-label
         dense
-      />
-
+        stack-label
+        @keydown.enter="search()"
+      >
+        <q-btn
+          color="primary"
+          dense
+          icon="search"
+          @click="search"
+          :loading="isLoading"
+        />
+      </q-input>
       <q-select
+        v-if="condition.mode == 'holo'"
         v-model="condition.hashtag"
         :options="holoList"
-        label="ハッシュタグ一覧"
+        label="hololive fanart"
         class="form-model"
         dense
         stack-label
         transition-show="jump-up"
         transition-hide="jump-up"
-      />
-      <q-input
-        label="ツイート日"
-        v-model="condition.startDate"
-        class="form-model"
-        stack-label
-        dense
-        type="date"
-      />
-      <div class="text-h6 q-pt-sm form-date-span">~</div>
-      <q-input
-        label="ツイート日"
-        v-model="condition.endDate"
-        class="form-model"
-        stack-label
-        dense
-        type="date"
-      />
-    </div>
-    <div class="row q-gutter-md q-pt-md">
-      <q-input
-        label="ユーザー名"
-        v-model="condition.userName"
-        class="form-model"
-        stack-label
-        dense
-      />
+      >
+      </q-select>
       <q-select
-        label="いいね数"
+        label="♡"
         v-model="condition.minLike"
         :options="selectItems"
-        class="form-model"
         emit-value
         map-options
+        stack-label
         dense
+        style="height: 40px; width: 80px"
       />
-      <div class="text-h6 q-pt-sm form-date-span">~</div>
-      <q-select
-        label="いいね数"
-        v-model="condition.maxLike"
-        :options="selectItems"
-        class="form-model"
-        emit-value
-        map-options
-        dense
-      />
+      <div>
+        <q-btn
+          icon="settings"
+          color="grey"
+          size="sm"
+          round
+          @click="searchOptionShow = true"
+        />
+      </div>
     </div>
 
+    <!--search option dialog-->
+    <q-dialog v-model="searchOptionShow">
+      <q-card style="height: 500px">
+        <q-card-section>
+          <div class="text-h5">検索オプション</div>
+          <hr />
+          <div class="text-subtitle1">ハッシュタグ</div>
+          <div class="row q-gutter-md">
+            <q-input
+              v-model="condition.hashtag"
+              class="form-model"
+              dense
+              stack-label
+              filled
+            />
+            <q-select
+              v-model="condition.hashtag"
+              :options="holoList"
+              label="ホロライブファンアート"
+              class="form-model"
+              dense
+              stack-label
+              transition-show="jump-up"
+              transition-hide="jump-up"
+              filled
+            >
+            </q-select>
+          </div>
+
+          <div class="q-pt-md text-subtitle1">ツイート日</div>
+          <div class="row q-gutter-md">
+            <q-input
+              v-model="condition.startDate"
+              class="form-model"
+              dense
+              type="date"
+              filled
+            />
+            <div class="text-h6 q-pt-sm form-date-span">~</div>
+            <q-input
+              v-model="condition.endDate"
+              class="form-model"
+              dense
+              type="date"
+              filled
+            />
+          </div>
+          <div class="q-pt-md">
+            <div class="text-subtitle1">ユーザー名</div>
+            <q-input
+              v-model="condition.userName"
+              class="form-model"
+              stack-label
+              dense
+              filled
+            />
+          </div>
+          <div class="q-pt-md">
+            <div class="text-subtitle1">いいね</div>
+            <div class="row q-gutter-md">
+              <q-input
+                v-model="condition.minLike"
+                class="form-model"
+                type="number"
+                dense
+                filled
+              />
+              <div class="text-h6 q-pt-sm form-date-span">~</div>
+              <q-select
+                v-model="condition.maxLike"
+                :options="selectItems"
+                class="form-model"
+                emit-value
+                map-options
+                stack-label
+                dense
+                filled
+              />
+            </div>
+          </div>
+          <div class="q-pt-md row q-gutter-cs">
+            <div>
+              <q-checkbox
+                true-value="holo"
+                false-value=""
+                v-model="condition.mode"
+                color="cyan"
+              />
+            </div>
+            <div>
+              <img
+                v-if="condition.mode == 'holo'"
+                src="../assets/holo_icon.jpg"
+                style="height: 30px"
+              />
+              <div v-else class="text-subtitle2 q-pt-sm">
+                ホロライブの画像のみ
+              </div>
+            </div>
+          </div>
+          <div class="q-pt-md">
+            <q-btn
+              color="primary"
+              dense
+              icon="search"
+              @click="search"
+              :loading="isLoading"
+              label="検索"
+            />
+          </div>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
     <!--botton-->
-    <div class="row q-gutter-md q-pt-md">
-      <q-btn
-        label="検索"
-        color="primary"
-        dense
-        icon="search"
-        @click="search"
-        :loading="isLoading"
-      />
-    </div>
+    <div class="row q-gutter-md q-pt-md"></div>
 
     <!--pagi-->
     <div class="q-pt-sm" v-if="dataState.totalPages > 1">
@@ -109,7 +218,7 @@
                 <!--Download-->
                 <q-btn
                   icon="file_download"
-                  @click.prevent="fileDownload(r.image)"
+                  @click.prevent="imageDownload(r.image)"
                   color="primary"
                   round
                   ><q-tooltip :delay="1000">download</q-tooltip></q-btn
@@ -184,13 +293,14 @@ import { useTwitterModel } from 'src/models/TwitterModels';
 import { computed, defineComponent, ref } from 'vue';
 import { LocationQueryRaw, useRoute, useRouter } from 'vue-router';
 import HoloHashtagList from 'src/components/HoloHashtagList.vue';
+import axios from 'axios';
 export default defineComponent({
   name: 'twitter-page',
   component: { 'holo-hashtag-list': HoloHashtagList },
   setup() {
     const route = useRoute();
     const router = useRouter();
-    const { fileDownload } = useViewSupport();
+    const { fileDownload, imageDownload } = useViewSupport();
 
     const {
       condition,
@@ -202,6 +312,7 @@ export default defineComponent({
       dateModalShow,
       selectItems,
       imageLinkOpen,
+      searchOptionShow,
     } = useTwitterModel();
     getHoloList();
 
@@ -265,6 +376,7 @@ export default defineComponent({
       selectItems,
       imageLinkOpen,
       onSearchClick,
+      imageDownload,
       fileDownload,
       downloadMode,
       fullSc,
@@ -274,6 +386,7 @@ export default defineComponent({
       pageOpenClick,
       pageWidth,
       pageHeight,
+      searchOptionShow,
     };
   },
 });

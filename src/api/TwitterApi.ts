@@ -34,6 +34,7 @@ export interface TwitterRequest {
   start_date: string | null;
   end_date: string | null;
   user_name: string | null;
+  mode: string | null;
   min_like: number | null;
   max_like: number | null;
 }
