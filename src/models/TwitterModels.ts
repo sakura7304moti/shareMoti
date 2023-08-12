@@ -214,9 +214,16 @@ export function useTwitterModel() {
   const convertImageLink = function (nitterUrl: string) {
     if (nitterUrl.includes('nitter')) {
       const fileNameExt = nitterUrl.split('%2F');
-      const fileName = fileNameExt[fileNameExt.length - 1].replace('.jpg', '');
-      const twitterUrl = `https://pbs.twimg.com/media/${fileName}?format=jpg&name=orig`;
-      return twitterUrl;
+      const fileName = fileNameExt[fileNameExt.length - 1]
+        .replace('.jpg', '')
+        .replace('.png', '');
+      if (fileNameExt[fileNameExt.length - 1].includes('jpg')) {
+        const twitterUrl = `https://pbs.twimg.com/media/${fileName}?format=jpg&name=orig`;
+        return twitterUrl;
+      } else if (fileNameExt[fileNameExt.length - 1].includes('png')) {
+        const twitterUrl = `https://pbs.twimg.com/media/${fileName}?format=png&name=orig`;
+        return twitterUrl;
+      }
     } else {
       return nitterUrl;
     }
