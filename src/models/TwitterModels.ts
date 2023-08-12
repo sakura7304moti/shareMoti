@@ -170,7 +170,7 @@ export function useTwitterModel() {
                 mode: rec.mode,
                 url: rec.url,
                 date: rec.date,
-                image: r,
+                image: convertImageLink(r),
                 userId: rec.userId,
                 userName: rec.userName,
                 likeCount: rec.likeCount,
@@ -208,6 +208,18 @@ export function useTwitterModel() {
 
   const imageLinkOpen = function (url: string) {
     window.open(url);
+  };
+
+  //nitterの画像URLをtwitterのやつに変換する
+  const convertImageLink = function (nitterUrl: string) {
+    if (nitterUrl.includes('nitter')) {
+      const fileNameExt = nitterUrl.split('%2F');
+      const fileName = fileNameExt[fileNameExt.length - 1].replace('.jpg', '');
+      const twitterUrl = `https://pbs.twimg.com/media/${fileName}?format=jpg&name=orig`;
+      return twitterUrl;
+    } else {
+      return nitterUrl;
+    }
   };
 
   return {

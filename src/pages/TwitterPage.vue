@@ -218,7 +218,7 @@
                 <!--Download-->
                 <q-btn
                   icon="file_download"
-                  @click.prevent="imageDownload(r.image)"
+                  @click.prevent="fileDownload(r.image)"
                   color="primary"
                   round
                   ><q-tooltip :delay="1000">download</q-tooltip></q-btn

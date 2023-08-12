@@ -1,5 +1,6 @@
 <template>
   <q-page class="">
+    <!--あいさつ-->
     <div class="row q-gutter-md">
       <div>
         <img src="../assets/obachan.jpg" height="130" id="oba-profile" />
@@ -24,6 +25,11 @@ export default defineComponent({
     };
   },
 });
+interface PageCard {
+  url: string;
+  imagePath: string | null;
+  detail: string;
+}
 </script>
 <style>
 #oba-profile {
