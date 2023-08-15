@@ -30,6 +30,13 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('pages/YakiListPage.vue') }],
   },
   {
+    path: '/haiku',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/HaikuListPage.vue') },
+    ],
+  },
+  {
     path: '/twitter',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/TwitterPage.vue') }],

@@ -3,14 +3,14 @@ import { APIClient } from './BaseApi';
 export class HaikuListApi extends APIClient {
   public search(
     request: HaikuListSearchRequest
-  ): Promise<Array<HaikuListSearchResponse> | null> {
+  ): Promise<HaikuListSearchResponse | null> {
     const url = '/haikuList/search';
     const path = this.combineUrl(url);
 
-    return this.httpPost<
-      HaikuListSearchRequest,
-      Array<HaikuListSearchResponse>
-    >(path, request);
+    return this.httpPost<HaikuListSearchRequest, HaikuListSearchResponse>(
+      path,
+      request
+    );
   }
 
   public insert(
@@ -88,6 +88,10 @@ export interface HaikuListDeleteRequest {
  */
 
 export interface HaikuListSearchResponse {
+  records: DataState[];
+}
+
+interface DataState {
   id: number;
   first: string;
   second: string;

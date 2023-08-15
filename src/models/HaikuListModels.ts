@@ -7,12 +7,13 @@ import { ref } from 'vue';
 
 export function useHaikuListModel() {
   const quasar = useQuasar();
-  const lockIconCondition = ref(false);
+  const lockIconCondition = ref(true);
   const displayCondition = ref({
     upper: true,
     insert: false,
     update: false,
     delete: false,
+    detail: true,
   } as DisplayCondition);
   const condition = ref({
     haikuText: '',
@@ -79,32 +80,55 @@ export function useHaikuListModel() {
     } else {
       request.haikuText = condition.value.haikuText;
     }
-    await api.search(request).then((response) => {
-      if (response) {
-        console.log('response', response);
-        records.value.splice(0);
-        response.forEach((rec) => {
-          records.value.push(rec);
+    console.log('request', request);
+    await api
+      .search(request)
+      .then((response) => {
+        if (response) {
+          console.log('response', response);
+          records.value.splice(0);
+          response.records?.forEach((rec) => {
+            records.value.push({
+              id: rec.id,
+              first: rec.first,
+              second: rec.second,
+              third: rec.third,
+              poster: rec.poster,
+              detail: rec.detail,
+              createAt: rec.createAt,
+              updateAt: rec.updateAt,
+              detailDisplay: false,
+            });
+          });
+          sortRecords();
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+
+        quasar.notify({
+          color: 'red',
+          position: 'top',
+          message: 'データの取得に失敗しました',
         });
-        sortRecords();
-      }
-    });
-    quasar.notify({
-      color: 'red',
-      position: 'top',
-      message: 'データの取得に失敗しました',
-    });
+      });
 
     LoadingCondition.value.search = false;
   };
   /*INSERT */
-  const insertClick = function (rec: DataState) {
-    insertCondition.value = JSON.parse(JSON.stringify(rec));
+  const insertClick = function () {
+    insertCondition.value = {
+      first: '',
+      second: '',
+      third: '',
+      poster: '',
+      detail: '',
+    } as InsertConditionState;
     displayCondition.value.insert = true;
   };
   const insert = async function () {
     insertCondition.value.valitationErr = '';
-    if (insertCondition.value.poster) {
+    if (insertCondition.value.poster == '') {
       insertCondition.value.valitationErr = '投稿者名を空にはできないよ!';
     }
     if (insertCondition.value.valitationErr == '') {
@@ -127,7 +151,15 @@ export function useHaikuListModel() {
                 position: 'top',
                 message: '追加完了しました',
               });
-              //todoこのあとrecordsにも追加する
+              insertCondition.value = {
+                first: '',
+                second: '',
+                third: '',
+                poster: '',
+                detail: '',
+                valitationErr: '',
+              };
+              search();
             }
           }
         })
@@ -153,7 +185,7 @@ export function useHaikuListModel() {
 
   const update = async function () {
     updateCondition.value.valitationErr = '';
-    if (updateCondition.value.poster) {
+    if (updateCondition.value.poster == '') {
       updateCondition.value.valitationErr = '投稿者名を空にはできないよ!';
     }
     if (updateCondition.value.valitationErr == '') {
@@ -171,7 +203,20 @@ export function useHaikuListModel() {
           if (response) {
             console.log('response', response);
             if (response.success) {
-              //todo更新後recordsに結果を反映させる
+              const index = records.value.findIndex(
+                (it) => it.id == updateSelectedCondition.value.id
+              );
+              const d = JSON.parse(
+                JSON.stringify(updateCondition.value)
+              ) as UpdateConditionState;
+              records.value[index].first = d.first;
+              records.value[index].second = d.second;
+              records.value[index].third = d.third;
+              records.value[index].poster = d.poster;
+              records.value[index].detail = d.detail;
+
+              displayCondition.value.update = false;
+
               quasar.notify({
                 color: 'blue',
                 position: 'top',
@@ -194,6 +239,10 @@ export function useHaikuListModel() {
   };
 
   /*DELETE */
+  const deleteClick = function (rec: DataState) {
+    updateSelectedCondition.value = JSON.parse(JSON.stringify(rec));
+    displayCondition.value.delete = true;
+  };
   const deleteRecord = async function () {
     await api
       .delete(updateSelectedCondition.value.id)
@@ -210,6 +259,7 @@ export function useHaikuListModel() {
               position: 'top',
               message: '削除完了しました',
             });
+            displayCondition.value.delete = false;
           }
         }
       })
@@ -230,12 +280,14 @@ export function useHaikuListModel() {
     insertCondition,
     updateCondition,
     updateSelectedCondition,
+    LoadingCondition,
     records,
     search,
     insertClick,
     insert,
     updateClick,
     update,
+    deleteClick,
     deleteRecord,
   };
 }
@@ -245,6 +297,7 @@ interface DisplayCondition {
   insert: boolean;
   update: boolean;
   delete: boolean;
+  detail: boolean;
 }
 
 interface LoadingCondition {
@@ -288,4 +341,5 @@ interface DataState {
   detail: string;
   createAt: string;
   updateAt: string;
+  detailDisplay: boolean;
 }

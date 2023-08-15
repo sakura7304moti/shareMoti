@@ -83,6 +83,13 @@ export default defineComponent({
         separator: false,
       },
       {
+        label: '俳句王決定戦',
+        icon: 'chat',
+        iconColor: 'green',
+        link: '/haiku',
+        separator: false,
+      },
+      {
         label: '共有URLまとめ',
         icon: 'info',
         iconColor: 'grey-6',
