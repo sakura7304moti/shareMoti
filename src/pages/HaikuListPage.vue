@@ -65,16 +65,16 @@
               height: 270px;
             "
           >
-            <div style="margin-right: 50px">
+            <div style="margin-right: 50px; height: 320px">
               {{ rec.first }}
             </div>
-            <div style="margin-right: 20px">
+            <div style="margin-right: 20px; height: 320px">
               {{ rec.second }}
             </div>
-            <div style="margin-right: 20px">
+            <div style="margin-right: 20px; height: 320px">
               {{ rec.third }}
             </div>
-            <div style="margin-right: 20px" class="text-right">
+            <div style="margin-right: 20px; height: 320px" class="text-right">
               {{ rec.poster }}
             </div>
           </div>

@@ -28,7 +28,7 @@
         </div>
 
         <!--ガノンヤーキー川柳-->
-        <div class="haiku-box">
+        <div class="haiku-box-big">
           <div style="font-family: HinaMincho-Regular; font-size: 36px">
             2023年交通安全川柳<br /><b>最優秀作品</b>
           </div>
@@ -140,8 +140,8 @@ export default defineComponent({
   font-family: 'HinaMincho-Regular';
   src: url(../fonts/HinaMincho-Regular.ttf) format('truetype');
 }
-/*haiku-box */
-.haiku-box {
+/*haiku-box-big */
+.haiku-box-big {
   width: 400px;
   margin: 2em 0;
   position: relative;
@@ -149,8 +149,8 @@ export default defineComponent({
   border-top: solid 2px black;
   border-bottom: solid 2px black;
 }
-.haiku-box:before,
-.haiku-box:after {
+.haiku-box-big:before,
+.haiku-box-big:after {
   content: '';
   position: absolute;
   top: -10px;
@@ -159,13 +159,13 @@ export default defineComponent({
   height: calc(100% + 20px);
   background-color: black;
 }
-.haiku-box:before {
+.haiku-box-big:before {
   left: 10px;
 }
-.haiku-box:after {
+.haiku-box-big:after {
   right: 10px;
 }
-.haiku-box div {
+.haiku-box-big div {
   margin: 0;
   padding: 0;
 }
