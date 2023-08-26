@@ -65,6 +65,14 @@
             </div>
             <q-item-section class="text-h6"> 俳句王決定戦 </q-item-section>
           </q-item>
+
+          <!--学校一覧-->
+          <q-item clickable v-ripple @click="router.replace('/school')">
+            <div class="menu-icon-image">
+              <img src="../assets/shatyo.png" width="48" />
+            </div>
+            <q-item-section class="text-h6"> 学校一覧 </q-item-section>
+          </q-item>
         </q-item-section>
 
         <q-separator />

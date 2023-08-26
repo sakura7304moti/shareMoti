@@ -79,6 +79,22 @@
           </q-card-section>
         </q-card>
 
+        <!--学校-->
+        <q-card class="index-page-card">
+          <img
+            src="../assets/panda.jpg"
+            style="cursor: pointer"
+            @click="router.replace('/school')"
+          />
+
+          <q-card-section>
+            <div class="text-h6">学校一覧</div>
+            <q-card-section class="q-pt-none">
+              オープンキャンパスの申し込みはこちらから
+            </q-card-section>
+          </q-card-section>
+        </q-card>
+
         <!--共有リンクまとめ-->
         <q-card class="index-page-card">
           <img
