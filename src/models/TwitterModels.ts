@@ -16,7 +16,7 @@ export function useTwitterModel() {
   const quasar = useQuasar();
   const condition = ref({
     pageNo: 1,
-    pageSize: 20,
+    pageSize: 40,
     hashtag: '',
     startDate: '',
     endDate: formattedDate,
@@ -28,7 +28,7 @@ export function useTwitterModel() {
 
   const fetchedCondition = ref({
     pageNo: 0,
-    pageSize: 20,
+    pageSize: 40,
     hashtag: '',
     startDate: '',
     endDate: formattedDate,
@@ -165,16 +165,21 @@ export function useTwitterModel() {
 
           response.records.forEach((rec) => {
             rec.images.forEach((r) => {
-              dataState.value.records.push({
-                hashtag: rec.hashtag,
-                mode: rec.mode,
-                url: rec.url,
-                date: rec.date,
-                image: convertImageLink(r),
-                userId: rec.userId,
-                userName: rec.userName,
-                likeCount: rec.likeCount,
-              } as TwitterRecord);
+              if (
+                dataState.value.records.filter(
+                  (it) => it.image == convertImageLink(r)
+                ).length == 0
+              )
+                dataState.value.records.push({
+                  hashtag: rec.hashtag,
+                  mode: rec.mode,
+                  url: rec.url,
+                  date: rec.date,
+                  image: convertImageLink(r),
+                  userId: rec.userId,
+                  userName: rec.userName,
+                  likeCount: rec.likeCount,
+                } as TwitterRecord);
             });
           });
 
