@@ -16,7 +16,7 @@ export function useTwitterModel() {
   const quasar = useQuasar();
   const condition = ref({
     pageNo: 1,
-    pageSize: 40,
+    pageSize: 20,
     hashtag: '',
     startDate: '',
     endDate: formattedDate,
@@ -28,7 +28,7 @@ export function useTwitterModel() {
 
   const fetchedCondition = ref({
     pageNo: 0,
-    pageSize: 40,
+    pageSize: 20,
     hashtag: '',
     startDate: '',
     endDate: formattedDate,

@@ -66,6 +66,10 @@ export function useHaikuListModel() {
     records.value.sort(sortfn);
   };
 
+  const rangeChange = function () {
+    records.value.reverse();
+  };
+
   /*SELECT */
   const search = async function () {
     LoadingCondition.value.search = true;
@@ -289,6 +293,7 @@ export function useHaikuListModel() {
     update,
     deleteClick,
     deleteRecord,
+    rangeChange,
   };
 }
 

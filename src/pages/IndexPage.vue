@@ -113,7 +113,7 @@
       </div>
 
       <!--Scraper-->
-      <div class="text-h4 q-pt-md">Scraper</div>
+      <div class="text-h4 q-pt-md">おまけ</div>
       <div class="row q-gutter-md">
         <q-card class="index-page-card">
           <img

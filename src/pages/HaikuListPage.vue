@@ -53,7 +53,11 @@
     </div>
     <!--SUB 2/3 俳句表示一覧-->
     <div>
-      <q-toggle label="解説表示" v-model="detailDisplay" />
+      <div class="row q-gutter-md q-pb-md">
+        <q-toggle label="解説表示" v-model="detailDisplay" />
+        <q-btn icon="import_export" @click="rangeChange" outline dense />
+      </div>
+
       <div v-for="rec in records" :key="rec.id" class="row q-gutter-md q-pb-md">
         <div class="haiku-box">
           <div
@@ -402,6 +406,7 @@ export default defineComponent({
       update,
       deleteClick,
       deleteRecord,
+      rangeChange,
     } = useHaikuListModel();
     search();
 
@@ -434,6 +439,7 @@ export default defineComponent({
       deleteRecord,
       insertHaikuOmake: ref(false),
       detailDisplay,
+      rangeChange,
     };
   },
 });
