@@ -48,6 +48,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/TwitterPage.vue') }],
   },
+  {
+    path: '/holosong',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/HoloSongPage.vue') }],
+  },
 
   /*Scraper */
   {

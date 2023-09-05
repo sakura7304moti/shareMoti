@@ -86,6 +86,14 @@
 
             <q-item-section class="text-h6"> twitter </q-item-section>
           </q-item>
+          <!--youtube-->
+          <q-item clickable v-ripple @click="router.replace('/holosong')">
+            <div class="menu-icon-image">
+              <img src="../assets/youtube_icon.png" width="48" />
+            </div>
+
+            <q-item-section class="text-h6"> YouTube </q-item-section>
+          </q-item>
         </q-item-section>
 
         <q-separator />
