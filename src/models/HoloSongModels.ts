@@ -1,4 +1,4 @@
-import { useQuasar } from 'quasar';
+import { QTableColumn, useQuasar } from 'quasar';
 import api from 'src/api/HoloSongApi';
 import { ref } from 'vue';
 
@@ -6,6 +6,37 @@ export function useHoloSongModel() {
   const { getVideoId, getImageLink } = subModel();
 
   const quasar = useQuasar();
+
+  const columns = [
+    {
+      name: 'member',
+      label: 'メンバー',
+      field: 'member',
+      sortable: true,
+    },
+    {
+      name: 'songName',
+      label: '曲名',
+      field: 'songName',
+      sortable: true,
+    },
+    {
+      name: 'date',
+      label: '投稿日',
+      field: 'date',
+      sortable: true,
+    },
+    {
+      name: 'detail',
+      label: '詳細',
+      field: 'detail',
+      sortable: true,
+    },
+  ] as QTableColumn[];
+
+  const rows = ref([] as TableRow[]);
+  const displayMode = ref('gallery');
+
   const records = ref([] as DataState[]);
   const pageState = ref({
     selectLink: '',
@@ -14,12 +45,34 @@ export function useHoloSongModel() {
     pageSize: 20,
     records: [] as DataState[],
   } as PageState);
+  const holoMembers = ref([] as string[]);
+  const getMembers = async function () {
+    holoMembers.value.splice(0);
+    await api
+      .holoList()
+      .then((response) => {
+        if (response) {
+          console.log('holo member', response);
+          response.forEach((it) => holoMembers.value.push(it));
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        quasar.notify({
+          color: 'red',
+          position: 'top',
+          message: 'データの取得に失敗しました',
+        });
+      });
+  };
+  const songList = ref([] as string[]);
 
   const isLoading = ref(false);
   const searchOptionShow = ref(false);
 
   const select = async function () {
     isLoading.value = true;
+    getMembers();
     records.value.splice(0);
     await api
       .search()
@@ -49,9 +102,25 @@ export function useHoloSongModel() {
           );
           selectPage();
 
-          //リスト
-          const arr = [...new Set(records.value.map((it) => it.member))];
-          console.log(arr);
+          //テーブル
+          rows.value.splice(0);
+          records.value.forEach((rec) => {
+            rows.value.push({
+              member: rec.member,
+              songName: rec.songName,
+              date: rec.date,
+              detail: rec.detail,
+              link: rec.link,
+            } as TableRow);
+          });
+
+          //曲名の一覧を取得
+          songList.value.splice(0);
+          songList.value = [
+            ...new Set(records.value.map((it) => it.songName.trim())),
+          ];
+          songList.value.sort();
+          console.log('songs', songList.value.length);
         }
       })
       .catch((e) => {
@@ -85,11 +154,17 @@ export function useHoloSongModel() {
   return {
     quasar,
     records,
+    holoMembers,
     pageState,
     isLoading,
     searchOptionShow,
+    rows,
+    columns,
+    displayMode,
+    songList,
     select,
     selectPage,
+    getMembers,
   };
 }
 
@@ -128,4 +203,11 @@ interface PageState {
   totalPages: number;
   pageSize: number;
   records: DataState[];
+}
+interface TableRow {
+  member: string;
+  link: string;
+  songName: string;
+  date: string;
+  detail: string;
 }
