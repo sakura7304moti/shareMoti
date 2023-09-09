@@ -3,11 +3,16 @@ import api from 'src/api/HoloSongApi';
 import { ref } from 'vue';
 
 export function useHoloSongModel() {
-  const { getVideoId, getImageLink } = subModel();
+  const { getVideoId, getImageLink, getDisplayName } = subModel();
 
   const quasar = useQuasar();
 
   const columns = [
+    {
+      name: 'play',
+      label: '',
+      field: 'play',
+    },
     {
       name: 'member',
       label: 'メンバー',
@@ -54,6 +59,10 @@ export function useHoloSongModel() {
         if (response) {
           console.log('holo member', response);
           response.forEach((it) => holoMembers.value.push(it));
+          console.log(
+            'max length',
+            Math.max(...holoMembers.value.map((it) => it.length))
+          );
         }
       })
       .catch((e) => {
@@ -107,6 +116,7 @@ export function useHoloSongModel() {
           records.value.forEach((rec) => {
             rows.value.push({
               member: rec.member,
+              displayMember: getDisplayName(rec.member),
               songName: rec.songName,
               date: rec.date,
               detail: rec.detail,
@@ -183,9 +193,18 @@ function subModel() {
     const baseUrl = 'https://img.youtube.com/vi/query/maxresdefault.jpg';
     return baseUrl.replace('query', getVideoId(url));
   };
+
+  const getDisplayName = function (text: string) {
+    if (text.length > 19) {
+      return text.substring(0, 19) + '...';
+    } else {
+      return text;
+    }
+  };
   return {
     getVideoId,
     getImageLink,
+    getDisplayName,
   };
 }
 interface DataState {
@@ -206,6 +225,7 @@ interface PageState {
 }
 interface TableRow {
   member: string;
+  displayMember: string;
   link: string;
   songName: string;
   date: string;
