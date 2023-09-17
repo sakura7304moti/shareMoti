@@ -53,6 +53,13 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/HoloSongPage.vue') }],
   },
+  {
+    path: '/holoalbum',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/HoloAlbumPage.vue') },
+    ],
+  },
 
   /*Scraper */
   {

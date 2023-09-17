@@ -169,17 +169,21 @@ export function useTwitterModel() {
                 dataState.value.records.filter(
                   (it) => it.image == convertImageLink(r)
                 ).length == 0
-              )
+              ) {
+                const url = rec.url.includes('pic.twitter.com')
+                  ? 'https://' + rec.url
+                  : rec.url;
                 dataState.value.records.push({
                   hashtag: rec.hashtag,
                   mode: rec.mode,
-                  url: rec.url,
+                  url: url,
                   date: rec.date,
                   image: convertImageLink(r),
                   userId: rec.userId,
                   userName: rec.userName,
                   likeCount: rec.likeCount,
                 } as TwitterRecord);
+              }
             });
           });
 

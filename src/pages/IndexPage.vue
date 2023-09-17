@@ -11,8 +11,7 @@
 
     <!--ページリンク一覧-->
     <div class="q-pt-md">
-      <hr />
-      <div class="text-h4">Main</div>
+      <div class="text-h4">おばあちゃんちの部屋</div>
       <!--Main-->
       <div class="row q-gutter-md">
         <!--名言集-->
@@ -113,7 +112,7 @@
       </div>
 
       <!--Scraper-->
-      <div class="text-h4 q-pt-md">おまけ</div>
+      <div class="text-h4 q-pt-lg">おまけ</div>
       <div class="row q-gutter-md">
         <!--Twitter-->
         <q-card class="index-page-card">
@@ -142,6 +141,22 @@
             <div class="text-h6">YouTube</div>
             <q-card-section class="q-pt-none">
               YouTubeの歌ってみたをまとめたよ
+            </q-card-section>
+          </q-card-section>
+        </q-card>
+
+        <!--Album-->
+        <q-card class="index-page-card">
+          <img
+            src="../assets/koyori.jpg"
+            style="cursor: pointer"
+            @click="router.replace('/holoalbum')"
+          />
+
+          <q-card-section>
+            <div class="text-h6">Album</div>
+            <q-card-section class="q-pt-none">
+              ホロライブのアルバムをまとめたよ
             </q-card-section>
           </q-card-section>
         </q-card>

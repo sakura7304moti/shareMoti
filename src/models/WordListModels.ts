@@ -1,15 +1,40 @@
-import { useQuasar } from 'quasar';
-import api from 'src/api/WordListApi';
+import { QTableColumn, useQuasar } from 'quasar';
+import api from 'src/api/WordList2Api';
 import { ref } from 'vue';
 
 export function useWordListModel() {
   const quasar = useQuasar();
   const saveModalShow = ref(false); //追加
   const editModalShow = ref(false); //更新・削除
-  const condition = ref({
-    word: '',
-    desc: '',
-  } as ConditionState);
+
+  const columns = [
+    {
+      name: 'word',
+      label: '名言',
+      field: 'word',
+      sortable: true,
+    },
+    {
+      name: 'desc',
+      label: '詳細',
+      field: 'desc',
+      sortable: true,
+    },
+    {
+      name: 'createAt',
+      label: '作成日',
+      field: 'createAt',
+      sortable: true,
+    },
+    {
+      name: 'updateAt',
+      label: '更新日',
+      field: 'updateAt',
+      sortable: true,
+    },
+  ] as QTableColumn[];
+
+  const condition = ref('');
   const insertCondition = ref({
     word: '',
     desc: '',
@@ -30,7 +55,7 @@ export function useWordListModel() {
     isLoading.value = true;
     await api
       .search({
-        text: condition.value.word,
+        text: condition.value,
       })
       .then((response) => {
         if (response) {
@@ -41,6 +66,8 @@ export function useWordListModel() {
             records.value.push({
               word: rec.word ?? '',
               desc: rec.desc ?? '',
+              createAt: rec.createAt?.split(' ')[0] ?? '',
+              updateAt: rec.updateAt?.split(' ')[0] ?? '',
             })
           );
           sortRecords();
@@ -98,10 +125,7 @@ export function useWordListModel() {
 
             //追加した場合
             if (response.insert) {
-              records.value.push({
-                word: word,
-                desc: desc,
-              });
+              search();
               insertCondition.value.word = '';
               insertCondition.value.desc = '';
               quasar.notify({
@@ -154,11 +178,7 @@ export function useWordListModel() {
 
             //更新した場合
             if (response.update) {
-              const index = records.value.findIndex((it) => it.word == word);
-              records.value[index] = {
-                word: word,
-                desc: desc,
-              };
+              search();
               insertCondition.value.word = '';
               insertCondition.value.desc = '';
               quasar.notify({
@@ -252,6 +272,7 @@ export function useWordListModel() {
     insertRecord,
     updateErr,
     deleteCheckModalShow,
+    columns,
   };
 }
 
@@ -263,4 +284,6 @@ interface ConditionState {
 interface DataState {
   word: string;
   desc: string;
+  createAt: string;
+  updateAt: string;
 }
