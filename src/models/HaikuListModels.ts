@@ -1,4 +1,4 @@
-import { useQuasar } from 'quasar';
+import { QTableColumn, useQuasar } from 'quasar';
 import api, {
   HaikuListInsertRequest,
   HaikuListSearchRequest,
@@ -55,6 +55,49 @@ export function useHaikuListModel() {
   } as LoadingCondition);
   const records = ref([] as DataState[]);
 
+  const tableView = ref(false);
+
+  const rows = ref([] as Row[]);
+
+  const columns = [
+    {
+      name: 'first',
+      label: '5',
+      field: 'first',
+      sortable: true,
+    },
+    {
+      name: 'second',
+      label: '7',
+      field: 'second',
+      sortable: true,
+    },
+    {
+      name: 'third',
+      label: '5',
+      field: 'third',
+      sortable: true,
+    },
+    {
+      name: 'poster',
+      label: '投稿者',
+      field: 'poster',
+      sortable: true,
+    },
+    {
+      name: 'createAt',
+      label: '作成日',
+      field: 'createAt',
+      sortable: true,
+    },
+    {
+      name: 'updateAt',
+      label: '更新日',
+      field: 'updateAt',
+      sortable: true,
+    },
+  ] as QTableColumn[];
+
   const sortfn = function (a: DataState, b: DataState) {
     if (a.id > b.id) {
       return 1;
@@ -91,6 +134,7 @@ export function useHaikuListModel() {
         if (response) {
           console.log('response', response);
           records.value.splice(0);
+          rows.value.splice(0);
           response.records?.forEach((rec) => {
             records.value.push({
               id: rec.id,
@@ -102,6 +146,15 @@ export function useHaikuListModel() {
               createAt: rec.createAt,
               updateAt: rec.updateAt,
               detailDisplay: false,
+            });
+            rows.value.push({
+              id: rec.id,
+              first: rec.first,
+              second: rec.second,
+              third: rec.third,
+              poster: rec.poster,
+              createAt: rec.createAt.split(' ')[0],
+              updateAt: rec.updateAt.split(' ')[0],
             });
           });
           sortRecords();
@@ -286,6 +339,9 @@ export function useHaikuListModel() {
     updateSelectedCondition,
     LoadingCondition,
     records,
+    tableView,
+    columns,
+    rows,
     search,
     insertClick,
     insert,
@@ -347,4 +403,14 @@ interface DataState {
   createAt: string;
   updateAt: string;
   detailDisplay: boolean;
+}
+
+interface Row {
+  id: number;
+  first: string;
+  second: string;
+  third: string;
+  poster: string;
+  createAt: string;
+  updateAt: string;
 }

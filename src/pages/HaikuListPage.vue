@@ -1,64 +1,169 @@
 <template>
   <q-page class="">
     <div class="text-h6">俳句王決定戦</div>
+    <div><q-toggle v-model="tableView" label="テーブル表示" /></div>
     <!--SUB 1/3 上に表示する検索、追加等詳細な操作画面-->
-    <div class="haiku-upper" v-if="displayCondition.upper">
-      <div class="row q-gutter-md">
-        <!--search input-->
-        <div style="height: 100px">
-          <q-field dense>
-            <q-input
-              v-model="condition.haikuText"
-              dense
-              class="form-model"
-              outlined
-              v-on:keydown.enter="search"
-            />
-            <q-btn
-              color="primary"
-              dense
-              icon="search"
-              @click="search()"
-              :loading="LoadingCondition.search"
-            />
-          </q-field>
-          <div v-if="condition.haikuText != ''">
-            <q-checkbox
-              v-model="condition.detailContain"
-              label="検索に解説も含める"
-            />
+    <div class="q-pb-md">
+      <q-card style="width: 600px" class="q-pa-sm" v-if="tableView == false">
+        <q-card-section>
+          <div
+            class="haiku-upper"
+            v-if="displayCondition.upper && tableView == false"
+          >
+            <div class="row q-gutter-md">
+              <!--search input-->
+              <div style="height: 60px; width: 350px">
+                <q-input
+                  dense
+                  debounce="300"
+                  v-model="condition.haikuText"
+                  placeholder="検索"
+                  style="width: 300px"
+                  align="left"
+                  @click="search()"
+                  :loading="LoadingCondition.search"
+                >
+                  <template v-slot:append>
+                    <q-btn
+                      color="primary"
+                      @click.prevent="search"
+                      icon="search"
+                    />
+                  </template>
+                </q-input>
+              </div>
+
+              <!--新規追加ボタン-->
+              <div class="q-pt-xs">
+                <q-btn
+                  label="作成"
+                  icon-right="note_add"
+                  color="grey-6"
+                  outline
+                  @click="insertClick"
+                />
+              </div>
+
+              <!--編集ロックアイコン-->
+              <div>
+                <lock-icon
+                  v-model="lockIconCondition"
+                  @event-change="lockIconCondition = $event"
+                  class="q-pt-md"
+                />
+              </div>
+            </div>
+            <div class="row q-gutter-md">
+              <div>
+                <q-btn
+                  label="解説"
+                  icon="description"
+                  @click="detailDisplay = !detailDisplay"
+                  color="green"
+                  dense
+                  outline
+                />
+              </div>
+              <div>
+                <q-btn
+                  icon="import_export"
+                  @click="rangeChange"
+                  label="並び"
+                  color="green"
+                  outline
+                  dense
+                />
+              </div>
+            </div>
           </div>
-        </div>
-
-        <!--新規追加ボタン-->
-        <div class="q-pt-xs">
-          <q-btn
-            label="新規"
-            color="grey-6"
-            class="text-weight-bold"
-            @click="insertClick"
-          />
-        </div>
-
-        <!--編集ロックアイコン-->
-        <div>
-          <lock-icon
-            v-model="lockIconCondition"
-            @event-change="lockIconCondition = $event"
-            class="q-pt-md"
-          />
-        </div>
-      </div>
-      <hr />
+        </q-card-section>
+      </q-card>
     </div>
-    <!--SUB 2/3 俳句表示一覧-->
-    <div>
-      <div class="row q-gutter-md q-pb-md">
-        <q-toggle label="解説表示" v-model="detailDisplay" />
-        <q-btn icon="import_export" @click="rangeChange" outline dense />
-      </div>
 
-      <div v-for="rec in records" :key="rec.id" class="row q-gutter-md q-pb-md">
+    <!--SUB 2/3 俳句表示一覧-->
+    <div v-if="tableView == true">
+      <q-table
+        :rows="rows"
+        :columns="columns"
+        row-key="id"
+        separator="cell"
+        rows-per-page-label="表示行数"
+        no-results-label="見つからなかった..."
+        no-data-label="見つからなかった..."
+        :pagination="{ rowsPerPage: 0 }"
+        :rows-per-page-options="[0]"
+        :filter="fillterText"
+        style="width: 900px"
+      >
+        <!--sub 1/3 オプション-->
+        <template v-slot:top-right>
+          <div class="row q-gutter-md">
+            <div style="width: 700px">
+              <q-input
+                dense
+                debounce="300"
+                v-model="fillterText"
+                placeholder="検索"
+                style="width: 200px"
+                align="left"
+              >
+                <template v-slot:append>
+                  <q-spinner
+                    v-model="LoadingCondition.search"
+                    v-if="LoadingCondition.search"
+                    color="primary"
+                    size="md"
+                  />
+                  <q-icon name="search" v-if="fillterText.length == 0" />
+                  <q-icon name="search" v-else color="primary" />
+                </template>
+              </q-input>
+            </div>
+            <div>
+              <q-btn
+                label="作成"
+                icon-right="note_add"
+                color="grey-6"
+                @click="displayCondition.insert = true"
+                outline
+              />
+            </div>
+            <div>
+              <lock-icon
+                v-model="displayCondition.detail"
+                @event-change="displayCondition.detail = $event"
+                class="q-pt-sm"
+              />
+            </div>
+          </div>
+        </template>
+        <!-- sub 2/3  ヘッダー-->
+        <template v-slot:header="props">
+          <q-tr :props="props">
+            <q-th v-if="displayCondition.detail == false"> 編集 </q-th>
+            <q-th v-for="col in props.cols" :key="col.name" :props="props">
+              <div
+                v-if="
+                  col.label == '5' || col.label == '7' || col.label == '投稿者'
+                "
+                style="width: 100px"
+              >
+                {{ col.label }}
+              </div>
+              <div
+                v-if="col.label == '作成日' || col.label == '更新日'"
+                style="width: 50px"
+              >
+                {{ col.label }}
+              </div>
+            </q-th>
+          </q-tr>
+        </template>
+      </q-table>
+    </div>
+
+    <div v-if="tableView == false">
+      <div v-for="rec in records" :key="rec.id" class="row q-gutter-md q-pa-md">
         <div class="haiku-box">
           <div
             style="
@@ -112,6 +217,7 @@
         </div>
       </div>
     </div>
+
     <!--SUB 3/3 モーダル一覧-->
     <div>
       <q-dialog v-model="displayCondition.insert">
@@ -399,6 +505,9 @@ export default defineComponent({
       updateSelectedCondition,
       LoadingCondition,
       records,
+      tableView,
+      columns,
+      rows,
       search,
       insertClick,
       insert,
@@ -430,6 +539,9 @@ export default defineComponent({
       updateSelectedCondition,
       LoadingCondition,
       records,
+      tableView,
+      columns,
+      rows,
       search,
       insertClick,
       insert,
@@ -440,6 +552,7 @@ export default defineComponent({
       insertHaikuOmake: ref(false),
       detailDisplay,
       rangeChange,
+      fillterText: ref(''),
     };
   },
 });
