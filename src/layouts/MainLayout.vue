@@ -95,7 +95,7 @@
             <q-item-section class="text-h6"> YouTube </q-item-section>
           </q-item>
           <!--album-->
-          <q-item clickable v-ripple @click="router.replace('/holosong')">
+          <q-item clickable v-ripple @click="router.replace('/holoalbum')">
             <div class="menu-icon-image">
               <img
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Hololive_triangles_logo.svg/1200px-Hololive_triangles_logo.svg.png"
