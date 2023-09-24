@@ -1,4 +1,4 @@
-import { useQuasar } from 'quasar';
+import { QTableColumn, useQuasar } from 'quasar';
 import api, { NameListUpdateRequest } from 'src/api/NameListApi';
 import { ref } from 'vue';
 
@@ -25,6 +25,21 @@ export function useNameListModel() {
   const detailEditLock = ref(true);
   const records = ref([] as DataState[]);
 
+  const columns = [
+    {
+      name: 'key',
+      label: 'あだ名',
+      field: 'key',
+      sortable: true,
+    },
+    {
+      name: 'val',
+      label: 'キャラ名',
+      field: 'val',
+      sortable: true,
+    },
+  ] as QTableColumn[];
+
   /*SELECT */
   const search = async function () {
     isLoading.value = true;
@@ -43,6 +58,7 @@ export function useNameListModel() {
           response.records?.forEach((rec) => {
             if (rec.val != 'その他') {
               records.value.push({
+                id: (rec.key ?? '') + (rec.val ?? ''),
                 key: rec.key ?? '',
                 val: rec.val ?? '',
               });
@@ -106,10 +122,12 @@ export function useNameListModel() {
             //追加した場合
             if (response.insert) {
               records.value.push({
+                id: key + val,
                 key: key,
                 val: val,
               });
               saveDisplayList.value.push({
+                id: key + val,
                 key: key,
                 val: val,
               });
@@ -178,6 +196,7 @@ export function useNameListModel() {
                   it.val == updateBeforeCondition.value.val
               );
               records.value[index] = {
+                id: key + val,
                 key: key,
                 val: val,
               };
@@ -315,6 +334,7 @@ export function useNameListModel() {
     searchSsbuNames,
     editSsbuNames,
     updateBeforeCondition,
+    columns,
   };
 }
 
@@ -324,6 +344,7 @@ interface ConditionState {
 }
 
 interface DataState {
+  id: string;
   key: string;
   val: string;
 }

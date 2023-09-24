@@ -282,6 +282,7 @@ export default defineComponent({
       updateErr,
       deleteCheckModalShow,
       selecter,
+      columns,
     } = useYakiListModel();
     search();
 
@@ -319,6 +320,8 @@ export default defineComponent({
       updateErr,
       deleteCheckModalShow,
       selecter,
+      columns,
+      filter: ref(''),
     };
   },
 });

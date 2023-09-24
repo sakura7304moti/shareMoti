@@ -116,6 +116,9 @@
                   />
                   <q-icon name="search" v-if="fillterText.length == 0" />
                   <q-icon name="search" v-else color="primary" />
+                  <div class="text-caption" v-if="records.length">
+                    {{ records.length }}
+                  </div>
                 </template>
               </q-input>
             </div>

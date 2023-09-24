@@ -1,4 +1,4 @@
-import { useQuasar } from 'quasar';
+import { QTableColumn, useQuasar } from 'quasar';
 import api from 'src/api/YakiListApi';
 import { ref } from 'vue';
 
@@ -7,6 +7,20 @@ export function useYakiListModel() {
   const saveModalShow = ref(false); //追加
   const editModalShow = ref(false); //更新・削除
   const selecter = ['焼き直し', '焼き直しフェニックス'];
+  const columns = [
+    {
+      name: 'word',
+      label: '条約',
+      field: 'word',
+      sortable: true,
+    },
+    {
+      name: 'yaki',
+      label: '種類',
+      field: 'yaki',
+      sortable: true,
+    },
+  ] as QTableColumn[];
   const condition = ref({
     word: '',
     yaki: '',
@@ -256,6 +270,7 @@ export function useYakiListModel() {
     updateErr,
     deleteCheckModalShow,
     selecter,
+    columns,
   };
 }
 

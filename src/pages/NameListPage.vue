@@ -4,89 +4,167 @@
       <!--画面左側-->
       <div>
         <div class="q-pb-md text-h6">あだ名一覧</div>
-        <div class="row q-gutter-md q-pb-md">
-          <q-field dense>
-            <q-input
-              label="あだ名"
-              v-model="condition.key"
-              class="form-model"
-              dense
-              stack-label
-              v-on:keydown.enter="search"
-            />
-            <q-btn
-              color="primary"
-              dense
-              icon="search"
-              @click="search"
-              :loading="isLoading"
-            />
-          </q-field>
+        <q-table
+          :rows="records"
+          :columns="columns"
+          row-key="id"
+          style="width: 800px"
+          separator="cell"
+          rows-per-page-label="表示行数"
+          no-results-label="見つからなかった..."
+          no-data-label="見つからなかった..."
+          :pagination="{ rowsPerPage: 0 }"
+          :rows-per-page-options="[0]"
+          :filter="filter"
+        >
+          <!--sub 1/3 オプション-->
+          <template v-slot:top-right>
+            <div class="row q-gutter-md" style="width: 800px">
+              <div style="width: 65%" class="row q-gutter-md">
+                <q-input
+                  dense
+                  debounce="300"
+                  v-model="filter"
+                  placeholder="検索"
+                  style="width: 200px"
+                  align="left"
+                >
+                  <template v-slot:append>
+                    <q-spinner
+                      v-model="isLoading"
+                      v-if="isLoading"
+                      color="primary"
+                      size="md"
+                    />
+                    <q-icon name="search" v-if="filter.length == 0" />
+                    <q-icon name="search" v-else color="primary" />
+                    <div class="text-caption" v-if="records.length">
+                      {{ records.length }}
+                    </div>
+                  </template>
+                </q-input>
+                <q-select
+                  v-model="filter"
+                  :options="ssbuNames"
+                  dense
+                  style="width: 200px"
+                  label="キャラ名"
+                  stack-label
+                />
+              </div>
 
-          <q-select
-            label="キャラ名"
-            v-model="condition.val"
-            :options="searchSsbuNames"
-            clearable
-            class="form-model"
-            dense
-            outlined
-            stack-label
-          />
-          <q-btn
-            label="追加"
-            icon-right="note_add"
-            color="grey-6"
-            outline
-            @click="saveModalShow = true"
-            dense
-          />
-        </div>
+              <div class="row q-gutter-md">
+                <div>
+                  <q-btn
+                    label="追加"
+                    icon-right="note_add"
+                    color="grey-6"
+                    @click="saveModalShow = true"
+                    outline
+                  />
+                </div>
+                <div>
+                  <lock-icon
+                    v-model="detailEditLock"
+                    @event-change="detailEditLock = $event"
+                    class="q-pt-sm"
+                  />
+                </div>
+              </div>
+            </div>
+          </template>
+          <!-- sub 2/3  ヘッダー-->
+          <template v-slot:header="props">
+            <q-tr :props="props">
+              <q-th v-if="detailEditLock == false"> 編集 </q-th>
+              <q-th v-for="col in props.cols" :key="col.name" :props="props">
+                <div
+                  v-if="col.label == 'あだ名' || col.label == 'キャラ名'"
+                  style="width: 200px"
+                >
+                  {{ col.label }}
+                </div>
+                <div v-else style="width: 100px">
+                  {{ col.label }}
+                </div>
+              </q-th>
+            </q-tr>
+          </template>
 
-        <!--botton-->
-        <div class="row q-gutter-md"></div>
+          <!-- sub 3/3  アイテム-->
+          <template v-slot:body="props">
+            <q-tr :props="props">
+              <q-td v-if="detailEditLock == false">
+                <a
+                  href="#"
+                  @click.prevent="
+                    console.log(props.row.word);
+                    onEditClick(props.row);
+                  "
+                  ><q-icon name="edit_note" color="secondary" size="md"></q-icon
+                ></a>
+              </q-td>
+              <q-td
+                v-for="col in props.cols"
+                :key="col.name"
+                :props="props"
+                style="white-space: normal; text-align: left"
+              >
+                {{ col.value }}
+              </q-td>
+            </q-tr>
+          </template>
+        </q-table>
       </div>
       <!--追加画面-->
       <q-dialog v-model="saveModalShow">
-        <q-card>
-          <q-section>
-            <div class="q-pa-md">
+        <q-card style="max-width: 700px">
+          <q-card-section>
+            <div>
               <div class="text-subtitle1 row q-gutter-md">
-                <div style="margin-right: auto">新規追加</div>
+                <div class="text-h5" style="margin-right: auto">新規追加</div>
                 <q-btn icon="close" @click="saveModalShow = false" round flat />
               </div>
-              <hr />
-              <div class="row q-gutter-md">
+              <div class="row q-gutter-md q-pa-md q-pb-lg">
                 <div>
                   <q-input
                     label="あだ名"
                     v-model="insertCondition.key"
                     class="form-model"
-                    dense
-                    outlined
                     stack-label
                     style="width: 250px"
                     clearable
                   />
                 </div>
-
-                <q-select
-                  label="キャラ名"
-                  v-model="insertCondition.val"
-                  class="form-model"
-                  :options="ssbuNames"
-                  dense
-                  outlined
-                  stack-label
-                  style="width: 250px"
-                />
+                <div>
+                  <q-select
+                    label="キャラ名"
+                    v-model="insertCondition.val"
+                    class="form-model"
+                    :options="ssbuNames"
+                    stack-label
+                    style="width: 250px"
+                  />
+                </div>
               </div>
-              <ul v-if="saveDisplayList.length > 0">
-                <div class="text-h6">登録済みのあだ名</div>
-                <li v-for="n in saveDisplayList" :key="n.key">{{ n.key }}</li>
-              </ul>
-              <hr />
-              <div class="row q-gutter-md">
+              <div
+                v-if="
+                  records.filter((it) => it.val == insertCondition.val).length >
+                  0
+                "
+              >
+                <div class="text-subtitle1">追加済</div>
+                <li
+                  v-for="n in records.filter(
+                    (it) => it.val == insertCondition.val
+                  )"
+                  :key="n.key"
+                >
+                  {{ n.key }}
+                </li>
+              </div>
+
+              <div class="row q-gutter-md q-pt-md">
                 <q-btn
                   @click.prevent="
                     insertRecord(insertCondition.key, insertCondition.val)
@@ -96,6 +174,9 @@
                   outline
                   icon="note_add"
                   :loading="isSaveLoading"
+                  :disable="
+                    insertCondition.key == '' || insertCondition.val == ''
+                  "
                 />
               </div>
 
@@ -103,70 +184,9 @@
                 {{ insertErr }}
               </div>
             </div>
-          </q-section>
+          </q-card-section>
         </q-card>
       </q-dialog>
-    </div>
-
-    <!--テーブル-->
-    <div class="q-pb-md search-table" v-if="records.length > 0">
-      <div class="row q-gutter-md q-pt-xs">
-        <q-toggle
-          v-model="visibleColumns"
-          val="desc"
-          label="キャラ名"
-          keep-color
-          color="blue"
-          dense
-          class="q-pt-sm"
-        />
-        <lock-icon
-          v-model="detailEditLock"
-          @event-change="detailEditLock = $event"
-          class="q-pt-sm"
-        />
-      </div>
-      <q-markup-table separator="cell" class="search-table">
-        <thead>
-          <th width="50" v-if="!detailEditLock">編集</th>
-          <th width="250">あだ名</th>
-          <th v-if="visibleColumns">キャラ名</th>
-        </thead>
-        <tbody>
-          <tr v-for="rec in records" :key="rec.key">
-            <td
-              v-if="!detailEditLock"
-              :class="{
-                'bg-light-blue-1':
-                  rec.val == updateCondition.val &&
-                  rec.key == updateCondition.key,
-              }"
-            >
-              <a href="#" @click.prevent="onEditClick(rec)"
-                ><q-icon name="edit_note" color="secondary" size="md"></q-icon
-              ></a>
-            </td>
-            <td
-              :class="{
-                'bg-light-blue-1': rec.key == updateCondition.key,
-              }"
-            >
-              {{ rec.key }}
-            </td>
-            <td
-              v-if="visibleColumns"
-              :class="{
-                'bg-light-blue-1': rec.key == updateCondition.key,
-              }"
-            >
-              {{ rec.val }}
-            </td>
-          </tr>
-        </tbody>
-      </q-markup-table>
-      <div class="q-pt-sm text-weight-light" style="">
-        count:{{ records.length }}
-      </div>
     </div>
 
     <!--更新ダイアログ-->
@@ -314,6 +334,7 @@ export default defineComponent({
       insertRecord,
       updateErr,
       deleteCheckModalShow,
+      columns,
       //initNameList,
       saveDisplayList,
       ssbuNames,
@@ -343,21 +364,6 @@ export default defineComponent({
       }
     });
 
-    watch(condition.value, () => {
-      if (condition.value.key == '') {
-        records.value = records.value.filter(
-          (it) => it.val == condition.value.val
-        );
-      }
-    });
-
-    //追加画面のセレクト選択後登録済みのあだ名表示
-    watch(insertCondition.value, () => {
-      if (insertCondition.value.val != '') {
-        search();
-      }
-    });
-
     return {
       condition,
       editModalShow,
@@ -372,6 +378,7 @@ export default defineComponent({
       saveModalShow,
       visibleColumns: ref(true),
       detailEditLock,
+      columns,
       updateCondition,
       onEditClick,
       insertErr,
@@ -383,6 +390,7 @@ export default defineComponent({
       editSsbuNames,
       saveDisplayList,
       updateBeforeCondition,
+      filter: ref(''),
     };
   },
 });

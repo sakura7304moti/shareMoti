@@ -39,6 +39,9 @@
                     />
                     <q-icon name="search" v-if="condition.length == 0" />
                     <q-icon name="search" v-else color="primary" />
+                    <div class="text-caption" v-if="records.length > 0">
+                      {{ records.length }}
+                    </div>
                   </template>
                 </q-input>
               </div>
