@@ -1,154 +1,172 @@
 <template>
   <q-page class="">
-    <div class="row q-gutter-md">
-      <!--画面左側-->
-      <div>
-        <div class="q-pb-md text-h6">焼き直し条約</div>
-        <div class="row q-gutter-md" style="padding-bottom: 8px">
-          <q-field dense>
+    <div class="q-pb-md text-h6">焼き直し条約</div>
+
+    <q-table
+      :rows="records"
+      :columns="columns"
+      row-key="word"
+      style="width: 800px"
+      separator="cell"
+      rows-per-page-label="表示行数"
+      no-results-label="見つからなかった..."
+      no-data-label="見つからなかった..."
+      :pagination="{ rowsPerPage: 0 }"
+      :rows-per-page-options="[0]"
+      :filter="filter"
+    >
+      <!--sub 1/3 オプション-->
+      <template v-slot:top-right>
+        <div class="row q-gutter-md" style="width: 800px">
+          <div style="width: 75%" class="row q-gutter-md">
             <q-input
-              v-model="condition.word"
+              dense
+              debounce="300"
+              v-model="filter"
+              placeholder="検索"
+              style="width: 200px"
+              align="left"
+            >
+              <template v-slot:append>
+                <q-spinner
+                  v-model="isLoading"
+                  v-if="isLoading"
+                  color="primary"
+                  size="md"
+                />
+                <q-icon name="search" v-if="filter.length == 0" />
+                <q-icon name="search" v-else color="primary" />
+                <div class="text-caption" v-if="records.length > 0">
+                  {{ records.length }}
+                </div>
+              </template>
+            </q-input>
+            <q-select
+              label="種類"
+              v-model="filter"
               class="form-model"
+              :options="selecter"
               dense
               stack-label
-              outlined
-              v-on:keydown.enter="search"
+              style="width: 250px"
             />
-            <q-btn
-              color="primary"
-              dense
-              icon="search"
-              @click="search"
-              :loading="isLoading"
-            />
-          </q-field>
-
-          <q-btn
-            label="追加"
-            icon-right="note_add"
-            color="grey-6"
-            @click="saveModalShow = true"
-            outline
-            dense
-          />
+          </div>
+          <div class="row q-gutter-md">
+            <div>
+              <q-btn
+                label="追加"
+                icon-right="note_add"
+                color="grey-6"
+                @click="saveModalShow = true"
+                outline
+              />
+            </div>
+            <div>
+              <lock-icon
+                v-model="detailEditLock"
+                @event-change="detailEditLock = $event"
+                class="q-pt-sm"
+              />
+            </div>
+          </div>
         </div>
-      </div>
-      <!--追加画面-->
-      <q-dialog v-model="saveModalShow">
-        <q-card>
-          <q-section>
-            <div class="q-pa-md">
-              <div class="text-subtitle1 row q-gutter-md">
-                <div style="margin-right: auto">新規追加</div>
-                <q-btn icon="close" @click="saveModalShow = false" round flat />
-              </div>
-              <hr />
-              <div class="row q-gutter-md" style="height: 150px">
-                <div style="height: 150px">
-                  <q-input
-                    label="条約名"
-                    type="textarea"
-                    v-model="insertCondition.word"
-                    class="form-model"
-                    dense
-                    outlined
-                    stack-label
-                    style="width: 250px"
-                    clearable
-                  />
-                </div>
+      </template>
+      <!-- sub 2/3  ヘッダー-->
+      <template v-slot:header="props">
+        <q-tr :props="props">
+          <q-th v-if="detailEditLock == false"> 編集 </q-th>
+          <q-th v-for="col in props.cols" :key="col.name" :props="props">
+            <div v-if="col.label == '条約'" style="width: 200px">
+              {{ col.label }}
+            </div>
+            <div v-else style="width: 100px">
+              {{ col.label }}
+            </div>
+          </q-th>
+        </q-tr>
+      </template>
+      <!-- sub 3/3  アイテム-->
+      <template v-slot:body="props">
+        <q-tr :props="props">
+          <q-td v-if="detailEditLock == false">
+            <a
+              href="#"
+              @click.prevent="
+                console.log(props.row.word);
+                onEditClick(props.row);
+              "
+              ><q-icon name="edit_note" color="secondary" size="md"></q-icon
+            ></a>
+          </q-td>
+          <q-td
+            v-for="col in props.cols"
+            :key="col.name"
+            :props="props"
+            style="white-space: normal; text-align: left"
+          >
+            {{ col.value }}
+          </q-td>
+        </q-tr>
+      </template>
+    </q-table>
 
-                <q-select
-                  label="種類"
-                  v-model="insertCondition.yaki"
+    <!--追加画面-->
+    <q-dialog v-model="saveModalShow">
+      <q-card>
+        <q-section>
+          <div class="q-pa-md">
+            <div class="text-subtitle1 row q-gutter-md">
+              <div style="margin-right: auto">新規追加</div>
+              <q-btn icon="close" @click="saveModalShow = false" round flat />
+            </div>
+            <hr />
+            <div class="row q-gutter-md" style="height: 150px">
+              <div style="height: 150px">
+                <q-input
+                  label="条約名"
+                  type="textarea"
+                  v-model="insertCondition.word"
                   class="form-model"
-                  :options="selecter"
                   dense
                   outlined
                   stack-label
                   style="width: 250px"
-                />
-              </div>
-              <hr />
-              <div class="row q-gutter-md">
-                <q-btn
-                  @click.prevent="
-                    insertRecord(insertCondition.word, insertCondition.yaki)
-                  "
-                  label="追加"
-                  color="primary"
-                  outline
-                  icon="note_add"
-                  :loading="isSaveLoading"
+                  clearable
                 />
               </div>
 
-              <div class="text-negative text-caption">
-                {{ insertErr }}
-              </div>
+              <q-select
+                label="種類"
+                v-model="insertCondition.yaki"
+                class="form-model"
+                :options="selecter"
+                dense
+                outlined
+                stack-label
+                style="width: 250px"
+              />
             </div>
-          </q-section>
-        </q-card>
-      </q-dialog>
-    </div>
+            <hr />
+            <div class="row q-gutter-md">
+              <q-btn
+                @click.prevent="
+                  insertRecord(insertCondition.word, insertCondition.yaki)
+                "
+                label="追加"
+                color="primary"
+                outline
+                icon="note_add"
+                :loading="isSaveLoading"
+              />
+            </div>
 
-    <!--テーブル-->
-    <div class="q-pb-md search-table" v-if="records.length > 0">
-      <div class="row q-gutter-md search-table">
-        <q-toggle
-          v-model="visibleColumns"
-          val="desc"
-          label="種類"
-          keep-color
-          color="blue"
-          dense
-          class="q-pt-sm"
-        />
-        <lock-icon
-          v-model="detailEditLock"
-          @event-change="detailEditLock = $event"
-          class="q-pt-sm"
-        />
-      </div>
-
-      <q-markup-table separator="cell" class="search-table">
-        <thead>
-          <th width="50" v-if="!detailEditLock">編集</th>
-          <th width="250">条約</th>
-          <th v-if="visibleColumns">種類</th>
-        </thead>
-        <tbody>
-          <tr v-for="rec in records" :key="rec.word">
-            <td
-              v-if="!detailEditLock"
-              :class="{
-                'bg-light-blue-1': rec.word == updateCondition.word,
-              }"
-            >
-              <a href="#" @click.prevent="onEditClick(rec)"
-                ><q-icon name="edit_note" color="secondary" size="md"></q-icon
-              ></a>
-            </td>
-            <td
-              :class="{
-                'bg-light-blue-1': rec.word == updateCondition.word,
-              }"
-            >
-              {{ rec.word }}
-            </td>
-            <td
-              v-if="visibleColumns"
-              :class="{
-                'bg-light-blue-1': rec.word == updateCondition.word,
-              }"
-            >
-              {{ rec.yaki }}
-            </td>
-          </tr>
-        </tbody>
-      </q-markup-table>
-      <div class="q-pt-sm text-weight-light">count:{{ records.length }}</div>
-    </div>
+            <div class="text-negative text-caption">
+              {{ insertErr }}
+            </div>
+          </div>
+        </q-section>
+      </q-card>
+    </q-dialog>
 
     <!--更新ダイアログ-->
     <q-dialog v-model="editModalShow">
