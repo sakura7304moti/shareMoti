@@ -6,6 +6,12 @@ export class HoloSongApi extends APIClient {
 
     return this.httpGet<HoloSongResponse>(path);
   }
+  public ori(): Promise<HoloSongResponse | null> {
+    const url = '/holoSong/ori';
+    const path = this.combineUrl(url);
+
+    return this.httpGet<HoloSongResponse>(path);
+  }
   public holoList(): Promise<Array<string> | null> {
     const url = '/holoSong/hololist';
     const path = this.combineUrl(url);
