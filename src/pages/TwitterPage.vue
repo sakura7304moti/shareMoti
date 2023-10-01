@@ -193,11 +193,11 @@
     <div class="q-pt-sm" v-if="dataState.totalPages > 1">
       <q-pagination
         v-model="condition.pageNo"
+        direction-links
         :max="dataState.totalPages"
         :max-pages="10"
         @click="search()"
       />
-      <hr />
     </div>
 
     <!--gallery-->
@@ -275,15 +275,13 @@
 
     <!--pagi-->
     <div class="q-pt-md" v-if="dataState.totalPages > 1 && !isLoading">
-      <hr />
-
       <q-pagination
         v-model="condition.pageNo"
         :max="dataState.totalPages"
         :max-pages="10"
         @click="search()"
+        direction-links
       />
-      <hr />
     </div>
   </q-page>
 </template>

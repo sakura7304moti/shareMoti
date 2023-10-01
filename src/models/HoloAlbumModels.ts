@@ -93,7 +93,7 @@ export function useHoloAlbumModel() {
               const addRec = {
                 date: it.date,
                 member: it.member,
-                link: it.link,
+                link: it.link.replace('youtu.be/', 'www.youtube.com/watch?v='), //https://www.youtube.com/watch?v=Bq8-XeogJzo
                 songName: it.songName,
                 detail: it.detail,
                 imageLink: getImageLink(it.link),
