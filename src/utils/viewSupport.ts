@@ -1,4 +1,4 @@
-import axios, { AxiosHeaders, AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 import { APIClient } from 'src/api/BaseApi';
 
 export const useViewSupport = function () {
