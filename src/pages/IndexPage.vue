@@ -111,6 +111,42 @@
         </q-card>
       </div>
 
+      <!--おみあげ-->
+      <div class="text-h4 q-pt-md">お土産</div>
+      <div class="row q-gutter-md">
+        <!--カラオケ-->
+        <q-card class="index-page-card">
+          <img
+            src="../assets/mirai_osho.jpg"
+            style="cursor: pointer"
+            @click="router.replace('/karaoke')"
+          />
+
+          <q-card-section>
+            <div class="text-h6">カラオケの思い出</div>
+            <q-card-section class="q-pt-none">
+              美しい歌声で世界を魅了している
+            </q-card-section>
+          </q-card-section>
+        </q-card>
+
+        <!--ボイス-->
+        <q-card class="index-page-card">
+          <img
+            src="../assets/itiro.jpg"
+            style="cursor: pointer"
+            @click="router.replace('/voice')"
+          />
+
+          <q-card-section>
+            <div class="text-h6">2040年ボイス</div>
+            <q-card-section class="q-pt-none">
+              このボイスを聞いてどう思う。
+            </q-card-section>
+          </q-card-section>
+        </q-card>
+      </div>
+
       <!--Scraper-->
       <div class="text-h4 q-pt-lg">おまけ</div>
       <div class="row q-gutter-md">

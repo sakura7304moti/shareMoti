@@ -74,6 +74,24 @@
             <q-item-section class="text-h6"> 学校一覧 </q-item-section>
           </q-item>
         </q-item-section>
+        <q-separator />
+        <q-item-section>
+          <div class="text-h6">File</div>
+          <!--カラオケ-->
+          <q-item clickable v-ripple @click="router.replace('/karaoke')">
+            <div class="menu-icon-image">
+              <img src="../assets/karaoke_boy.jpg" width="48" />
+            </div>
+            <q-item-section class="text-h6"> カラオケ音楽堂 </q-item-section>
+          </q-item>
+          <!--ボイス-->
+          <q-item clickable v-ripple @click="router.replace('/voice')">
+            <div class="menu-icon-image">
+              <img src="../assets/kinen.jpg" width="48" />
+            </div>
+            <q-item-section class="text-h6"> ボイス販売所 </q-item-section>
+          </q-item>
+        </q-item-section>
 
         <q-separator />
         <q-item-section>

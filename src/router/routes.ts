@@ -44,6 +44,20 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
+    path: '/karaoke',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/KaraokeListPage.vue') },
+    ],
+  },
+  {
+    path: '/voice',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/VoiceListPage.vue') },
+    ],
+  },
+  {
     path: '/twitter',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/TwitterPage.vue') }],
