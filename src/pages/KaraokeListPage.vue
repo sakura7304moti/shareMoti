@@ -84,9 +84,10 @@
       <!-- sub 2/3  ヘッダー-->
       <template v-slot:header="props">
         <q-tr :props="props">
-          <q-th style="width: 50px">再生</q-th>
-          <q-th style="width: 250px">曲名</q-th>
-          <q-th style="width: 100px">日付</q-th>
+          <q-th>再生</q-th>
+          <q-th v-for="col in props.cols" :key="col.name" :props="props">
+            {{ col.label }}
+          </q-th>
         </q-tr>
       </template>
       <!-- sub 3/3  アイテム-->

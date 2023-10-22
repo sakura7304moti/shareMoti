@@ -58,6 +58,11 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
+    path: '/ssbu',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/SsbuListPage.vue') }],
+  },
+  {
     path: '/twitter',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/TwitterPage.vue') }],

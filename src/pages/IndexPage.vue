@@ -145,6 +145,22 @@
             </q-card-section>
           </q-card-section>
         </q-card>
+
+        <!--スマブラ-->
+        <q-card class="index-page-card">
+          <img
+            src="https://www.smashbros.com/assets_v2/img/top/hero02.jpg"
+            style="cursor: pointer"
+            @click="router.replace('/ssbu')"
+          />
+
+          <q-card-section>
+            <div class="text-h6">スマブラクリップ集</div>
+            <q-card-section class="q-pt-none">
+              感動するなら今のうちやで
+            </q-card-section>
+          </q-card-section>
+        </q-card>
       </div>
 
       <!--Scraper-->
