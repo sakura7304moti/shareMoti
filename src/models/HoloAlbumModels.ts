@@ -9,11 +9,6 @@ export function useHoloAlbumModel() {
 
   const columns = [
     {
-      name: 'play',
-      label: '',
-      field: 'play',
-    },
-    {
       name: 'member',
       label: 'メンバー',
       field: 'member',

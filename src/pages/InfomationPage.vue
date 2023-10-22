@@ -1,7 +1,7 @@
 <template>
   <q-page class="">
     <div id="page-main">
-      <div class="text-h5 q-pb-md">共有URLまとめ</div>
+      <div class="text-h5 q-pb-md">お茶の間</div>
       <!--ネタ要素満載-->
       <div class="row q-gutter-md">
         <!--与謝野晶子による焼き直し劇場-->

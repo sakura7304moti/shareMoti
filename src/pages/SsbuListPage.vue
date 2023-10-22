@@ -1,6 +1,6 @@
 <template>
   <q-page class="">
-    <div class="q-pb-md text-h5">スマブラクリップ集</div>
+    <div class="q-pb-md text-h5">スマブラ切り抜き集</div>
 
     <div class="ssbu-container">
       <div class="ssbu-left-content">

@@ -25,7 +25,7 @@
           <q-card-section>
             <div class="text-h6">名言集</div>
             <q-card-section class="q-pt-none">
-              心に響く名言が集められている
+              占い師の言葉を信じて釣りに没頭している
             </q-card-section>
           </q-card-section>
         </q-card>
@@ -41,7 +41,7 @@
           <q-card-section>
             <div class="text-h6">あだ名一覧</div>
             <q-card-section class="q-pt-none">
-              この木なんの木、平澤フェニックス(迫真)
+              数年に一度ゴットタモリが空から舞い降りる。これを見た人は今年の金運アップ間違いなし。ただし上強メテオの撃墜される確率もアップする。
             </q-card-section>
           </q-card-section>
         </q-card>
@@ -57,7 +57,7 @@
           <q-card-section>
             <div class="text-h6">焼き直し条約</div>
             <q-card-section class="q-pt-none">
-              焼き直しフェニックス降臨！
+              自宅で映画鑑賞中の土井カービィ。最近コナンの映画にハマっており、スケボーに乗ろうと思ったが、走ったほうが早いことに気づいてからは、ぱくーくと一緒に毎朝ランニングをしている。たまに通報されるが大体ぱくーくは逃げきれて、土井カービィが捕まる。
             </q-card-section>
           </q-card-section>
         </q-card>
@@ -73,7 +73,7 @@
           <q-card-section>
             <div class="text-h6">俳句王決定戦</div>
             <q-card-section class="q-pt-none">
-              最優秀賞には賞金10万たかしポイントをプレゼント！
+              これはもう言わなくてもわかるね？すき家にGOだ
             </q-card-section>
           </q-card-section>
         </q-card>
@@ -89,7 +89,7 @@
           <q-card-section>
             <div class="text-h6">学校一覧</div>
             <q-card-section class="q-pt-none">
-              オープンキャンパスの申し込みはこちらから
+              社会に出てから行けばよかったと後悔する人が後を絶たない
             </q-card-section>
           </q-card-section>
         </q-card>
@@ -103,9 +103,10 @@
           />
 
           <q-card-section>
-            <div class="text-h6">共有URLまとめ</div>
+            <div class="text-h6">お茶の間</div>
             <q-card-section class="q-pt-none">
-              外部サービスのリンクまとめたよ
+              お茶でも飲んで、ゆっくりしていきなさい。<br />
+              GoogleDriveとNotionのリンクはここから飛べるわよ。
             </q-card-section>
           </q-card-section>
         </q-card>
@@ -125,7 +126,7 @@
           <q-card-section>
             <div class="text-h6">カラオケの思い出</div>
             <q-card-section class="q-pt-none">
-              美しい歌声で世界を魅了している
+              奇跡的に未来に帰る瞬間を目撃した
             </q-card-section>
           </q-card-section>
         </q-card>
@@ -141,7 +142,7 @@
           <q-card-section>
             <div class="text-h6">2040年ボイス</div>
             <q-card-section class="q-pt-none">
-              このボイスを聞いてどう思う。
+              ここの画像募集中。それまではイチローで我慢しなさい。
             </q-card-section>
           </q-card-section>
         </q-card>
@@ -157,7 +158,7 @@
           <q-card-section>
             <div class="text-h6">スマブラクリップ集</div>
             <q-card-section class="q-pt-none">
-              感動するなら今のうちやで
+              感動するなら今のうちやで！
             </q-card-section>
           </q-card-section>
         </q-card>
@@ -230,6 +231,7 @@ export default defineComponent({
       router,
       obamessage: `よく来たわね
 ゆっくりしていきなさい
+とりあえずお茶でもどうかしら
 `,
     };
   },

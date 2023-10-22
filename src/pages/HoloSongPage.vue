@@ -10,6 +10,7 @@
 
       <div class="q-pa-md row q-gutter-md" v-if="pageState.selectLink != ''">
         <YouTube
+          v-if="!isLoading && displayMode == 'gallery'"
           :src="pageState.selectLink"
           @ready="true"
           ref="youtube"
@@ -94,86 +95,129 @@
 
     <!--4/5  テーブル-->
     <div class="q-pa-md">
-      <q-table
-        :rows="rows"
-        :columns="columns"
-        row-key="link"
-        :filter="filter"
-        v-if="!isLoading && displayMode == 'table'"
-        rows-per-page-label="表示行数"
-        no-results-label="見つからなかった..."
-      >
-        <!--sub 1/3 検索-->
-        <template v-slot:top-right>
-          <div class="q-pr-md no-shadow">
-            <q-btn
-              icon="queue_music"
-              dense
-              @click="songModalShow = true"
-              round
+      <div class="holosong-container">
+        <div class="holosong-left-content">
+          <div v-if="pageState.selectLink != ''">
+            <YouTube
+              v-if="!isLoading && displayMode == 'table'"
+              :src="pageState.selectLink"
+              @ready="true"
+              ref="youtube"
+              :vars="{ autoplay: 1, rel: 0 }"
             />
           </div>
 
-          <q-select
-            v-model="songInput"
-            style="width: 200px"
-            dense
-            use-input
-            stack-label
-            label="曲名"
-            class="q-pr-md"
-            :options="songOptions"
-            @filter="filterFn"
-          />
-
-          <q-select
-            v-model="selectedMember"
-            style="width: 200px"
-            dense
-            stack-label
-            label="メンバー"
-            class="q-pr-md"
-            :options="holoMembers"
-          />
-
-          <div class="q-pl-md"></div>
-
-          <q-input dense debounce="300" v-model="filter" placeholder="検索">
-            <template v-slot:append>
-              <q-icon name="search" v-if="filter.length == 0" />
-              <q-icon name="search" v-else color="primary" />
-            </template>
-          </q-input>
-        </template>
-        <!-- sub 2/3  ヘッダー-->
-        <template v-slot:header="props">
-          <q-tr :props="props">
-            <q-th auto-width />
-            <q-th v-for="col in props.cols" :key="col.name" :props="props">
-              {{ col.label }}
-            </q-th>
-          </q-tr>
-        </template>
-        <!-- sub 3/3  アイテム-->
-        <template v-slot:body="props">
-          <q-tr :props="props">
-            <q-td auto-width>
-              <div class="no-shadow">
+          <div v-else>
+            <div class="holosong-video-container" v-if="displayMode == 'table'">
+              <div class="holosong-video-placeholder">
+                <!-- 動画再生ボタンアイコン（例: フォントアイコンを使用） -->
+                <i class="holosong-play-icon">▶️</i>
+                <div class="text-white">動画はここで再生されるよ</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="holosong-right-content">
+          <q-table
+            :rows="rows"
+            :columns="columns"
+            row-key="link"
+            :filter="filter"
+            separator="cell"
+            v-if="!isLoading && displayMode == 'table'"
+            rows-per-page-label="表示行数"
+            no-results-label="見つからなかった..."
+            style="width: 900px"
+            :pagination="{ rowsPerPage: 0 }"
+            :rows-per-page-options="[0]"
+            class="holosong-table-scrollable-container"
+          >
+            <!--sub 1/3 検索-->
+            <template v-slot:top-right>
+              <div class="q-pr-md no-shadow">
                 <q-btn
-                  size="md"
-                  @click="pageState.selectLink = props.row.link"
-                  icon="play_circle_filled"
-                  text-color="primary"
-                  flat
+                  icon="queue_music"
+                  dense
+                  @click="songModalShow = true"
+                  round
                 />
               </div>
-            </q-td>
-            <q-td v-for="col in props.cols" :key="col.name" :props="props">
-              {{ col.value }}
-            </q-td>
-          </q-tr>
-        </template>
-      </q-table>
+
+              <q-select
+                v-model="songInput"
+                style="width: 200px"
+                dense
+                use-input
+                stack-label
+                label="曲名"
+                class="q-pr-md"
+                :options="songOptions"
+                @filter="filterFn"
+              />
+
+              <q-select
+                v-model="selectedMember"
+                style="width: 200px"
+                dense
+                stack-label
+                label="メンバー"
+                class="q-pr-md"
+                :options="holoMembers"
+              />
+
+              <div class="q-pl-md"></div>
+
+              <q-input dense debounce="300" v-model="filter" placeholder="検索">
+                <template v-slot:append>
+                  <q-icon name="search" v-if="filter.length == 0" />
+                  <q-icon name="search" v-else color="primary" />
+                </template>
+              </q-input>
+            </template>
+            <!-- sub 2/3  ヘッダー-->
+            <template v-slot:header="props">
+              <q-tr :props="props">
+                <q-th style="width: 50px"></q-th>
+                <q-th v-for="col in props.cols" :key="col.name" :props="props">
+                  <div v-if="col.label == 'メンバー'" style="width: 200px">
+                    {{ col.label }}
+                  </div>
+                  <div v-if="col.label == '曲名'" style="width: 200px">
+                    {{ col.label }}
+                  </div>
+                  <div v-if="col.label == '投稿日'" style="width: 100px">
+                    {{ col.label }}
+                  </div>
+                  <div v-if="col.label == '詳細'" style="width: 100px">
+                    {{ col.label }}
+                  </div>
+                </q-th>
+              </q-tr>
+            </template>
+            <!-- sub 3/3  アイテム-->
+            <template v-slot:body="props">
+              <q-tr :props="props">
+                <q-td style="width: 50px">
+                  <div class="no-shadow">
+                    <q-btn
+                      size="md"
+                      @click="pageState.selectLink = props.row.link"
+                      icon="play_arrow"
+                      text-color="primary"
+                      outline
+                    />
+                  </div>
+                </q-td>
+                <q-td v-for="col in props.cols" :key="col.name" :props="props">
+                  <div style="white-space: normal; text-align: left">
+                    {{ col.value }}
+                  </div>
+                </q-td>
+              </q-tr>
+            </template>
+          </q-table>
+        </div>
+      </div>
     </div>
 
     <!--5/5  モーダル一覧-->
@@ -326,5 +370,69 @@ export default defineComponent({
   background: #fff;
   border-radius: 50%;
   margin-right: 8px;
+}
+/*テーブル用の表示 */
+/*動画とテーブルのstyle */
+.holosong-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.holosong-left-content {
+  width: 570px;
+}
+
+.holosong-right-content {
+  width: 900px;
+}
+
+@media screen and (max-width: 1470px) {
+  .holosong-container {
+    flex-direction: column; /* ページの横幅が1470px未満の場合、縦に配置 */
+  }
+
+  .holosong-left-content,
+  .holosong-right-content {
+    width: 100%; /* ページの横幅が1470px未満の場合、フル幅になる */
+  }
+}
+
+/*テーブルのstyle */
+.holosong-table-scrollable-container {
+  height: 80vh; /* ページの高さの80%に設定 */
+  overflow-y: auto; /* 縦方向にスクロール可能にする */
+}
+
+/*動画再生してないときの画面 */
+.holosong-video-container {
+  width: 569px;
+  height: 320px;
+  position: relative;
+  overflow: hidden; /* オーバーフローしたコンテンツを非表示にする */
+}
+
+.holosong-video-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000; /* ボタンアイコンの背景色 */
+  opacity: 0.7; /* 不透明度を設定して動画の一部を透過させる */
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.holosong-play-icon {
+  font-size: 40px;
+  color: #fff; /* ボタンアイコンの色 */
+  cursor: pointer;
+}
+/*テーブルのstyle */
+.holosong-table-scrollable-container {
+  height: 80vh; /* ページの高さの80%に設定 */
+  overflow-y: auto; /* 縦方向にスクロール可能にする */
 }
 </style>

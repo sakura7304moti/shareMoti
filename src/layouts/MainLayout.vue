@@ -91,6 +91,16 @@
             </div>
             <q-item-section class="text-h6"> ボイス販売所 </q-item-section>
           </q-item>
+          <!--スマブラ切り抜き-->
+          <q-item clickable v-ripple @click="router.replace('/ssbu')">
+            <div class="menu-icon-image">
+              <img
+                src="https://pbs.twimg.com/profile_images/971877109139255296/Q13jcE4h_400x400.jpg"
+                width="48"
+              />
+            </div>
+            <q-item-section class="text-h6"> スマブラ切り抜き </q-item-section>
+          </q-item>
         </q-item-section>
 
         <q-separator />
@@ -121,7 +131,7 @@
               />
             </div>
 
-            <q-item-section class="text-h6"> album </q-item-section>
+            <q-item-section class="text-h6"> original </q-item-section>
           </q-item>
         </q-item-section>
 
@@ -134,7 +144,7 @@
             <div class="menu-icon-image">
               <img src="../assets/google_drive_icon.png" width="48" />
             </div>
-            <q-item-section class="text-h6"> 共有URLまとめ </q-item-section>
+            <q-item-section class="text-h6"> お茶の間 </q-item-section>
           </q-item>
 
           <!--ホーム-->
