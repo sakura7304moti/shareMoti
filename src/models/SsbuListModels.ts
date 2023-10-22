@@ -1,14 +1,64 @@
 import { QTableColumn, useQuasar } from 'quasar';
 import api from 'src/api/SsbuListApi';
 import { NameListApi } from 'src/api/NameListApi';
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 
 export function useSsbuListModel() {
   const { names, ssbuNames, getName, searchName, getSsbuNames } =
     useNameModel();
   const quasar = useQuasar();
-  const filter = ref('');
   const selectId = ref(-1);
+
+  const filter = ref({
+    charName: '',
+    title: '',
+    date: '',
+    folder: '',
+  } as FilterState);
+
+  const folderList = ref([
+    'ウルトラC',
+    '思い出',
+    'ウルツラC',
+    '焼き直し',
+    '焼き直しフェニックス',
+    '大江戸温泉物語',
+    '素材',
+  ]);
+
+  const disableFilter = ref(false);
+
+  const filteringData = function (rows: readonly DataState[]) {
+    disableFilter.value = true;
+    load.value.search = true;
+    let letRows = rows;
+
+    if (filter.value.charName != '' && filter.value.charName != undefined) {
+      letRows = letRows.filter((it) => it.charName == filter.value.charName);
+    }
+
+    if (filter.value.title != '') {
+      letRows = letRows.filter((it) =>
+        it.fileName.includes(filter.value.title)
+      );
+    }
+
+    if (filter.value.date ?? ''.length > 0) {
+      letRows = letRows.filter((it) =>
+        it.date.includes(filter.value.date?.replaceAll('/', '') ?? '')
+      );
+    }
+
+    if (filter.value.folder ?? ''.length > 0) {
+      letRows = letRows.filter((it) =>
+        it.fileName.includes(filter.value.folder)
+      );
+    }
+
+    disableFilter.value = false;
+    load.value.search = false;
+    return letRows;
+  };
 
   const columns = [
     {
@@ -18,21 +68,15 @@ export function useSsbuListModel() {
       sortable: true,
     },
     {
-      name: 'displayFileName',
+      name: 'fileName',
       label: 'タイトル',
-      field: 'displayFileName',
+      field: 'fileName',
       sortable: true,
     },
     {
       name: 'displayDate',
       label: '日付',
       field: 'displayDate',
-      sortable: true,
-    },
-    {
-      name: 'year',
-      label: '区分',
-      field: 'year',
       sortable: true,
     },
   ] as QTableColumn[];
@@ -65,8 +109,19 @@ export function useSsbuListModel() {
     }
   };
 
+  function formatDate(yyyymmdd: string) {
+    if (yyyymmdd && yyyymmdd.length === 8) {
+      const year = yyyymmdd.slice(0, 4);
+      const month = yyyymmdd.slice(4, 6);
+      const day = yyyymmdd.slice(6, 8);
+      return `${year}/${month}/${day}`;
+    }
+    return yyyymmdd; // 変換できない場合はそのまま返す
+  }
+
   const search = async function () {
     load.value.search = true;
+    disableFilter.value = true;
     await searchName();
 
     await api
@@ -76,7 +131,7 @@ export function useSsbuListModel() {
           console.log('search', res);
           records.value.splice(0);
           res.records.forEach((it) => {
-            const displayDate = it.date.replaceAll('_', '');
+            const displayDate = formatDate(it.date.replaceAll('_', ''));
             let displayFileName = getDisplayFileName(it.fileName);
 
             /*キャラ名の取得 */
@@ -121,17 +176,21 @@ export function useSsbuListModel() {
           message: 'データの取得に失敗しました',
         });
       });
+    disableFilter.value = false;
     load.value.search = false;
   };
 
   return {
     filter,
+    filteringData,
+    disableFilter,
     selectId,
     columns,
     load,
     records,
     dateList,
     ssbuNames,
+    folderList,
     search,
     getSsbuNames,
   };
@@ -201,4 +260,11 @@ interface DataState {
   date: string;
   displayDate: string;
   year: string;
+}
+
+interface FilterState {
+  charName: string | null;
+  title: string;
+  date: string | null;
+  folder: string;
 }

@@ -4,11 +4,16 @@
 
     <div class="ssbu-container">
       <div class="ssbu-left-content">
-        <q-video
-          v-if="playUrl != ''"
-          :src="playUrl"
-          style="width: 569px; height: 320px"
-        />
+        <div v-if="playUrl != ''">
+          <q-video :src="playUrl" style="width: 569px; height: 320px" />
+          <div class="row q-gutter-xs text-primary">
+            <div>
+              <q-icon name="music_note" color="primary" />
+            </div>
+            <div>{{ playName }}</div>
+          </div>
+        </div>
+
         <div v-else>
           <div class="video-container">
             <div class="video-placeholder">
@@ -16,7 +21,6 @@
               <i class="play-icon">▶️</i>
               <div class="text-white">動画はここで再生されるよ</div>
             </div>
-            <!-- ここに実際の動画要素を追加する -->
           </div>
         </div>
       </div>
@@ -32,20 +36,22 @@
           :pagination="{ rowsPerPage: 0 }"
           :rows-per-page-options="[0]"
           :filter="filter"
+          :filter-method="filteringData"
           style="width: 900px"
           class="ssbu-table-scrollable-container"
         >
           <!--sub 1/3 オプション-->
           <template v-slot:top-left>
-            <div class="row q-gutter-md" style="width: 700px">
+            <div class="row q-gutter-md" style="width: 800px">
               <div>
                 <q-input
                   dense
                   debounce="300"
-                  v-model="filter"
+                  v-model="filter.title"
                   placeholder="検索"
                   style="width: 200px"
                   align="left"
+                  :readonly="disableFilter"
                 >
                   <template v-slot:append>
                     <q-spinner
@@ -54,7 +60,7 @@
                       color="primary"
                       size="md"
                     />
-                    <q-icon name="search" v-if="filter.length == 0" />
+                    <q-icon name="search" v-if="filter.title.length == 0" />
                     <q-icon name="search" v-else color="primary" />
                     <div class="text-caption" v-if="records.length > 0">
                       {{ records.length }}
@@ -64,26 +70,44 @@
               </div>
               <div>
                 <q-select
-                  v-model="filter"
+                  v-model="filter.charName"
                   :options="ssbuNames"
                   dense
+                  clearable
                   stack-label
                   label="キャラ名"
                   transition-show="jump-up"
                   transition-hide="jump-up"
-                  style="width: 300px"
+                  style="width: 220px"
+                  :readonly="disableFilter"
                 />
               </div>
               <div>
                 <q-select
-                  v-model="filter"
+                  v-model="filter.date"
                   :options="dateList"
                   dense
                   stack-label
+                  clearable
                   label="日付"
                   transition-show="jump-up"
                   transition-hide="jump-up"
-                  style="width: 150px"
+                  style="width: 130px"
+                  :readonly="disableFilter"
+                />
+              </div>
+              <div>
+                <q-select
+                  v-model="filter.folder"
+                  :options="folderList"
+                  dense
+                  stack-label
+                  clearable
+                  label="種類"
+                  transition-show="jump-up"
+                  transition-hide="jump-up"
+                  style="width: 130px"
+                  :readonly="disableFilter"
                 />
               </div>
             </div>
@@ -94,7 +118,21 @@
             <q-tr :props="props">
               <q-th>再生</q-th>
               <q-th v-for="col in props.cols" :key="col.name" :props="props">
-                {{ col.label }}
+                <div v-if="col.label == '再生'" style="width: 50px">
+                  {{ col.label }}
+                </div>
+
+                <div v-if="col.label == 'キャラ名'" style="width: 150px">
+                  {{ col.label }}
+                </div>
+
+                <div v-if="col.label == 'タイトル'" style="width: 400px">
+                  {{ col.label }}
+                </div>
+
+                <div v-if="col.label == '日付'" style="width: 50px">
+                  {{ col.label }}
+                </div>
               </q-th>
             </q-tr>
           </template>
@@ -141,6 +179,9 @@ export default defineComponent({
   setup() {
     const {
       filter,
+      filteringData,
+      disableFilter,
+      folderList,
       selectId,
       columns,
       load,
@@ -155,6 +196,9 @@ export default defineComponent({
 
     return {
       filter,
+      filteringData,
+      disableFilter,
+      folderList,
       selectId,
       columns,
       load,
