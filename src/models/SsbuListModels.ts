@@ -119,6 +119,48 @@ export function useSsbuListModel() {
     return yyyymmdd; // 変換できない場合はそのまま返す
   }
 
+  function isValidDate(year, month, day) {
+    // Dateオブジェクトによる有効な日付のチェック
+    const date = new Date(year, month, day);
+    return (
+      date.getFullYear() === year &&
+      date.getMonth() === month &&
+      date.getDate() === day
+    );
+  }
+
+  function convertToDate(dateString: string) {
+    const parts = dateString.split('/');
+    if (parts.length === 3) {
+      const year = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10) - 1; // 月は0から始まるため1を引きます
+      const day = parseInt(parts[2], 10);
+
+      // 有効な日付か確認
+      if (isValidDate(year, month, day)) {
+        return new Date(year, month, day);
+      }
+    }
+    return null; // 変換に失敗した場合は null を返す
+  }
+
+  // 日付を表す文字列をDateオブジェクトに変換し、比較用の関数を提供
+  function compareDates(a: DataState, b: DataState) {
+    const dateA = convertToDate(a.displayDate);
+    const dateB = convertToDate(b.displayDate);
+    if (dateA == null || dateB == null) {
+      return 0;
+    }
+
+    if (dateA < dateB) {
+      return -1;
+    }
+    if (dateA > dateB) {
+      return 1;
+    }
+    return 0;
+  }
+
   const search = async function () {
     load.value.search = true;
     disableFilter.value = true;
@@ -164,6 +206,7 @@ export function useSsbuListModel() {
           dateList.value.sort();
           dateList.value.reverse();
 
+          records.value.sort(compareDates);
           records.value.reverse();
         }
       })
