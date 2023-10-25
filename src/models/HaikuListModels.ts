@@ -114,7 +114,7 @@ export function useHaikuListModel() {
   };
 
   /*SELECT */
-  const search = async function () {
+  const search = async function (query = '') {
     LoadingCondition.value.search = true;
     const request = {
       id: -1,
@@ -126,6 +126,9 @@ export function useHaikuListModel() {
       request.detail = condition.value.haikuText;
     } else {
       request.haikuText = condition.value.haikuText;
+    }
+    if (query != '') {
+      request.haikuText = query;
     }
     console.log('request', request);
     await api
