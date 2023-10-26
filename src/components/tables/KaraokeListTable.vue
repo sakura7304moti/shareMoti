@@ -15,7 +15,7 @@
     :rows-per-page-options="[0]"
     :filter="condition"
     ><!--sub 1/3 オプション-->
-    <template v-slot:top-left>
+    <template v-slot:top-right>
       <div class="row q-gutter-md" style="width: 700px">
         <div>
           <q-input
