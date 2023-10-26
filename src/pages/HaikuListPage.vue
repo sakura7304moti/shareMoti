@@ -26,7 +26,7 @@
                   <template v-slot:append>
                     <q-btn
                       color="primary"
-                      @click.prevent="search"
+                      @click.prevent="search()"
                       icon="search"
                     />
                   </template>
@@ -144,6 +144,7 @@
         <template v-slot:header="props">
           <q-tr :props="props">
             <q-th v-if="displayCondition.detail == false"> 編集 </q-th>
+            <q-th v-if="displayCondition.detail == false"> 削除 </q-th>
             <q-th v-for="col in props.cols" :key="col.name" :props="props">
               <div
                 v-if="
@@ -160,6 +161,30 @@
                 {{ col.label }}
               </div>
             </q-th>
+          </q-tr>
+        </template>
+
+        <!-- sub 3/3  アイテム-->
+        <template v-slot:body="props">
+          <q-tr :props="props">
+            <q-td v-if="displayCondition.detail == false">
+              <a href="#" @click.prevent="updateClick(props.row)"
+                ><q-icon name="edit_note" color="secondary" size="md"></q-icon
+              ></a>
+            </q-td>
+            <q-td v-if="displayCondition.detail == false">
+              <a href="#" @click.prevent="deleteClick(props.row)"
+                ><q-icon name="delete" color="negative" size="md"></q-icon
+              ></a>
+            </q-td>
+            <q-td
+              v-for="col in props.cols"
+              :key="col.name"
+              :props="props"
+              style="white-space: normal; text-align: left"
+            >
+              {{ col.value }}
+            </q-td>
           </q-tr>
         </template>
       </q-table>
