@@ -41,45 +41,19 @@
             </template>
           </q-input>
         </div>
-        <div>
-          <q-select
-            v-model="condition"
-            :options="musicList"
-            dense
-            stack-label
-            label="曲名"
-            transition-show="jump-up"
-            transition-hide="jump-up"
-            style="width: 300px"
-          />
+        <div v-if="playName != '' && playUrl != ''">
+          <audio controls :src="playUrl" autoplay />
+          <q-field borderless style="height: 18px">{{ playName }}</q-field>
         </div>
-        <div>
-          <q-select
-            v-model="condition"
-            :options="dateList"
-            dense
-            stack-label
-            label="日付"
-            transition-show="jump-up"
-            transition-hide="jump-up"
-            style="width: 150px"
-          />
-        </div>
-      </div>
-      <div v-if="playName != '' && playUrl != ''" class="row q-gutter-md">
-        <audio controls :src="playUrl" autoplay />
-        <q-field borderless class="q-pt-md" style="height: 18px">{{
-          playName
-        }}</q-field>
       </div>
     </template>
 
     <!-- sub 2/3  ヘッダー-->
     <template v-slot:header="props">
       <q-tr :props="props">
-        <q-th>再生</q-th>
+        <q-th style="width: 50px">再生</q-th>
         <q-th v-for="col in props.cols" :key="col.name" :props="props">
-          {{ col.label }}
+          <div style="width: 250px">{{ col.label }}</div>
         </q-th>
       </q-tr>
     </template>
@@ -88,11 +62,11 @@
       <q-tr :props="props">
         <q-td>
           <a
-            :href="api.apiEndpoint() + '/karaoke/download?id=' + props.row.id"
+            :href="api.apiEndpoint() + '/voice/download?id=' + props.row.id"
             @click.prevent="
               console.log('play', props.row);
               playUrl =
-                api.apiEndpoint() + '/karaoke/download?id=' + props.row.id;
+                api.apiEndpoint() + '/voice/download?id=' + props.row.id;
               playName = props.row.fileName;
             "
             class="play-btn"
@@ -114,10 +88,10 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { useKaraokeListModel } from 'src/models/KaraokeListModels';
-import api from 'src/api/KaraokeListApi';
+import { useVoiceListModel } from 'src/models/VoiceListModels';
+import api from 'src/api/VoiceListApi';
 export default defineComponent({
-  name: 'table-karaoke-list',
+  name: 'table-voice-list',
   props: {
     modelValue: {
       type: String,
@@ -126,7 +100,7 @@ export default defineComponent({
     label: {
       type: String,
       required: false,
-      default: 'カラオケ音楽堂',
+      default: 'ボイス1つ100たかしペリカ',
     },
     height: {
       type: Number,
@@ -135,8 +109,7 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const { columns, load, records, search, selectId, dateList, musicList } =
-      useKaraokeListModel();
+    const { columns, load, records, search, selectId } = useVoiceListModel();
 
     search();
     return {
@@ -151,8 +124,6 @@ export default defineComponent({
       selectId,
       playUrl: ref(''),
       playName: ref(''),
-      dateList,
-      musicList,
     };
   },
 });
@@ -163,7 +134,7 @@ export default defineComponent({
   margin: 2em 0;
   font-weight: bold;
   background: #fff;
-  border: solid 3px #5c5e5f; /*線*/
+  border: solid 2px #5c5e5f; /*線*/
   border-radius: 10px; /*角の丸み*/
 }
 .playground p {
