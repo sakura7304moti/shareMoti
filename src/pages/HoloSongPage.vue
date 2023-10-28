@@ -379,21 +379,21 @@ export default defineComponent({
 }
 
 .holosong-left-content {
-  width: 570px;
+  width: 640px;
 }
 
 .holosong-right-content {
   width: 900px;
 }
 
-@media screen and (max-width: 1470px) {
+@media screen and (max-width: 1540px) {
   .holosong-container {
     flex-direction: column; /* ページの横幅が1470px未満の場合、縦に配置 */
   }
 
   .holosong-left-content,
   .holosong-right-content {
-    width: 100%; /* ページの横幅が1470px未満の場合、フル幅になる */
+    width: 100%; /* ページの横幅が1540px未満の場合、フル幅になる */
   }
 }
 
@@ -405,7 +405,7 @@ export default defineComponent({
 
 /*動画再生してないときの画面 */
 .holosong-video-container {
-  width: 569px;
+  width: 640px;
   height: 320px;
   position: relative;
   overflow: hidden; /* オーバーフローしたコンテンツを非表示にする */
