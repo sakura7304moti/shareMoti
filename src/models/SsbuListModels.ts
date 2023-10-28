@@ -119,7 +119,7 @@ export function useSsbuListModel() {
     return yyyymmdd; // 変換できない場合はそのまま返す
   }
 
-  function isValidDate(year, month, day) {
+  function isValidDate(year: number, month: number, day: number) {
     // Dateオブジェクトによる有効な日付のチェック
     const date = new Date(year, month, day);
     return (

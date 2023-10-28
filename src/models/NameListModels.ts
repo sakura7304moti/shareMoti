@@ -6,6 +6,7 @@ export function useNameListModel() {
   const quasar = useQuasar();
   const saveModalShow = ref(false); //追加
   const editModalShow = ref(false); //更新・削除
+
   const condition = ref({
     key: '',
     val: '',

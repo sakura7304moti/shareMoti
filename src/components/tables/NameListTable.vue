@@ -15,7 +15,8 @@
         no-data-label="見つからなかった..."
         :pagination="{ rowsPerPage: 0 }"
         :rows-per-page-options="[0]"
-        :filter="filter"
+        :filter="filterCondition"
+        :filter-method="filteringData"
       >
         <!--sub 1/3 オプション-->
         <template v-slot:top-right>
@@ -24,7 +25,7 @@
               <q-input
                 dense
                 debounce="300"
-                v-model="filter"
+                v-model="filterCondition.query"
                 placeholder="検索"
                 style="width: 200px"
                 align="left"
@@ -36,21 +37,20 @@
                     color="primary"
                     size="md"
                   />
-                  <q-icon name="search" v-if="filter.length == 0" />
+                  <q-icon
+                    name="search"
+                    v-if="
+                      (filterCondition.query ?? '').length == 0 ||
+                      filterCondition.query == null
+                    "
+                  />
                   <q-icon name="search" v-else color="primary" />
                   <div class="text-caption" v-if="records.length">
                     {{ records.length }}
                   </div>
                 </template>
               </q-input>
-              <q-select
-                v-model="filter"
-                :options="ssbuNames"
-                dense
-                style="width: 200px"
-                label="キャラ名"
-                stack-label
-              />
+              <ssbu-name-select v-model="filterCondition.charName" />
             </div>
 
             <div class="row q-gutter-md">
@@ -134,17 +134,11 @@
                   stack-label
                   style="width: 250px"
                   clearable
+                  dense
                 />
               </div>
               <div>
-                <q-select
-                  label="キャラ名"
-                  v-model="insertCondition.val"
-                  class="form-model"
-                  :options="ssbuNames"
-                  stack-label
-                  style="width: 250px"
-                />
+                <ssbu-name-select v-model="insertCondition.val" />
               </div>
             </div>
             <div
@@ -304,6 +298,7 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue';
 import { useNameListModel } from 'src/models/NameListModels';
+import SsbuNameSelect from '../selects/SsbuNameSelect.vue';
 import lockIcon from 'src/components/LockIcon.vue';
 export default defineComponent({
   name: 'name-list',
@@ -325,6 +320,7 @@ export default defineComponent({
   },
   components: {
     'lock-icon': lockIcon,
+    'ssbu-name-select': SsbuNameSelect,
   },
   setup(props) {
     const {
@@ -376,8 +372,40 @@ export default defineComponent({
       }
     });
 
+    /*Filter */
+
+    const filterCondition = ref({
+      query: props.modelValue,
+      charName: '',
+    } as FilterState);
+
+    const filteringData = function (rows: readonly DataState[]) {
+      let letRows = rows;
+      if (
+        filterCondition.value.query != '' &&
+        filterCondition.value.query != undefined
+      ) {
+        letRows = letRows.filter(
+          (it) =>
+            it.key.includes(filterCondition.value.query ?? '') ||
+            it.val.includes(filterCondition.value.query ?? '')
+        );
+      }
+      if (
+        filterCondition.value.charName != '' &&
+        filterCondition.value.charName != undefined
+      ) {
+        letRows = letRows.filter(
+          (it) => it.val == (filterCondition.value.charName ?? '')
+        );
+      }
+      console.log('filter', letRows);
+      return letRows;
+    };
+
     return {
-      filter: ref(props.modelValue),
+      filterCondition,
+      filteringData,
       tableName: ref(props.label),
       tableHeight: ref(props.height + 'px'),
       condition,
@@ -408,6 +436,15 @@ export default defineComponent({
     };
   },
 });
+interface FilterState {
+  query: string;
+  charName: string;
+}
+interface DataState {
+  id: string;
+  key: string;
+  val: string;
+}
 </script>
 <style>
 /*input 入力の横幅 */
