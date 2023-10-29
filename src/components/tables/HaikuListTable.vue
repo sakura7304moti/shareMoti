@@ -158,7 +158,12 @@
           </div>
           <div>
             <q-input
-              style="width: 250px"
+              style="
+                width: 250px;
+                text-align: left;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+              "
               rows="12"
               type="textarea"
               v-model="insertCondition.detail"
@@ -267,7 +272,12 @@
               </div>
               <div>
                 <q-input
-                  style="width: 250px"
+                  style="
+                    width: 250px;
+                    text-align: left;
+                    white-space: pre-wrap;
+                    word-wrap: break-word;
+                  "
                   rows="12"
                   type="textarea"
                   v-model="updateCondition.detail"
