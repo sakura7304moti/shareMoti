@@ -270,17 +270,7 @@ export function useHaikuListModel() {
           if (response) {
             console.log('response', response);
             if (response.success) {
-              const index = records.value.findIndex(
-                (it) => it.id == updateSelectedCondition.value.id
-              );
-              const d = JSON.parse(
-                JSON.stringify(updateCondition.value)
-              ) as UpdateConditionState;
-              records.value[index].first = d.first;
-              records.value[index].second = d.second;
-              records.value[index].third = d.third;
-              records.value[index].poster = d.poster;
-              records.value[index].detail = d.detail;
+              search();
 
               displayCondition.value.update = false;
 
