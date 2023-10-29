@@ -37,12 +37,12 @@
           :rows-per-page-options="[0]"
           :filter="filter"
           :filter-method="filteringData"
-          style="width: 800px"
+          style="width: 830px"
           class="ssbu-table-scrollable-container"
         >
           <!--sub 1/3 オプション-->
           <template v-slot:top-left>
-            <div class="row q-gutter-md" style="width: 800px">
+            <div class="row q-gutter-md" style="width: 830px">
               <div>
                 <q-input
                   dense
