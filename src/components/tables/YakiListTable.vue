@@ -12,7 +12,8 @@
     no-data-label="見つからなかった..."
     :pagination="{ rowsPerPage: 0 }"
     :rows-per-page-options="[0]"
-    :filter="filter"
+    :filter="filterCondition"
+    :filter-method="filteringData"
   >
     <!--sub 1/3 オプション-->
     <template v-slot:top-right>
@@ -21,7 +22,7 @@
           <q-input
             dense
             debounce="300"
-            v-model="filter"
+            v-model="filterCondition.word"
             placeholder="検索"
             style="width: 200px"
             align="left"
@@ -33,22 +34,20 @@
                 color="primary"
                 size="md"
               />
-              <q-icon name="search" v-if="filter.length == 0" />
+              <q-icon
+                name="search"
+                v-if="
+                  (filterCondition.word ?? '').length == 0 ||
+                  filterCondition.word == null
+                "
+              />
               <q-icon name="search" v-else color="primary" />
               <div class="text-caption" v-if="records.length > 0">
                 {{ records.length }}
               </div>
             </template>
           </q-input>
-          <q-select
-            label="種類"
-            v-model="filter"
-            class="form-model"
-            :options="selecter"
-            dense
-            stack-label
-            style="width: 250px"
-          />
+          <yaki-select v-model="filterCondition.yaki" />
         </div>
         <div class="row q-gutter-md">
           <div>
@@ -133,17 +132,7 @@
                 clearable
               />
             </div>
-
-            <q-select
-              label="種類"
-              v-model="insertCondition.yaki"
-              class="form-model"
-              :options="selecter"
-              dense
-              outlined
-              stack-label
-              style="width: 250px"
-            />
+            <yaki-select v-model="insertCondition.yaki" />
           </div>
           <hr />
           <div class="row q-gutter-md">
@@ -156,6 +145,9 @@
               outline
               icon="note_add"
               :loading="isSaveLoading"
+              :disable="
+                insertCondition.word == '' || insertCondition.yaki == ''
+              "
             />
           </div>
 
@@ -270,10 +262,12 @@
 import { defineComponent, ref, watch } from 'vue';
 import { useYakiListModel } from 'src/models/YakiListModels';
 import lockIcon from 'src/components/LockIcon.vue';
+import YakiSelect from '../selects/YakiSelect.vue';
 export default defineComponent({
   name: 'table-yaki-list',
   components: {
     'lock-icon': lockIcon,
+    'yaki-select': YakiSelect,
   },
   props: {
     modelValue: {
@@ -329,8 +323,37 @@ export default defineComponent({
       }
     });
 
+    /*Filter */
+    const filterCondition = ref({
+      word: props.modelValue,
+      yaki: '',
+    } as FilterState);
+
+    const filteringData = function (rows: readonly DataState[]) {
+      let letRows = rows;
+      if (
+        filterCondition.value.word != '' &&
+        filterCondition.value.word != undefined
+      ) {
+        letRows = letRows.filter((it) =>
+          it.word.includes(filterCondition.value.word ?? '')
+        );
+      }
+      if (
+        filterCondition.value.yaki != '' &&
+        filterCondition.value.yaki != undefined
+      ) {
+        letRows = letRows.filter(
+          (it) => it.yaki == (filterCondition.value.yaki ?? '')
+        );
+      }
+      console.log('filter', letRows);
+      return letRows;
+    };
+
     return {
-      filter: ref(props.modelValue),
+      filterCondition,
+      filteringData,
       tableName: ref(props.label),
       tableHeight: ref(props.height + 'px'),
       condition,
@@ -357,6 +380,14 @@ export default defineComponent({
     };
   },
 });
+interface FilterState {
+  word: string;
+  yaki: string;
+}
+interface DataState {
+  word: string;
+  yaki: string;
+}
 </script>
 <style>
 /*input 入力の横幅 */
