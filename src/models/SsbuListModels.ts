@@ -1,11 +1,10 @@
 import { QTableColumn, useQuasar } from 'quasar';
 import api from 'src/api/SsbuListApi';
 import { NameListApi } from 'src/api/NameListApi';
-import { reactive, ref } from 'vue';
+import { ref } from 'vue';
 
 export function useSsbuListModel() {
-  const { names, ssbuNames, getName, searchName, getSsbuNames } =
-    useNameModel();
+  const { names, ssbuNames, searchName, getSsbuNames } = useNameModel();
   const quasar = useQuasar();
   const selectId = ref(-1);
 
@@ -270,7 +269,7 @@ function useNameModel() {
 
     await nameApi.ssbu_names().then((res) => {
       if (res) {
-        res.forEach((it) => ssbuNames.value.push(it));
+        res.records.forEach((it) => ssbuNames.value.push(it.name));
       }
     });
   };
@@ -306,7 +305,7 @@ interface DataState {
 }
 
 interface FilterState {
-  charName: string | null;
+  charName: string;
   title: string;
   date: string | null;
   folder: string;

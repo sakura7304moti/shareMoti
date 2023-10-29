@@ -117,7 +117,7 @@
       </q-table>
     </div>
     <!--追加画面-->
-    <q-dialog v-model="saveModalShow">
+    <q-dialog v-model="saveModalShow" position="top">
       <q-card style="max-width: 700px">
         <q-card-section>
           <div>
@@ -345,15 +345,10 @@ export default defineComponent({
       columns,
       //initNameList,
       saveDisplayList,
-      ssbuNames,
-      ssbuList,
-      searchSsbuNames,
-      editSsbuNames,
       updateBeforeCondition,
     } = useNameListModel();
     //initNameList();
     search();
-    ssbuList();
 
     //追加画面閉じたら初期化
     watch(editModalShow, () => {
@@ -428,9 +423,6 @@ export default defineComponent({
       insertRecord,
       updateErr,
       deleteCheckModalShow,
-      ssbuNames,
-      searchSsbuNames,
-      editSsbuNames,
       saveDisplayList,
       updateBeforeCondition,
     };

@@ -52,7 +52,7 @@ export class NameListApi extends APIClient {
   }
 
   //スマブラのキャラ名一覧
-  public ssbu_names(): Promise<Array<string> | null> {
+  public ssbu_names(): Promise<SsbuName | null> {
     const url = '/nameList/names';
     const path = this.combineUrl(url);
     return this.httpGet(path);
@@ -65,6 +65,14 @@ export default api;
 /*
  *interfaces
  */
+interface SsbuName {
+  records: SsbuNameResponse[];
+}
+
+interface SsbuNameResponse {
+  name: string;
+  url: string;
+}
 
 export interface NameListRequest {
   key: string | null;

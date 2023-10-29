@@ -280,35 +280,6 @@ export function useNameListModel() {
     await api.init();
   };
 
-  /*SSBU_NAMES */
-  const ssbuNames = ref([] as Array<string>);
-  const searchSsbuNames = ref([] as Array<string>);
-  const editSsbuNames = ref([] as Array<string>);
-  const ssbuList = async function () {
-    ssbuNames.value.splice(0);
-    await api
-      .ssbu_names()
-      .then((response) => {
-        console.log('response', response);
-        response?.forEach((res) => {
-          ssbuNames.value.push(res);
-          searchSsbuNames.value.push(res);
-          editSsbuNames.value.push(res);
-        });
-        ssbuNames.value.sort();
-        searchSsbuNames.value.sort();
-        editSsbuNames.value.sort();
-      })
-      .catch((e) => {
-        console.log(e);
-        quasar.notify({
-          color: 'red',
-          position: 'top',
-          message: 'データの取得に失敗しました',
-        });
-      });
-  };
-
   return {
     condition,
     saveModalShow,
@@ -330,10 +301,6 @@ export function useNameListModel() {
     updateErr,
     deleteCheckModalShow,
     initNameList,
-    ssbuNames,
-    ssbuList,
-    searchSsbuNames,
-    editSsbuNames,
     updateBeforeCondition,
     columns,
   };

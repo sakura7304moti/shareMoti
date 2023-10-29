@@ -37,7 +37,7 @@
           :rows-per-page-options="[0]"
           :filter="filter"
           :filter-method="filteringData"
-          style="width: 900px"
+          style="width: 800px"
           class="ssbu-table-scrollable-container"
         >
           <!--sub 1/3 オプション-->
@@ -69,16 +69,8 @@
                 </q-input>
               </div>
               <div>
-                <q-select
+                <ssbu-name-select
                   v-model="filter.charName"
-                  :options="ssbuNames"
-                  dense
-                  clearable
-                  stack-label
-                  label="キャラ名"
-                  transition-show="jump-up"
-                  transition-hide="jump-up"
-                  style="width: 220px"
                   :readonly="disableFilter"
                 />
               </div>
@@ -173,9 +165,13 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { useSsbuListModel } from 'src/models/SsbuListModels';
+import SsbuNameSelect from 'src/components/selects/SsbuNameSelect.vue';
 import api from 'src/api/SsbuListApi';
 export default defineComponent({
   name: 'ssbu-list',
+  components: {
+    'ssbu-name-select': SsbuNameSelect,
+  },
   setup() {
     const {
       filter,
@@ -225,17 +221,17 @@ export default defineComponent({
 }
 
 .ssbu-right-content {
-  width: 900px;
+  width: 800px;
 }
 
-@media screen and (max-width: 1470px) {
+@media screen and (max-width: 1370px) {
   .ssbu-container {
-    flex-direction: column; /* ページの横幅が1470px未満の場合、縦に配置 */
+    flex-direction: column;
   }
 
   .ssbu-left-content,
   .ssbu-right-content {
-    width: 100%; /* ページの横幅が1470px未満の場合、フル幅になる */
+    width: 100%;
   }
 }
 
