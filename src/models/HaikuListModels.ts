@@ -79,6 +79,12 @@ export function useHaikuListModel() {
       sortable: true,
     },
     {
+      name: 'detail',
+      label: '解説',
+      field: 'detail',
+      sortable: true,
+    },
+    {
       name: 'poster',
       label: '投稿者',
       field: 'poster',
@@ -156,6 +162,7 @@ export function useHaikuListModel() {
               second: rec.second,
               third: rec.third,
               poster: rec.poster,
+              detail: rec.detail,
               createAt: rec.createAt.split(' ')[0],
               updateAt: rec.updateAt.split(' ')[0],
             });
@@ -414,6 +421,7 @@ interface Row {
   second: string;
   third: string;
   poster: string;
+  detail: string;
   createAt: string;
   updateAt: string;
 }

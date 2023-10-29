@@ -11,7 +11,7 @@
     :pagination="{ rowsPerPage: 0 }"
     :rows-per-page-options="[0]"
     :filter="filter"
-    style="width: 900px"
+    style="width: 1100px"
     :style="{ height: tableHeight }"
   >
     <!--sub 1/3 オプション-->
@@ -77,6 +77,17 @@
           >
             {{ col.label }}
           </div>
+          <div
+            v-if="col.label == '解説'"
+            style="
+              width: 200px;
+              text-align: left;
+              white-space: pre-wrap;
+              word-wrap: break-word;
+            "
+          >
+            {{ col.label }}
+          </div>
         </q-th>
       </q-tr>
     </template>
@@ -98,7 +109,7 @@
           v-for="col in props.cols"
           :key="col.name"
           :props="props"
-          style="white-space: normal; text-align: left"
+          style="text-align: left; white-space: pre-wrap; word-wrap: break-word"
         >
           {{ col.value }}
         </q-td>
