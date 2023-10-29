@@ -197,7 +197,7 @@ export function useHaikuListModel() {
         second: insertCondition.value.second.replace(/\n/g, ''),
         third: insertCondition.value.third.replace(/\n/g, ''),
         poster: insertCondition.value.poster.replace(/\n/g, ''),
-        detail: insertCondition.value.detail.replace(/\n/g, ''),
+        detail: insertCondition.value.detail,
       } as HaikuListInsertRequest;
       LoadingCondition.value.insert = true;
       await api

@@ -24,7 +24,6 @@ export class APIClient {
         T,
         AxiosResponse<string>
       >(url, request, this.config);
-
       const r = JSON.parse(res.data);
       return r;
     } catch {

@@ -103,7 +103,11 @@
               v-for="col in props.cols"
               :key="col.name"
               :props="props"
-              style="white-space: normal; text-align: left"
+              style="
+                text-align: left;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+              "
             >
               {{ col.value }}
             </q-td>
