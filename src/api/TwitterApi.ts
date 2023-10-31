@@ -13,11 +13,11 @@ export class TwitterApi extends APIClient {
     );
   }
 
-  public holoList(): Promise<Array<string> | null> {
+  public holoList(): Promise<HoloNameResponse | null> {
     const url = '/nitter/hololist'; //twitter/hololist
     const path = this.combineUrl(url);
 
-    return this.httpGet<Array<string>>(path);
+    return this.httpGet<HoloNameResponse>(path);
   }
 }
 
@@ -47,4 +47,12 @@ export interface TwitterResponse {
   userId: string;
   userName: string;
   likeCount: number;
+}
+interface HoloNameResponse {
+  records: HoloName[];
+}
+
+interface HoloName {
+  hashtag: string;
+  url: string;
 }

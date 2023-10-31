@@ -42,8 +42,6 @@ export function useTwitterModel() {
     records: [] as TwitterRecord[],
   } as DataState);
 
-  const holoList = ref([] as string[]);
-
   const dateModalShow = ref(false);
 
   const selectItems = [
@@ -80,27 +78,6 @@ export function useTwitterModel() {
       value: 100000,
     },
   ] as Array<selectItem>;
-
-  //function
-  const getHoloList = async function () {
-    holoList.value.splice(0);
-    await api
-      .holoList()
-      .then((response) => {
-        //console.log('response', response);
-        response?.forEach((res) =>
-          holoList.value.push(res.replace('#AIart #hololive', '#AIart'))
-        );
-      })
-      .catch((e) => {
-        console.log(e);
-        quasar.notify({
-          color: 'red',
-          position: 'top',
-          message: 'データの取得に失敗しました',
-        });
-      });
-  };
 
   const dateToString = function (date: string) {
     if (date) {
@@ -243,8 +220,6 @@ export function useTwitterModel() {
     dataState,
     search,
     isLoading,
-    holoList,
-    getHoloList,
     dateModalShow,
     selectItems,
     imageLinkOpen,

@@ -1,16 +1,14 @@
 <template>
   <q-page class="">
-    <custom-table v-model="filter" />
+    <holo-hashtag-select v-model="filter" />
   </q-page>
 </template>
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import HaikuList from 'components/HaikuList.vue';
+import HoloNameSelect from 'src/components/selects/HoloNameSelect.vue';
 export default defineComponent({
   name: 'component-test',
-  components: {
-    'custom-table': HaikuList,
-  },
+  component: { 'holo-hashtag-select': HoloNameSelect },
   setup() {
     const pageHeight = ref(document.documentElement.scrollHeight * 0.85);
     return {

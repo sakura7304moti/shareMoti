@@ -40,18 +40,11 @@
           :loading="isLoading"
         />
       </q-input>
-      <q-select
+      <holo-select
         v-if="condition.mode == 'holo'"
         v-model="condition.hashtag"
-        :options="holoList"
         label="hololive fanart"
-        class="form-model"
-        dense
-        stack-label
-        transition-show="jump-up"
-        transition-hide="jump-up"
-      >
-      </q-select>
+      />
       <q-select
         label="♡"
         v-model="condition.minLike"
@@ -88,18 +81,10 @@
               stack-label
               filled
             />
-            <q-select
+            <holo-select
               v-model="condition.hashtag"
-              :options="holoList"
               label="ホロライブファンアート"
-              class="form-model"
-              dense
-              stack-label
-              transition-show="jump-up"
-              transition-hide="jump-up"
-              filled
-            >
-            </q-select>
+            />
           </div>
 
           <div class="q-pt-md text-subtitle1">ツイート日</div>
@@ -289,15 +274,13 @@
 import { useViewSupport } from 'src/utils/viewSupport';
 import { useTwitterModel } from 'src/models/TwitterModels';
 import { computed, defineComponent, ref } from 'vue';
-import { LocationQueryRaw, useRoute, useRouter } from 'vue-router';
-import HoloHashtagList from 'src/components/HoloHashtagList.vue';
-import axios from 'axios';
+import HoloNameSelect from 'src/components/selects/HoloNameSelect.vue';
 export default defineComponent({
   name: 'twitter-page',
-  component: { 'holo-hashtag-list': HoloHashtagList },
+  components: {
+    'holo-select': HoloNameSelect,
+  },
   setup() {
-    const route = useRoute();
-    const router = useRouter();
     const { fileDownload, imageDownload } = useViewSupport();
 
     const {
@@ -305,42 +288,11 @@ export default defineComponent({
       dataState,
       search,
       isLoading,
-      holoList,
-      getHoloList,
       dateModalShow,
       selectItems,
       imageLinkOpen,
       searchOptionShow,
     } = useTwitterModel();
-    getHoloList();
-
-    const onSearchClick = async function () {
-      // パラメータと値を持つオブジェクトを作成
-      const params = {
-        p: condition.value.pageNo,
-        ps: condition.value.pageSize,
-      } as LocationQueryRaw;
-      if (condition.value.hashtag != '') {
-        params.h = condition.value.hashtag;
-      }
-      if (condition.value.startDate != '') {
-        params.sd = condition.value.startDate;
-      }
-      if (condition.value.endDate != '') {
-        params.ed = condition.value.endDate;
-      }
-      if (condition.value.userName != '') {
-        params.u = condition.value.userName;
-      }
-      if (condition.value.minLike != 0) {
-        params.min = condition.value.minLike;
-      }
-      if (condition.value.maxLike != 0) {
-        params.max = condition.value.maxLike;
-      }
-      params.fetch = 1;
-      router.push({ path: route.path, query: params });
-    };
 
     const downloadMode = ref(false);
 
@@ -368,12 +320,9 @@ export default defineComponent({
       dataState,
       search,
       isLoading,
-      holoList,
-      getHoloList,
       dateModalShow,
       selectItems,
       imageLinkOpen,
-      onSearchClick,
       imageDownload,
       fileDownload,
       downloadMode,
@@ -385,6 +334,7 @@ export default defineComponent({
       pageWidth,
       pageHeight,
       searchOptionShow,
+      test: ref(''),
     };
   },
 });
