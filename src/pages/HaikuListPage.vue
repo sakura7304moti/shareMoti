@@ -29,3 +29,13 @@ export default defineComponent({
   },
 });
 </script>
+<style>
+@font-face {
+  font-family: 'haiku';
+  src: url(../fonts/haiku2.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'HinaMincho-Regular';
+  src: url(../fonts/HinaMincho-Regular.ttf) format('truetype');
+}
+</style>

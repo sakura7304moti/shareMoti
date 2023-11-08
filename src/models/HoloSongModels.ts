@@ -3,7 +3,8 @@ import api from 'src/api/HoloSongApi';
 import { ref } from 'vue';
 
 export function useHoloSongModel() {
-  const { getVideoId, getImageLink, getDisplayName } = subModel();
+  const { getVideoId, getImageLink, getAlterImageLink, getDisplayName } =
+    subModel();
 
   const quasar = useQuasar();
 
@@ -92,6 +93,7 @@ export function useHoloSongModel() {
                 songName: it.songName,
                 detail: it.detail,
                 imageLink: getImageLink(it.link),
+                alterLink: getAlterImageLink(it.link),
                 videoId: getVideoId(it.link),
               } as DataState;
               records.value.push(addRec);
@@ -189,6 +191,11 @@ function subModel() {
     return baseUrl.replace('query', getVideoId(url));
   };
 
+  const getAlterImageLink = function (url: string) {
+    const baseUrl = 'https://img.youtube.com/vi/query/default.jpg';
+    return baseUrl.replace('query', getVideoId(url));
+  };
+
   const getDisplayName = function (text: string) {
     if (text.length > 19) {
       return text.substring(0, 19) + '...';
@@ -199,6 +206,7 @@ function subModel() {
   return {
     getVideoId,
     getImageLink,
+    getAlterImageLink,
     getDisplayName,
   };
 }
@@ -209,6 +217,7 @@ interface DataState {
   songName: string;
   detail: string;
   imageLink: string;
+  alterLink: string;
   videoId: string;
 }
 interface PageState {

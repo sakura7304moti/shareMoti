@@ -191,7 +191,7 @@
           />
 
           <q-card-section>
-            <div class="text-h6">YouTube</div>
+            <div class="text-h6">Cover</div>
             <q-card-section class="q-pt-none">
               YouTubeの歌ってみたをまとめたよ
             </q-card-section>
@@ -207,9 +207,9 @@
           />
 
           <q-card-section>
-            <div class="text-h6">Album</div>
+            <div class="text-h6">Original</div>
             <q-card-section class="q-pt-none">
-              ホロライブのアルバムをまとめたよ
+              ホロライブのオリ曲(動画)をまとめたよ
             </q-card-section>
           </q-card-section>
         </q-card>
