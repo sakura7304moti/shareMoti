@@ -162,6 +162,25 @@
             </q-card-section>
           </q-card-section>
         </q-card>
+
+        <!--オム子レイディオ-->
+        <q-card class="index-page-card">
+          <img
+            src="../assets/omuko.jpg"
+            style="cursor: pointer"
+            @click="router.replace('/radio')"
+          />
+
+          <q-card-section>
+            <div class="text-h6">オム子レイディオ</div>
+            <q-card-section class="q-pt-none">
+              オム子のラジオ放送局。<br />
+              普段は自家用ヘリで出勤しているが、たまに土井カービィに運んでもらっている。
+              ちなみに土井カー運送は10kmで200円。まれに復帰ミスして落っこちるのが難点。<br />
+              空で移動したいならオム子空港に行こう。復帰力の低い人でも安心よ。
+            </q-card-section>
+          </q-card-section>
+        </q-card>
       </div>
 
       <!--Scraper-->

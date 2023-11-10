@@ -1,6 +1,6 @@
 <template>
   <q-page class="">
-    <radio-list-table v-model="filter" :height="pageHeight" />
+    <radio-list-table :height="pageHeight" />
   </q-page>
 </template>
 
@@ -15,7 +15,6 @@ export default defineComponent({
   setup() {
     const pageHeight = ref(document.documentElement.scrollHeight * 0.85);
     return {
-      filter: ref(''),
       pageHeight,
     };
   },

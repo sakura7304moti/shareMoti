@@ -4,19 +4,29 @@ import { ref } from 'vue';
 
 export function useRadioListModel() {
   const quasar = useQuasar();
-  const filter = ref('');
+  const filter = ref({
+    text: '',
+    date: '',
+  } as FilterState);
+  const dateFilter = ref('');
   const selectId = ref(-1);
   const columns = [
     {
-      name: 'fileName',
-      label: 'ファイル名',
-      field: 'fileName',
+      name: 'displayName',
+      label: 'タイトル',
+      field: 'displayName',
       sortable: true,
     },
     {
       name: 'date',
-      label: '日付',
+      label: '日時',
       field: 'date',
+      sortable: true,
+    },
+    {
+      name: 'fileName',
+      label: 'ファイル名',
+      field: 'fileName',
       sortable: true,
     },
   ] as QTableColumn[];
@@ -36,15 +46,32 @@ export function useRadioListModel() {
           console.log('search', response);
           records.value.splice(0);
           dateList.value.splice(0);
+          const revDateList = [] as string[];
 
           response.records.forEach((it) => {
-            records.value.push(it);
             if (!dateList.value.includes(it.date.split(' ')[0])) {
               dateList.value.push(it.date.split(' ')[0]);
+              revDateList.push(it.date.split(' ')[0]);
             }
+
+            const rec = {
+              id: it.id,
+              fileName: it.fileName,
+              displayName: '',
+              date: it.date,
+            } as DataState;
+            records.value.push(rec);
           });
 
           records.value.sort((a, b) => (a.date > b.date ? -1 : 1));
+
+          revDateList.reverse();
+          records.value.forEach((it) => {
+            const displayName = `第${
+              revDateList.indexOf(it.date.split(' ')[0]) + 1
+            }回`;
+            it.displayName = displayName;
+          });
         }
       })
 
@@ -60,6 +87,21 @@ export function useRadioListModel() {
     load.value.search = false;
   };
 
+  const filteringData = function (rows: readonly DataState[]) {
+    let letRows = rows;
+    if (filter.value.text != '') {
+      letRows = letRows.filter(
+        (it) =>
+          it.displayName.includes(filter.value.text) ||
+          it.fileName.includes(filter.value.text)
+      );
+    }
+    if (filter.value.date != '' && filter.value.date != undefined) {
+      letRows = letRows.filter((it) => it.date.includes(filter.value.date));
+    }
+    return letRows;
+  };
+
   return {
     filter,
     columns,
@@ -68,11 +110,18 @@ export function useRadioListModel() {
     search,
     selectId,
     dateList,
+    dateFilter,
+    filteringData,
   };
 }
 interface DataState {
   id: number;
   fileName: string;
+  displayName: string;
+  date: string;
+}
+interface FilterState {
+  text: string;
   date: string;
 }
 interface Loading {

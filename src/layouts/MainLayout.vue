@@ -101,6 +101,13 @@
             </div>
             <q-item-section class="text-h6"> スマブラ切り抜き </q-item-section>
           </q-item>
+          <!--オム子レイディオ-->
+          <q-item clickable v-ripple @click="router.replace('/radio')">
+            <div class="menu-icon-image">
+              <img src="../assets/omuko_icon2.jpg" width="48" />
+            </div>
+            <q-item-section class="text-h6"> オム子レイディオ </q-item-section>
+          </q-item>
         </q-item-section>
 
         <q-separator />

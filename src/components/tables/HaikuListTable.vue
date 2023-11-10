@@ -485,11 +485,11 @@ export default defineComponent({
 <style>
 @font-face {
   font-family: 'haiku';
-  src: url(../fonts/haiku2.ttf) format('truetype');
+  src: url(src/fonts/haiku2.ttf) format('truetype');
 }
 @font-face {
   font-family: 'HinaMincho-Regular';
-  src: url(../fonts/HinaMincho-Regular.ttf) format('truetype');
+  src: url(src/fonts/HinaMincho-Regular.ttf) format('truetype');
 }
 /*input 入力の横幅 */
 .form-model {

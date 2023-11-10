@@ -13,7 +13,8 @@
     no-data-label="見つからなかった..."
     :pagination="{ rowsPerPage: 0 }"
     :rows-per-page-options="[0]"
-    :filter="condition"
+    :filter="filter"
+    :filter-method="filteringData"
     ><!--sub 1/3 オプション-->
     <template v-slot:top-right>
       <div class="row q-gutter-md" style="width: 700px">
@@ -21,7 +22,7 @@
           <q-input
             dense
             debounce="300"
-            v-model="condition"
+            v-model="filter.text"
             placeholder="検索"
             style="width: 200px"
             align="left"
@@ -33,7 +34,7 @@
                 color="primary"
                 size="md"
               />
-              <q-icon name="search" v-if="condition.length == 0" />
+              <q-icon name="search" v-if="filter.text.length == 0" />
               <q-icon name="search" v-else color="primary" />
               <div class="text-caption" v-if="records.length > 0">
                 {{ records.length }}
@@ -43,7 +44,7 @@
         </div>
         <div>
           <q-select
-            v-model="condition"
+            v-model="filter.date"
             :options="dateList"
             dense
             stack-label
@@ -51,6 +52,7 @@
             transition-show="jump-up"
             transition-hide="jump-up"
             style="width: 150px"
+            clearable
           />
         </div>
       </div>
@@ -65,9 +67,17 @@
     <!-- sub 2/3  ヘッダー-->
     <template v-slot:header="props">
       <q-tr :props="props">
-        <q-th>再生</q-th>
+        <q-th style="width: 50px">再生</q-th>
         <q-th v-for="col in props.cols" :key="col.name" :props="props">
-          {{ col.label }}
+          <div v-if="col.label == 'タイトル'" style="width: 70px">
+            {{ col.label }}
+          </div>
+          <div v-if="col.label == '日時'" style="width: 150px">
+            {{ col.label }}
+          </div>
+          <div v-if="col.label == 'ファイル名'">
+            {{ col.label }}
+          </div>
         </q-th>
       </q-tr>
     </template>
@@ -107,10 +117,6 @@ import api from 'src/api/RadioListApi';
 export default defineComponent({
   name: 'table-karaoke-list',
   props: {
-    modelValue: {
-      type: String,
-      required: true,
-    },
     label: {
       type: String,
       required: false,
@@ -123,12 +129,20 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const { columns, load, records, search, selectId, dateList } =
-      useRadioListModel();
+    const {
+      columns,
+      load,
+      records,
+      search,
+      selectId,
+      dateList,
+      filter,
+      dateFilter,
+      filteringData,
+    } = useRadioListModel();
 
     search();
     return {
-      condition: ref(props.modelValue),
       tableName: ref(props.label),
       tableHeight: ref(props.height + 'px'),
       columns,
@@ -140,6 +154,9 @@ export default defineComponent({
       playUrl: ref(''),
       playName: ref(''),
       dateList,
+      filter,
+      dateFilter,
+      filteringData,
     };
   },
 });
