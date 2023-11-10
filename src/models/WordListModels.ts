@@ -51,6 +51,29 @@ export function useWordListModel() {
   const records = ref([] as DataState[]);
 
   /*SELECT */
+  function addHours(date: Date, hours: number): Date {
+    const result = new Date(date);
+    result.setHours(result.getHours() + hours);
+    return result;
+  }
+
+  function formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  function displayDate(date: string): string {
+    const inputDate = new Date(date);
+
+    // 7時間後の日時
+    const resultDate = addHours(inputDate, 7);
+
+    // yyyy-mm-ddの形式に変換
+    const resultString = formatDate(resultDate);
+    return resultString;
+  }
   const search = async function () {
     isLoading.value = true;
     await api
@@ -66,11 +89,12 @@ export function useWordListModel() {
             records.value.push({
               word: rec.word ?? '',
               desc: rec.desc ?? '',
-              createAt: rec.createAt?.split(' ')[0] ?? '',
-              updateAt: rec.updateAt?.split(' ')[0] ?? '',
+              createAt: displayDate(rec.createAt ?? ''),
+              updateAt: displayDate(rec.updateAt ?? ''),
             })
           );
           sortRecords();
+          console.log('select', records.value);
         }
       })
       .catch((e) => {
