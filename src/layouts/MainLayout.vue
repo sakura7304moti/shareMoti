@@ -108,6 +108,13 @@
             </div>
             <q-item-section class="text-h6"> オム子レイディオ </q-item-section>
           </q-item>
+          <!--画像一覧-->
+          <q-item clickable v-ripple @click="router.replace('/img')">
+            <div class="menu-icon-image">
+              <img src="../assets/ichiro2.jpg" width="48" />
+            </div>
+            <q-item-section class="text-h6"> 画像まとめ </q-item-section>
+          </q-item>
         </q-item-section>
 
         <q-separator />
@@ -127,7 +134,7 @@
               <img src="../assets/youtube_icon.png" width="48" />
             </div>
 
-            <q-item-section class="text-h6"> YouTube </q-item-section>
+            <q-item-section class="text-h6"> 歌みた </q-item-section>
           </q-item>
           <!--album-->
           <q-item clickable v-ripple @click="router.replace('/holoalbum')">
@@ -138,7 +145,7 @@
               />
             </div>
 
-            <q-item-section class="text-h6"> original </q-item-section>
+            <q-item-section class="text-h6"> オリ曲 </q-item-section>
           </q-item>
         </q-item-section>
 

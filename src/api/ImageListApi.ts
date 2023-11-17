@@ -1,17 +1,25 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { APIClient } from './BaseApi';
 export class ImageListApi extends APIClient {
-  public search(): Promise<Array<ImageListSearchResponse> | null> {
+  public search(): Promise<ImageListSearchResponse | null> {
     const url = '/imageList/search';
     const path = this.combineUrl(url);
 
-    return this.httpGet<Array<ImageListSearchResponse>>(path);
+    return this.httpGet<ImageListSearchResponse>(path);
+  }
+
+  public upload(file: File): Promise<ImageListUploadResponse | null> {
+    const url = '/imageList/upload';
+    const path = this.combineUrl(url);
+
+    return this.httpUpload<ImageListUploadResponse>(path, file);
   }
 
   public async download(
-    fileName: string
-  ): Promise<AxiosResponse<string, any> | null> {
-    const url = `/imageList/download?file=${fileName}`;
+    fileName: string,
+    ext: string
+  ): Promise<AxiosResponse<string, null> | null> {
+    const url = `/imageList/download?fileName=${fileName}&ext=${ext}`;
     const config = {
       headers: {
         'Content-Type': 'image/jpeg',
@@ -66,6 +74,7 @@ export default api;
 /*リクエスト */
 export interface ImageListInsertRequest {
   fileName: string;
+  ext: string;
   title: string;
   detail: string;
 }
@@ -86,8 +95,13 @@ export interface ImageListDeleteRequest {
 
 /*レスポンス */
 export interface ImageListSearchResponse {
+  records: searchRec[];
+}
+
+interface searchRec {
   id: number;
   fileName: string;
+  ext: string;
   title: string;
   detail: string;
   createAt: string;
@@ -97,4 +111,8 @@ export interface ImageListSearchResponse {
 export interface ImageListStatusResult {
   success: boolean;
   errorText: string;
+}
+
+export interface ImageListUploadResponse {
+  fileName: string;
 }
