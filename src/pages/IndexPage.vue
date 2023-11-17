@@ -4,7 +4,9 @@
     <div class="row q-gutter-md q-pt-md">
       <div>
         <img src="../assets/obachan.jpg" height="130" id="oba-profile" />
-        <div class="profile-name">韓国のおばあちゃん</div>
+        <div class="profile-name" @click="router.replace('/imagelist')">
+          韓国のおばあちゃん
+        </div>
       </div>
       <balloon-left :text="obamessage" style="height: 120px" />
     </div>

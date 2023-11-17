@@ -13,6 +13,12 @@ export class APIClient {
     },
   } as AxiosRequestConfig;
 
+  public uploadConfig = {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  } as AxiosRequestConfig;
+
   //URL結合
   public combineUrl(endpoint: string): string {
     return this.apiEndpoint() + endpoint;
@@ -26,7 +32,7 @@ export class APIClient {
       >(url, request, this.config);
       const r = JSON.parse(res.data);
       return r;
-    } catch {
+    } catch (e) {
       return null;
     }
   }
@@ -42,6 +48,24 @@ export class APIClient {
       const r = JSON.parse(res.data);
       return r;
     } catch {
+      return null;
+    }
+  }
+
+  //file upload
+  public async httpUpload<T>(url: string, file: File): Promise<T | null> {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res: AxiosResponse<string> = await axios.post<
+        T,
+        AxiosResponse<string>
+      >(url, formData, this.uploadConfig);
+      const jsonText = JSON.stringify(res.data);
+      const r = JSON.parse(jsonText);
+      return r;
+    } catch (e) {
+      console.log('upload err', e);
       return null;
     }
   }
