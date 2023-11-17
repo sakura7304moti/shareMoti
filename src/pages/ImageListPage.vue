@@ -1,16 +1,12 @@
 <template>
   <q-page class="">
-    <div class="text-h6">コラ画像コンテスト</div>
-    <q-card style="width: 500px; height: 100px" class="q-pb-md">
-      <q-card-section>
-        <div class="text-subtitle1">画像アップロード</div>
-        <div class="row q-gutter-md">
-          <div>
-            <uploader />
-          </div>
-        </div>
-      </q-card-section>
-    </q-card>
+    <div class="row q-gutter-md">
+      <div class="text-h6">国立美術館</div>
+      <div class="row q-gutter-sm" style="width: 200px">
+        <div><uploader /></div>
+        <div class="q-pt-sm text-grey-6">画像のアップロード</div>
+      </div>
+    </div>
 
     <div v-for="rec in records" :key="rec.id" class="q-pa-md">
       <imageCard :dataState="rec" />

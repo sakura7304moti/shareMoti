@@ -1,7 +1,7 @@
 <template>
   <q-btn
     round
-    icon="upload"
+    icon="cloud_upload"
     dense
     text-color="primary"
     @click="modalView = true"

@@ -1,12 +1,35 @@
 <template>
   <q-card class="image-tweet-card">
     <q-card-section>
+      <!--タイトル-->
       <div class="text-h6 text-bold text-grey-4" v-if="state.title == ''">
         タイトル無し
       </div>
       <div class="text-h6 text-bold" v-else>{{ state.title }}</div>
+
+      <!--画像-->
+      <div class="image-tweet-card-img">
+        <img :src="downloadUrl" />
+      </div>
+
+      <!--詳細-->
+      <div class="image-tweet-card-detail">
+        {{ state.detail }}
+      </div>
       <q-separator />
-      <img :src="downloadUrl" style="width: 100%" />
+
+      <!--ボタン一覧-->
+      <div class="row q-gutter-md q-pt-md">
+        <div>
+          <q-btn
+            round
+            dense
+            icon="download"
+            text-color="primary"
+            @click="fileDownload(downloadUrl)"
+          />
+        </div>
+      </div>
     </q-card-section>
   </q-card>
 </template>
@@ -14,6 +37,7 @@
 <script lang="ts">
 import { defineComponent, PropType, ref } from 'vue';
 import { APIClient } from 'src/api/BaseApi';
+import { useViewSupport } from 'src/utils/viewSupport';
 export default defineComponent({
   name: 'image-list-tweet',
   props: {
@@ -23,6 +47,7 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const { fileDownload } = useViewSupport();
     const state = ref(props.dataState);
     const client = new APIClient();
     const downloadUrl = ref(
@@ -31,7 +56,7 @@ export default defineComponent({
       }&ext=${props.dataState.ext}`
     );
 
-    return { state, downloadUrl };
+    return { state, downloadUrl, emptyText: ref('詳細無し'), fileDownload };
   },
 });
 
@@ -47,8 +72,46 @@ interface DataState {
 </script>
 
 <style>
+/*カード全体 */
 .image-tweet-card {
-  width: 300px;
-  height: 300px;
+  width: 400px;
+  height: 550px;
+}
+/*画像の表示 */
+.image-tweet-card-img {
+  margin-bottom: 30px;
+  width: 100%;
+  max-width: 400px;
+  background-color: #ffffff;
+  overflow: hidden;
+  position: relative;
+}
+.image-tweet-card-img img {
+  position: absolute;
+  width: auto;
+  height: auto;
+  top: 50%;
+  left: 50%;
+  max-width: 100%;
+  max-height: 100%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.image-tweet-card-img:after {
+  display: block;
+  padding-top: 75%;
+  content: '';
+}
+/*詳細 */
+.image-tweet-card-detail {
+  height: 100px;
+  width: 100px;
+  overflow: scroll;
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: normal;
 }
 </style>
