@@ -52,7 +52,7 @@
   </q-dialog>
 </template>
 <script lang="ts">
-import { defineComponent, PropType, ref } from 'vue';
+import { defineComponent, PropType, ref, SetupContext } from 'vue';
 import api from 'src/api/ImageListApi';
 import { useQuasar } from 'quasar';
 export default defineComponent({
@@ -66,7 +66,7 @@ export default defineComponent({
       type: String,
     },
   },
-  setup(props) {
+  setup(props, context: SetupContext) {
     const quasar = useQuasar();
     const modalView = ref(false);
     const state = ref(props.dataState);
@@ -83,6 +83,7 @@ export default defineComponent({
                 color: 'primary',
                 position: 'top',
               });
+              context.emit('deleted');
               modalView.value = false;
             }
           }

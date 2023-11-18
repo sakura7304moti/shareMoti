@@ -12,8 +12,15 @@
         <img :src="downloadUrl" />
       </div>
 
+      <q-separator />
       <!--詳細-->
-      <div class="image-tweet-card-detail">
+      <div
+        v-if="state.detail == ''"
+        class="text-grey-4 image-tweet-card-detail"
+      >
+        詳細無し
+      </div>
+      <div v-else class="image-tweet-card-detail">
         {{ state.detail }}
       </div>
       <q-separator />
@@ -40,7 +47,23 @@
           <imageUpdate :data-state="state" :download-url="downloadUrl" />
         </div>
         <div v-if="deleteDisplay">
-          <imageDelete :data-state="state" :download-url="downloadUrl" />
+          <imageDelete
+            :data-state="state"
+            :download-url="downloadUrl"
+            @deleted="deleteNotify"
+          />
+        </div>
+      </div>
+
+      <!--日付-->
+      <div class="row q-gutter-xs q-pt-md text-grey-8">
+        <div>作成日:</div>
+        <div class="q-pr-md">
+          {{ state.createAt }}
+        </div>
+        <div>更新日:</div>
+        <div>
+          {{ state.updateAt }}
         </div>
       </div>
     </q-card-section>
@@ -48,7 +71,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, ref } from 'vue';
+import { computed, defineComponent, PropType, ref, SetupContext } from 'vue';
 import { APIClient } from 'src/api/BaseApi';
 import { useViewSupport } from 'src/utils/viewSupport';
 import ImageUpdate from './ImageUpdate.vue';
@@ -69,7 +92,7 @@ export default defineComponent({
     imageUpdate: ImageUpdate,
     imageDelete: ImageDelete,
   },
-  setup(props) {
+  setup(props, context: SetupContext) {
     const { fileDownload } = useViewSupport();
     const state = ref(props.dataState);
     const deleteView = computed(() => props.deleteDisplay);
@@ -80,12 +103,17 @@ export default defineComponent({
       }&ext=${props.dataState.ext}`
     );
 
+    const deleteNotify = function () {
+      context.emit('deleted');
+    };
+
     return {
       state,
       downloadUrl,
       emptyText: ref('詳細無し'),
       fileDownload,
       deleteView,
+      deleteNotify,
     };
   },
 });
@@ -96,6 +124,10 @@ interface DataState {
   ext: string;
   title: string;
   detail: string;
+  createAt: string;
+  updateAt: string;
+}
+interface FormateDate {
   createAt: string;
   updateAt: string;
 }

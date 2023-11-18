@@ -47,11 +47,12 @@
             :url="uploadUrl"
             label="ここをクリックして画像を選択"
             dense
-            :clearable="file.size != null"
+            :clearable="file?.size != null"
             style="width: 300px"
+            stack-label
           />
         </div>
-        <div class="row q-gutter-xs q-pt-md q-pb-md" v-if="file.size != null">
+        <div class="row q-gutter-xs q-pt-md q-pb-md" v-if="file?.size != null">
           <div>
             <q-btn
               text-color="primary"
@@ -60,7 +61,7 @@
               @click="fileUpload"
             />
           </div>
-          <div class="q-pt-sm text-grey-6 q-pr-md">アップロードする</div>
+          <div class="q-pt-sm q-pr-md">←アップロードするボタン!</div>
         </div>
 
         <!--画像-->
@@ -73,19 +74,14 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
+import { defineComponent, ref, SetupContext } from 'vue';
 import { APIClient } from '../../api/BaseApi';
 import api from '../../api/ImageListApi';
 import { useQuasar } from 'quasar';
 import { watch } from 'vue';
 export default defineComponent({
   name: 'image-list-uploader',
-  props: {
-    uploaded: {
-      type: Boolean,
-    },
-  },
-  setup() {
+  setup(_, context: SetupContext) {
     const modalView = ref(false);
     const client = new APIClient();
     const uploadUrl = ref(client.apiEndpoint() + '/imageList/upload');
@@ -139,6 +135,7 @@ export default defineComponent({
                     condition.value.ext = '';
                     condition.value.title = '';
                     condition.value.detail = '';
+                    context.emit('research');
 
                     modalView.value = false;
                   } else {

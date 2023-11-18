@@ -48,5 +48,33 @@ export const useViewSupport = function () {
         }
       });
   };
-  return { fileDownload, imageDownload };
+
+  /*
+   *日付を日本時間のyyyy-mm-ddにフォーマット
+   */
+  function displayDate(date: string): string {
+    const inputDate = new Date(date);
+
+    // 7時間後の日時
+    const resultDate = addHours(inputDate, 7);
+
+    // yyyy-mm-ddの形式に変換
+    const resultString = formatDate(resultDate);
+    return resultString;
+  }
+  return { fileDownload, imageDownload, displayDate };
 };
+
+/*日付操作用 */
+function addHours(date: Date, hours: number): Date {
+  const result = new Date(date);
+  result.setHours(result.getHours() + hours);
+  return result;
+}
+
+function formatDate(date: Date): string {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
