@@ -19,7 +19,7 @@
       <q-separator />
 
       <!--ボタン一覧-->
-      <div class="row q-gutter-md q-pt-md">
+      <div class="row q-gutter-xs q-pt-md">
         <div>
           <q-btn
             round
@@ -29,6 +29,11 @@
             @click="fileDownload(downloadUrl)"
           />
         </div>
+        <div class="q-pt-sm q-pr-md text-grey-6">ダウンロード</div>
+        <div>
+          <imageUpdate :data-state="state" :download-url="downloadUrl" />
+        </div>
+        <div class="q-pt-sm q-pr-md text-grey-6">編集</div>
       </div>
     </q-card-section>
   </q-card>
@@ -38,6 +43,7 @@
 import { defineComponent, PropType, ref } from 'vue';
 import { APIClient } from 'src/api/BaseApi';
 import { useViewSupport } from 'src/utils/viewSupport';
+import ImageUpdate from './ImageUpdate.vue';
 export default defineComponent({
   name: 'image-list-tweet',
   props: {
@@ -45,6 +51,9 @@ export default defineComponent({
       type: Object as PropType<DataState>,
       required: true,
     },
+  },
+  components: {
+    imageUpdate: ImageUpdate,
   },
   setup(props) {
     const { fileDownload } = useViewSupport();
@@ -90,24 +99,33 @@ interface DataState {
   position: absolute;
   width: auto;
   height: auto;
-  top: 50%;
+  top: 0%;
   left: 50%;
   max-width: 100%;
   max-height: 100%;
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, 0%);
+  -moz-transform: translate(-50%, 0%);
+  -ms-transform: translate(-50%, 0%);
+  transform: translate(-50%, 0%);
 }
 .image-tweet-card-img:after {
   display: block;
   padding-top: 75%;
   content: '';
 }
+@media screen and (max-width: 768px) {
+  .image-tweet-card-img {
+    max-width: 300px;
+  }
+  .image-tweet-card {
+    width: 350px;
+  }
+}
+
 /*詳細 */
 .image-tweet-card-detail {
   height: 100px;
-  width: 100px;
+  width: 370px;
   overflow: scroll;
   text-align: left;
   white-space: pre-wrap;

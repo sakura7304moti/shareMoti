@@ -1,11 +1,24 @@
 <template>
-  <q-btn
-    round
-    icon="cloud_upload"
-    dense
-    text-color="primary"
-    @click="modalView = true"
-  />
+  <div class="row q-gutter-xs">
+    <div>
+      <q-btn
+        round
+        icon="cloud_upload"
+        dense
+        text-color="primary"
+        @click="modalView = true"
+      />
+    </div>
+
+    <a
+      href="#"
+      class="q-pt-sm text-grey-6 q-pr-md"
+      @click.prevent="modalView = true"
+      style="text-decoration: none"
+      >画像のアップロード</a
+    >
+  </div>
+
   <q-dialog v-model="modalView">
     <q-card class="q-pa-sm" id="image-upload-dialog-card">
       <q-card-section>
@@ -13,39 +26,44 @@
         <div class="q-pb-md">
           <q-input
             v-model="condition.title"
-            label="タイトル(省略可)"
+            label="タイトル(省略可・後で変更可能)"
             stack-label
             dense
+            class="text-subtitle1 text-bold"
           />
           <q-input
             type="textarea"
             v-model="condition.detail"
-            label="詳細(省略可)"
+            label="詳細(省略可・後で変更可能)"
             stack-label
             dense
+            class="text-caption"
           />
         </div>
 
-        <div class="row q-gutter-md">
-          <div>
-            <q-file
-              v-model="file"
-              :url="uploadUrl"
-              label="画像を選んでね"
-              stack-label
-              dense
-              style="max-width: 300px"
-            />
-          </div>
-          <div>
-            <q-btn
-              text-color="primary"
-              round
-              icon="upload"
-              @click="fileUpload"
-              :disable="file.size == null"
-            />
-          </div>
+        <div>
+          <q-file
+            v-model="file"
+            :url="uploadUrl"
+            label="ここをクリックして画像を選択"
+            dense
+            :clearable="file.size != null"
+            style="width: 300px"
+          />
+        </div>
+        <div class="row q-gutter-md q-pt-md q-pb-md">
+          <q-btn
+            text-color="primary"
+            round
+            icon="cloud_upload"
+            @click="fileUpload"
+            v-if="file.size != null"
+          />
+        </div>
+
+        <!--画像-->
+        <div class="image-tweet-card-img" v-if="imgUrl != ''">
+          <img :src="imgUrl" />
         </div>
       </q-card-section>
     </q-card>
@@ -57,13 +75,16 @@ import { defineComponent, ref } from 'vue';
 import { APIClient } from '../../api/BaseApi';
 import api from '../../api/ImageListApi';
 import { useQuasar } from 'quasar';
+import { watch } from 'vue';
 export default defineComponent({
   name: 'image-list-uploader',
   setup() {
     const modalView = ref(false);
     const client = new APIClient();
     const uploadUrl = ref(client.apiEndpoint() + '/imageList/upload');
+    const imgUrl = ref('');
     const file = ref({} as File);
+
     const condition = ref({
       fileName: '',
       ext: '',
@@ -72,6 +93,14 @@ export default defineComponent({
     } as insertRec);
 
     const quasar = useQuasar();
+
+    watch(file, () => {
+      if (file.value) {
+        imgUrl.value = URL.createObjectURL(file.value);
+      } else {
+        imgUrl.value = '';
+      }
+    });
 
     const fileUpload = async function () {
       if (file.value) {
@@ -103,6 +132,7 @@ export default defineComponent({
                     condition.value.ext = '';
                     condition.value.title = '';
                     condition.value.detail = '';
+                    modalView.value = false;
                   } else {
                     quasar.notify({
                       color: 'red',
@@ -125,7 +155,7 @@ export default defineComponent({
         });
       }
     };
-    return { condition, modalView, file, uploadUrl, fileUpload };
+    return { condition, modalView, file, uploadUrl, imgUrl, fileUpload };
   },
 });
 interface insertRec {
