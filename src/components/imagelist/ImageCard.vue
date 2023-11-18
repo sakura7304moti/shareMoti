@@ -29,21 +29,30 @@
             @click="fileDownload(downloadUrl)"
           />
         </div>
-        <div class="q-pt-sm q-pr-md text-grey-6">ダウンロード</div>
+        <a
+          :href="downloadUrl"
+          class="q-pt-sm q-pr-md image-list-button-text"
+          @click.prevent="fileDownload(downloadUrl)"
+          style="text-decoration: none"
+          >ダウンロード</a
+        >
         <div>
           <imageUpdate :data-state="state" :download-url="downloadUrl" />
         </div>
-        <div class="q-pt-sm q-pr-md text-grey-6">編集</div>
+        <div v-if="deleteDisplay">
+          <imageDelete :data-state="state" :download-url="downloadUrl" />
+        </div>
       </div>
     </q-card-section>
   </q-card>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from 'vue';
+import { computed, defineComponent, PropType, ref } from 'vue';
 import { APIClient } from 'src/api/BaseApi';
 import { useViewSupport } from 'src/utils/viewSupport';
 import ImageUpdate from './ImageUpdate.vue';
+import ImageDelete from 'src/components/imagelist/ImageDelete.vue';
 export default defineComponent({
   name: 'image-list-tweet',
   props: {
@@ -51,13 +60,19 @@ export default defineComponent({
       type: Object as PropType<DataState>,
       required: true,
     },
+    deleteDisplay: {
+      type: Boolean,
+      default: false,
+    },
   },
   components: {
     imageUpdate: ImageUpdate,
+    imageDelete: ImageDelete,
   },
   setup(props) {
     const { fileDownload } = useViewSupport();
     const state = ref(props.dataState);
+    const deleteView = computed(() => props.deleteDisplay);
     const client = new APIClient();
     const downloadUrl = ref(
       `${client.apiEndpoint()}/imageList/download?fileName=${
@@ -65,7 +80,13 @@ export default defineComponent({
       }&ext=${props.dataState.ext}`
     );
 
-    return { state, downloadUrl, emptyText: ref('詳細無し'), fileDownload };
+    return {
+      state,
+      downloadUrl,
+      emptyText: ref('詳細無し'),
+      fileDownload,
+      deleteView,
+    };
   },
 });
 

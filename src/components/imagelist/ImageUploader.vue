@@ -12,7 +12,7 @@
 
     <a
       href="#"
-      class="q-pt-sm text-grey-6 q-pr-md"
+      class="q-pt-sm q-pr-md image-list-button-text"
       @click.prevent="modalView = true"
       style="text-decoration: none"
       >画像のアップロード</a
@@ -51,14 +51,16 @@
             style="width: 300px"
           />
         </div>
-        <div class="row q-gutter-md q-pt-md q-pb-md">
-          <q-btn
-            text-color="primary"
-            round
-            icon="cloud_upload"
-            @click="fileUpload"
-            v-if="file.size != null"
-          />
+        <div class="row q-gutter-xs q-pt-md q-pb-md" v-if="file.size != null">
+          <div>
+            <q-btn
+              text-color="primary"
+              round
+              icon="cloud_upload"
+              @click="fileUpload"
+            />
+          </div>
+          <div class="q-pt-sm text-grey-6 q-pr-md">アップロードする</div>
         </div>
 
         <!--画像-->
@@ -71,13 +73,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import { APIClient } from '../../api/BaseApi';
 import api from '../../api/ImageListApi';
 import { useQuasar } from 'quasar';
 import { watch } from 'vue';
 export default defineComponent({
   name: 'image-list-uploader',
+  props: {
+    uploaded: {
+      type: Boolean,
+    },
+  },
   setup() {
     const modalView = ref(false);
     const client = new APIClient();
@@ -132,6 +139,7 @@ export default defineComponent({
                     condition.value.ext = '';
                     condition.value.title = '';
                     condition.value.detail = '';
+
                     modalView.value = false;
                   } else {
                     quasar.notify({
@@ -155,7 +163,14 @@ export default defineComponent({
         });
       }
     };
-    return { condition, modalView, file, uploadUrl, imgUrl, fileUpload };
+    return {
+      condition,
+      modalView,
+      file,
+      uploadUrl,
+      imgUrl,
+      fileUpload,
+    };
   },
 });
 interface insertRec {

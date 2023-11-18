@@ -4,46 +4,43 @@
       <q-btn
         round
         dense
-        icon="edit"
-        text-color="secondary"
+        icon="delete"
+        text-color="negative"
         @click="modalView = true"
       />
     </div>
 
     <a
       href="#"
-      class="q-pt-sm q-pr-lg image-list-button-text"
+      class="q-pt-sm image-list-button-text"
       style="text-decoration: none"
       @click.prevent="modalView = true"
-      >編集</a
+      >削除</a
     >
   </div>
 
   <q-dialog v-model="modalView">
     <q-card class="image-list-update-card">
       <q-card-section class="q-pa-md">
-        <div class="text-h6 q-pb-md">更新画面</div>
+        <div class="text-h6 q-pb-md">削除画面</div>
         <div class="q-pa-md">
-          <q-input v-model="updateState.title" label="タイトル" stack-label />
           <q-input
-            v-model="updateState.detail"
+            v-model="state.title"
+            label="タイトル"
+            stack-label
+            readonly
+          />
+          <q-input
+            v-model="state.detail"
             label="詳細"
             stack-label
             type="textarea"
+            readonly
           />
         </div>
         <div style="width: 100%">
           <div style="text-align: right">
-            <q-btn
-              label="保存"
-              flat
-              color="primary"
-              :disable="
-                state.title == updateState.title &&
-                state.detail == updateState.detail
-              "
-              @click="update"
-            />
+            <q-btn label="削除" flat color="negative" @click="deleteRecord" />
           </div>
         </div>
         <!--画像-->
@@ -55,12 +52,11 @@
   </q-dialog>
 </template>
 <script lang="ts">
-import { computed, defineComponent, PropType, ref } from 'vue';
+import { defineComponent, PropType, ref } from 'vue';
 import api from 'src/api/ImageListApi';
-import { emit } from 'process';
 import { useQuasar } from 'quasar';
 export default defineComponent({
-  name: 'image-list-update',
+  name: 'image-list-delete',
   props: {
     dataState: {
       type: Object as PropType<DataState>,
@@ -73,35 +69,27 @@ export default defineComponent({
   setup(props) {
     const quasar = useQuasar();
     const modalView = ref(false);
-    const d = JSON.parse(JSON.stringify(props.dataState)) as DataState;
-    const updateState = ref({
-      id: d.id,
-      title: d.title,
-      detail: d.detail,
-    } as UpdateState);
     const state = ref(props.dataState);
 
-    const update = async function () {
+    const deleteRecord = async function () {
       await api
-        .update(updateState.value)
+        .dell({ id: state.value.id })
         .then((response) => {
           if (response) {
-            console.log('update', response);
+            console.log('delete', response);
             if (response.success) {
               quasar.notify({
-                message: '更新完了！',
+                message: '画像を消したわよ！',
                 color: 'primary',
                 position: 'top',
               });
-              state.value.title = updateState.value.title;
-              state.value.detail = updateState.value.detail;
               modalView.value = false;
             }
           }
         })
         .catch((e) => console.log('update err', e));
     };
-    return { modalView, state, updateState, update };
+    return { modalView, state, deleteRecord };
   },
 });
 
@@ -113,11 +101,6 @@ interface DataState {
   detail: string;
   createAt: string;
   updateAt: string;
-}
-interface UpdateState {
-  id: number;
-  title: string;
-  detail: string;
 }
 </script>
 <style>

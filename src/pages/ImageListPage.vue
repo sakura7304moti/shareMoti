@@ -2,31 +2,44 @@
   <q-page class="">
     <div class="row q-gutter-md">
       <div class="text-h6">国立美術館</div>
+      <!--ヘッダー-->
       <div class="row q-gutter-xs">
-        <div><uploader /></div>
+        <div>
+          <uploader :uploaded="uploaded" />
+        </div>
         <div>
           <q-btn round dense icon="loop" textColor="black" @click="search" />
         </div>
         <a
           href="#"
-          class="q-pt-sm text-grey-6 q-pr-md"
+          class="q-pt-sm image-list-button-text q-pr-md"
           @click.prevent="search"
           style="text-decoration: none"
           >再検索</a
         >
+        <div>
+          <q-toggle v-model="deleteLock" icon="delete" color="negative" />
+        </div>
+        <a
+          href="#"
+          class="q-pt-sm image-list-button-text q-pr-md"
+          @click.prevent="deleteLock = !deleteLock"
+          style="text-decoration: none"
+          >削除アイコン表示</a
+        >
       </div>
     </div>
 
+    <!--カード一覧-->
     <div style="display: flex; width: 100%; flex-wrap: wrap">
       <div v-for="rec in records" :key="rec.id" class="q-pa-md">
-        <imageCard :dataState="rec" />
+        <imageCard :dataState="rec" :deleteDisplay="deleteLock" />
       </div>
     </div>
   </q-page>
 </template>
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue';
-import { APIClient } from 'src/api/BaseApi';
 import api from 'src/api/ImageListApi';
 import ImageUploader from 'src/components/imagelist/ImageUploader.vue';
 import ImageCard from 'src/components/imagelist/ImageCard.vue';
@@ -39,6 +52,7 @@ export default defineComponent({
   setup() {
     const records = ref([] as DataState[]);
     const uploaded = ref(false);
+    const deleteLock = ref(false);
     const search = async function () {
       records.value.splice(0);
 
@@ -55,9 +69,10 @@ export default defineComponent({
     watch(uploaded, () => {
       if (uploaded.value) {
         search();
+        uploaded.value = false;
       }
     });
-    return { records, search };
+    return { records, uploaded, search, deleteLock };
   },
 });
 interface DataState {
@@ -70,3 +85,8 @@ interface DataState {
   updateAt: string;
 }
 </script>
+<style lang="scss">
+.image-list-button-text {
+  color: $grey-6;
+}
+</style>
