@@ -22,7 +22,20 @@
   <q-dialog v-model="modalView">
     <q-card class="q-pa-sm" id="image-upload-dialog-card">
       <q-card-section>
-        <div class="text-h6 q-pb-md">画像アップロード</div>
+        <div class="text-h6 q-pb-md row justify-between">
+          <div class="row q-gutter-xs">
+            <div>画像アップロード</div>
+            <div><q-icon name="cloud_upload" /></div>
+          </div>
+          <div>
+            <q-btn
+              label="閉じる"
+              flat
+              color="primary"
+              @click="modalView = false"
+            />
+          </div>
+        </div>
         <div class="q-pb-md">
           <q-input
             v-model="condition.title"
@@ -55,13 +68,11 @@
         <div class="row q-gutter-xs q-pt-md q-pb-md" v-if="file?.size != null">
           <div>
             <q-btn
-              text-color="primary"
-              round
-              icon="cloud_upload"
+              color="primary"
+              label="アップロードする"
               @click="fileUpload"
             />
           </div>
-          <div class="q-pt-sm q-pr-md">←アップロードするボタン!</div>
         </div>
 
         <!--画像-->

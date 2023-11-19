@@ -22,7 +22,20 @@
   <q-dialog v-model="modalView">
     <q-card class="image-list-update-card">
       <q-card-section class="q-pa-md">
-        <div class="text-h6 q-pb-md">削除画面</div>
+        <div class="text-h6 q-pb-md row justify-between">
+          <div class="row q-gutter-xs">
+            <div>削除確認</div>
+            <div><q-icon name="delete" /></div>
+          </div>
+          <div>
+            <q-btn
+              label="閉じる"
+              flat
+              color="primary"
+              @click="modalView = false"
+            />
+          </div>
+        </div>
         <div class="q-pa-md">
           <q-input
             v-model="state.title"
@@ -39,8 +52,8 @@
           />
         </div>
         <div style="width: 100%">
-          <div style="text-align: right">
-            <q-btn label="削除" flat color="negative" @click="deleteRecord" />
+          <div style="text-align: right" class="q-pb-sm">
+            <q-btn label="削除する" color="negative" @click="deleteRecord" />
           </div>
         </div>
         <!--画像-->

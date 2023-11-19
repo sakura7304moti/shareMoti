@@ -65,7 +65,7 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
-    path: '/kora',
+    path: '/img',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/ImageListPage.vue') },

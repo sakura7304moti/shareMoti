@@ -22,7 +22,20 @@
   <q-dialog v-model="modalView">
     <q-card class="image-list-update-card">
       <q-card-section class="q-pa-md">
-        <div class="text-h6 q-pb-md">更新画面</div>
+        <div class="text-h6 q-pb-md row justify-between">
+          <div class="row q-gutter-xs">
+            <div>タイトル・詳細の更新</div>
+            <div><q-icon name="edit" /></div>
+          </div>
+          <div>
+            <q-btn
+              label="閉じる"
+              flat
+              color="primary"
+              @click="modalView = false"
+            />
+          </div>
+        </div>
         <div class="q-pa-md">
           <q-input v-model="updateState.title" label="タイトル" stack-label />
           <q-input
@@ -33,10 +46,9 @@
           />
         </div>
         <div style="width: 100%">
-          <div style="text-align: right">
+          <div style="text-align: right" class="q-pb-sm">
             <q-btn
-              label="保存"
-              flat
+              label="保存する"
               color="primary"
               :disable="
                 state.title == updateState.title &&

@@ -183,6 +183,22 @@
             </q-card-section>
           </q-card-section>
         </q-card>
+
+        <!--画像-->
+        <q-card class="index-page-card">
+          <img
+            src="../assets/ichiro2.jpg"
+            style="cursor: pointer"
+            @click="router.replace('/img')"
+          />
+
+          <q-card-section>
+            <div class="text-h6">イチローの国立美術館</div>
+            <q-card-section class="q-pt-none">
+              なんだこれは、、、なんていい景色なんだ、、、
+            </q-card-section>
+          </q-card-section>
+        </q-card>
       </div>
 
       <!--Scraper-->
@@ -212,7 +228,7 @@
           />
 
           <q-card-section>
-            <div class="text-h6">Cover</div>
+            <div class="text-h6">cover</div>
             <q-card-section class="q-pt-none">
               YouTubeの歌ってみたをまとめたよ
             </q-card-section>
@@ -228,7 +244,7 @@
           />
 
           <q-card-section>
-            <div class="text-h6">Original</div>
+            <div class="text-h6">original</div>
             <q-card-section class="q-pt-none">
               ホロライブのオリ曲(動画)をまとめたよ
             </q-card-section>

@@ -1,7 +1,7 @@
 <template>
   <q-page class="">
     <div class="row q-gutter-md">
-      <div class="text-h6">国立美術館</div>
+      <div class="text-h6">画像まとめ</div>
       <!--ヘッダー-->
       <div class="row q-gutter-xs">
         <div>
