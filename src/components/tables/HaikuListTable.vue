@@ -11,7 +11,7 @@
     :pagination="{ rowsPerPage: 0 }"
     :rows-per-page-options="[0]"
     :filter="filter"
-    style="width: 1100px"
+    class="haiku-list-table"
     :style="{ height: tableHeight }"
   >
     <!--sub 1/3 オプション-->
@@ -73,7 +73,7 @@
           </div>
           <div
             v-if="col.label == '作成日' || col.label == '更新日'"
-            style="width: 50px"
+            style="width: 80px"
           >
             {{ col.label }}
           </div>
@@ -551,5 +551,37 @@ export default defineComponent({
 .box28 p {
   margin: 0;
   padding: 0;
+}
+/*テーブルのstyle */
+.haiku-list-table {
+  max-width: 1100px;
+}
+
+.haiku-list-table .q-table__top,
+.haiku-list-table .q-table__bottom,
+.haiku-list-table thead tr:first-child th {
+  /* bg color is important for th; just specify one */
+  background-color: white;
+}
+
+.haiku-list-table thead tr th {
+  position: sticky;
+  z-index: 1;
+}
+
+.haiku-list-table thead tr:first-child th {
+  top: 0;
+}
+
+/* this is when the loading indicator appears */
+.haiku-list-table.q-table--loading thead tr:last-child th {
+  /* height of all previous header rows */
+  top: 48px;
+}
+
+/* prevent scrolling behind sticky top row on focus */
+.haiku-list-table tbody {
+  /* height of all previous header rows */
+  scroll-margin-top: 48px;
 }
 </style>

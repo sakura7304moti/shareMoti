@@ -7,7 +7,6 @@
         :rows="records"
         :columns="columns"
         row-key="id"
-        style="width: 800px"
         :style="{ height: tableHeight }"
         separator="cell"
         rows-per-page-label="表示行数"
@@ -17,6 +16,7 @@
         :rows-per-page-options="[0]"
         :filter="filterCondition"
         :filter-method="filteringData"
+        class="name-list-table"
       >
         <!--sub 1/3 オプション-->
         <template v-slot:top-right>
@@ -446,7 +446,6 @@ interface DataState {
 }
 /*テーブルのサイズ */
 .search-table {
-  max-width: 700px;
   word-break: break-word;
   max-height: 600px;
 }
@@ -468,5 +467,37 @@ ul {
 li {
   line-height: 1.5; /*文の行高*/
   padding: 0.5em 0; /*前後の文との余白*/
+}
+/*テーブルのstyle */
+.name-list-table {
+  max-width: 800px;
+}
+
+.name-list-table .q-table__top,
+.name-list-table .q-table__bottom,
+.name-list-table thead tr:first-child th {
+  /* bg color is important for th; just specify one */
+  background-color: white;
+}
+
+.name-list-table thead tr th {
+  position: sticky;
+  z-index: 1;
+}
+
+.name-list-table thead tr:first-child th {
+  top: 0;
+}
+
+/* this is when the loading indicator appears */
+.name-list-table.q-table--loading thead tr:last-child th {
+  /* height of all previous header rows */
+  top: 48px;
+}
+
+/* prevent scrolling behind sticky top row on focus */
+.name-list-table tbody {
+  /* height of all previous header rows */
+  scroll-margin-top: 48px;
 }
 </style>

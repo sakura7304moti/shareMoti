@@ -1,6 +1,6 @@
 <template>
   <q-page class="">
-    <div class="q-pb-md q-pa-md">
+    <div>
       <!--1/5 タイトル-->
       <div class="text-h5 q-pb-md">ホロライブオリ曲まとめ</div>
       <div id="holo-page-loading" v-if="isLoading" class="row q-gutter-md">
@@ -127,10 +127,9 @@
             v-if="!isLoading && displayMode == 'table'"
             rows-per-page-label="表示行数"
             no-results-label="見つからなかった..."
-            style="width: 900px"
             :pagination="{ rowsPerPage: 0 }"
             :rows-per-page-options="[0]"
-            class="holosong-table-scrollable-container"
+            class="holoalbum-list-table"
           >
             <!--sub 1/3 検索-->
             <template v-slot:top-right>
@@ -398,9 +397,37 @@ export default defineComponent({
 }
 
 /*テーブルのstyle */
-.holosong-table-scrollable-container {
-  height: 80vh; /* ページの高さの80%に設定 */
-  overflow-y: auto; /* 縦方向にスクロール可能にする */
+.holoalbum-list-table {
+  max-width: 900px;
+  max-height: 70vh;
+}
+
+.holoalbum-list-table .q-table__top,
+.holoalbum-list-table .q-table__bottom,
+.holoalbum-list-table thead tr:first-child th {
+  /* bg color is important for th; just specify one */
+  background-color: white;
+}
+
+.holoalbum-list-table thead tr th {
+  position: sticky;
+  z-index: 1;
+}
+
+.holoalbum-list-table thead tr:first-child th {
+  top: 0;
+}
+
+/* this is when the loading indicator appears */
+.holoalbum-list-table.q-table--loading thead tr:last-child th {
+  /* height of all previous header rows */
+  top: 48px;
+}
+
+/* prevent scrolling behind sticky top row on focus */
+.holoalbum-list-table tbody {
+  /* height of all previous header rows */
+  scroll-margin-top: 48px;
 }
 
 /*動画再生してないときの画面 */

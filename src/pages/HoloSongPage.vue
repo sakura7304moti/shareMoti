@@ -1,6 +1,6 @@
 <template>
   <q-page class="">
-    <div class="q-pb-md q-pa-md">
+    <div>
       <!--1/5 タイトル-->
       <div class="text-h5 q-pb-md">ホロライブ歌みたまとめ</div>
       <div id="holo-page-loading" v-if="isLoading" class="row q-gutter-md">
@@ -127,10 +127,9 @@
             v-if="!isLoading && displayMode == 'table'"
             rows-per-page-label="表示行数"
             no-results-label="見つからなかった..."
-            style="width: 900px"
             :pagination="{ rowsPerPage: 0 }"
             :rows-per-page-options="[0]"
-            class="holosong-table-scrollable-container"
+            class="holosong-list-table"
           >
             <!--sub 1/3 検索-->
             <template v-slot:top-right>
@@ -431,8 +430,36 @@ export default defineComponent({
   cursor: pointer;
 }
 /*テーブルのstyle */
-.holosong-table-scrollable-container {
-  height: 80vh; /* ページの高さの80%に設定 */
-  overflow-y: auto; /* 縦方向にスクロール可能にする */
+.holosong-list-table {
+  max-width: 900px;
+  max-height: 70vh;
+}
+
+.holosong-list-table .q-table__top,
+.holosong-list-table .q-table__bottom,
+.holosong-list-table thead tr:first-child th {
+  /* bg color is important for th; just specify one */
+  background-color: white;
+}
+
+.holosong-list-table thead tr th {
+  position: sticky;
+  z-index: 1;
+}
+
+.holosong-list-table thead tr:first-child th {
+  top: 0;
+}
+
+/* this is when the loading indicator appears */
+.holosong-list-table.q-table--loading thead tr:last-child th {
+  /* height of all previous header rows */
+  top: 48px;
+}
+
+/* prevent scrolling behind sticky top row on focus */
+.holosong-list-table tbody {
+  /* height of all previous header rows */
+  scroll-margin-top: 48px;
 }
 </style>

@@ -5,7 +5,6 @@
     :rows="records"
     :columns="columns"
     row-key="id"
-    style="width: 700px"
     :style="{ height: tableHeight }"
     separator="cell"
     rows-per-page-label="表示行数"
@@ -14,6 +13,7 @@
     :pagination="{ rowsPerPage: 0 }"
     :rows-per-page-options="[0]"
     :filter="condition"
+    class="karaoke-list-table"
     ><!--sub 1/3 オプション-->
     <template v-slot:top-right>
       <div class="row q-gutter-md" style="width: 700px">
@@ -169,5 +169,37 @@ export default defineComponent({
 .playground p {
   margin: 0;
   padding: 0;
+}
+/*テーブルのstyle */
+.karaoke-list-table {
+  max-width: 700px;
+}
+
+.karaoke-list-table .q-table__top,
+.karaoke-list-table .q-table__bottom,
+.karaoke-list-table thead tr:first-child th {
+  /* bg color is important for th; just specify one */
+  background-color: white;
+}
+
+.karaoke-list-table thead tr th {
+  position: sticky;
+  z-index: 1;
+}
+
+.karaoke-list-table thead tr:first-child th {
+  top: 0;
+}
+
+/* this is when the loading indicator appears */
+.karaoke-list-table.q-table--loading thead tr:last-child th {
+  /* height of all previous header rows */
+  top: 48px;
+}
+
+/* prevent scrolling behind sticky top row on focus */
+.karaoke-list-table tbody {
+  /* height of all previous header rows */
+  scroll-margin-top: 48px;
 }
 </style>

@@ -4,7 +4,6 @@
     :rows="records"
     :columns="columns"
     row-key="word"
-    style="width: 800px"
     :style="{ height: tableHeight }"
     separator="cell"
     rows-per-page-label="表示行数"
@@ -14,6 +13,7 @@
     :rows-per-page-options="[0]"
     :filter="filterCondition"
     :filter-method="filteringData"
+    class="yaki-list-table"
   >
     <!--sub 1/3 オプション-->
     <template v-slot:top-right>
@@ -397,7 +397,6 @@ interface DataState {
 }
 /*テーブルのサイズ */
 .search-table {
-  max-width: 700px;
   word-break: break-word;
   max-height: 600px;
 }
@@ -408,5 +407,37 @@ interface DataState {
 .search-table td {
   word-wrap: break-word; /* テキストの自動改行を設定 */
   white-space: normal; /* 空白文字の扱いを設定 */
+}
+/*スクロール */
+.yaki-list-table {
+  max-width: 800px;
+}
+
+.yaki-list-table .q-table__top,
+.yaki-list-table .q-table__bottom,
+.yaki-list-table thead tr:first-child th {
+  /* bg color is important for th; just specify one */
+  background-color: white;
+}
+
+.yaki-list-table thead tr th {
+  position: sticky;
+  z-index: 1;
+}
+
+.yaki-list-table thead tr:first-child th {
+  top: 0;
+}
+
+/* this is when the loading indicator appears */
+.yaki-list-table.q-table--loading thead tr:last-child th {
+  /* height of all previous header rows */
+  top: 48px;
+}
+
+/* prevent scrolling behind sticky top row on focus */
+.yaki-list-table tbody {
+  /* height of all previous header rows */
+  scroll-margin-top: 48px;
 }
 </style>

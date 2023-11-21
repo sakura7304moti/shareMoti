@@ -24,7 +24,7 @@
           </div>
         </div>
       </div>
-      <div class="ssbu-right-content">
+      <div class="ssbu-list-table">
         <q-table
           :rows="records"
           :columns="columns"
@@ -210,6 +210,38 @@ export default defineComponent({
 });
 </script>
 <style>
+/*テーブルのstyle */
+.ssbu-list-table {
+  max-width: 800px;
+}
+
+.ssbu-list-table .q-table__top,
+.ssbu-list-table .q-table__bottom,
+.ssbu-list-table thead tr:first-child th {
+  /* bg color is important for th; just specify one */
+  background-color: white;
+}
+
+.ssbu-list-table thead tr th {
+  position: sticky;
+  z-index: 1;
+}
+
+.ssbu-list-table thead tr:first-child th {
+  top: 0;
+}
+
+/* this is when the loading indicator appears */
+.ssbu-list-table.q-table--loading thead tr:last-child th {
+  /* height of all previous header rows */
+  top: 48px;
+}
+
+/* prevent scrolling behind sticky top row on focus */
+.ssbu-list-table tbody {
+  /* height of all previous header rows */
+  scroll-margin-top: 48px;
+}
 /*動画とテーブルのstyle */
 .ssbu-container {
   display: flex;
