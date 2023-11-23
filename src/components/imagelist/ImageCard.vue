@@ -1,5 +1,5 @@
 <template>
-  <q-card class="image-tweet-card">
+  <q-card :class="{ 'image-tweet-card-lg': cardSize == 'lg' }">
     <q-card-section>
       <!--タイトル-->
       <div class="text-h6 text-bold text-grey-4" v-if="state.title == ''">
@@ -15,12 +15,15 @@
       <q-separator />
       <!--詳細-->
       <div
-        v-if="state.detail == ''"
+        v-if="state.detail == '' && cardSize == 'lg'"
         class="text-grey-4 image-tweet-card-detail"
       >
         詳細無し
       </div>
-      <div v-else class="image-tweet-card-detail">
+      <div
+        v-if="state.detail != '' && cardSize == 'lg'"
+        class="image-tweet-card-detail"
+      >
         {{ state.detail }}
       </div>
       <q-separator />
@@ -56,7 +59,10 @@
       </div>
 
       <!--日付-->
-      <div class="row q-gutter-xs q-pt-md text-grey-8">
+      <div
+        class="row q-gutter-xs q-pt-md text-grey-8"
+        v-if="cardSize == 'lg' || cardSize == 'md'"
+      >
         <div>作成日:</div>
         <div class="q-pr-md">
           {{ state.createAt }}
@@ -87,12 +93,17 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    size: {
+      type: String,
+      default: 'lg',
+    },
   },
   components: {
     imageUpdate: ImageUpdate,
     imageDelete: ImageDelete,
   },
   setup(props, context: SetupContext) {
+    const cardSize = computed(() => props.size);
     const { fileDownload } = useViewSupport();
     const state = ref(props.dataState);
     const deleteView = computed(() => props.deleteDisplay);
@@ -114,6 +125,7 @@ export default defineComponent({
       fileDownload,
       deleteView,
       deleteNotify,
+      cardSize,
     };
   },
 });
@@ -127,15 +139,11 @@ interface DataState {
   createAt: string;
   updateAt: string;
 }
-interface FormateDate {
-  createAt: string;
-  updateAt: string;
-}
 </script>
 
 <style>
 /*カード全体 */
-.image-tweet-card {
+.image-tweet-card-lg {
   width: 400px;
   height: 550px;
 }
